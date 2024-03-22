@@ -19,7 +19,7 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.HoleManager holeManager;
     public static me.coolmint.ngm.manager.EventManager eventManager;
     public static me.coolmint.ngm.manager.SpeedManager speedManager;
-    //public static me.coolmint.ngm.manager.CommandManager commandManager;
+    public static me.coolmint.ngm.manager.CommandManager commandManager;
     public static me.coolmint.ngm.manager.FriendManager friendManager;
     public static me.coolmint.ngm.manager.ModuleManager moduleManager;
     public static me.coolmint.ngm.manager.ConfigManager configManager;
@@ -33,8 +33,8 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         positionManager = new me.coolmint.ngm.manager.PositionManager();
         friendManager = new me.coolmint.ngm.manager.FriendManager();
         colorManager = new me.coolmint.ngm.manager.ColorManager();
-        //commandManager = new me.coolmint.ngm.manager.CommandManager();
         moduleManager = new me.coolmint.ngm.manager.ModuleManager();
+        commandManager = new me.coolmint.ngm.manager.CommandManager();
         speedManager = new me.coolmint.ngm.manager.SpeedManager();
         holeManager = new me.coolmint.ngm.manager.HoleManager();
         playerManager = new me.coolmint.ngm.manager.PlayerManager();

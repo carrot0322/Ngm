@@ -5,20 +5,19 @@ import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.ClientEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
-import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 
-public class ClickGui
+public class ClickGuiModule
         extends Module {
-    private static ClickGui INSTANCE = new ClickGui();
+    private static ClickGuiModule INSTANCE = new ClickGuiModule();
     public Setting<String> prefix = this.register(new Setting<>("Prefix", "$"));
-    public Setting<Integer> red = this.register(new Setting<>("Red", 255, 0, 255));
-    public Setting<Integer> green = this.register(new Setting<>("Green", 55, 0, 255));
-    public Setting<Integer> blue = this.register(new Setting<>("Blue", 55, 0, 255));
+    public Setting<Integer> red = this.register(new Setting<>("Red", 6, 0, 255));
+    public Setting<Integer> green = this.register(new Setting<>("Green", 251, 0, 255));
+    public Setting<Integer> blue = this.register(new Setting<>("Blue", 150, 0, 255));
     public Setting<Integer> hoverAlpha = this.register(new Setting<>("Alpha", 255, 0, 255));
-    public Setting<Integer> topRed = this.register(new Setting<>("SecondRed", 255, 0, 255));
-    public Setting<Integer> topGreen = this.register(new Setting<>("SecondGreen", 0, 0, 255));
-    public Setting<Integer> topBlue = this.register(new Setting<>("SecondBlue", 0, 0, 255));
+    public Setting<Integer> topRed = this.register(new Setting<>("SecondRed", 5, 0, 255));
+    public Setting<Integer> topGreen = this.register(new Setting<>("SecondGreen", 200, 0, 255));
+    public Setting<Integer> topBlue = this.register(new Setting<>("SecondBlue", 150, 0, 255));
     public Setting<Integer> alpha = this.register(new Setting<>("HoverAlpha", 100, 0, 255));
     public Setting<Boolean> rainbow = this.register(new Setting<>("Rainbow", false));
     public Setting<rainbowMode> rainbowModeHud = this.register(new Setting<>("HRainbowMode", rainbowMode.Static, v -> this.rainbow.getValue()));
@@ -28,15 +27,15 @@ public class ClickGui
     public Setting<Float> rainbowSaturation = this.register(new Setting<>("Saturation", 150.0f, 1.0f, 255.0f, v -> this.rainbow.getValue()));
     private me.coolmint.ngm.features.gui.ClickGui click;
 
-    public ClickGui() {
+    public ClickGuiModule() {
         super("ClickGui", "Opens the ClickGui", Module.Category.CLIENT, true, false, false);
         setBind(GLFW.GLFW_KEY_Y);
         this.setInstance();
     }
 
-    public static ClickGui getInstance() {
+    public static ClickGuiModule getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ClickGui();
+            INSTANCE = new ClickGuiModule();
         }
         return INSTANCE;
     }
@@ -69,7 +68,7 @@ public class ClickGui
 
     @Override
     public void onTick() {
-        if (!(me.coolmint.ngm.features.modules.client.ClickGui.mc.currentScreen instanceof me.coolmint.ngm.features.gui.ClickGui)) {
+        if (!(ClickGuiModule.mc.currentScreen instanceof me.coolmint.ngm.features.gui.ClickGui)) {
             this.disable();
         }
     }

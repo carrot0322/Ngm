@@ -2,6 +2,7 @@ package me.coolmint.ngm.features.gui.items.buttons;
 
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.gui.ClickGui;
+import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.features.settings.Bind;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.util.ColorUtil;
@@ -25,8 +26,8 @@ public class BindButton
 
     @Override
     public void drawScreen(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        int color = ColorUtil.toARGB(me.coolmint.ngm.features.modules.client.ClickGui.getInstance().red.getValue(), me.coolmint.ngm.features.modules.client.ClickGui.getInstance().green.getValue(), me.coolmint.ngm.features.modules.client.ClickGui.getInstance().blue.getValue(), 255);
-        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515) : (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(me.coolmint.ngm.features.modules.client.ClickGui.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(me.coolmint.ngm.features.modules.client.ClickGui.class).alpha.getValue())));
+        int color = ColorUtil.toARGB(ClickGuiModule.getInstance().red.getValue(), ClickGuiModule.getInstance().green.getValue(), ClickGuiModule.getInstance().blue.getValue(), 255);
+        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515) : (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue())));
         if (this.isListening) {
             drawString("Press a Key...", this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), -1);
         } else {

@@ -3,6 +3,7 @@ package me.coolmint.ngm.features.gui;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.gui.items.Item;
 import me.coolmint.ngm.features.gui.items.buttons.Button;
+import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.util.ColorUtil;
 import me.coolmint.ngm.util.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
@@ -54,8 +55,8 @@ public class Component
         this.drag(mouseX, mouseY);
         counter1 = new int[]{1};
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
-        int color = ColorUtil.toARGB(me.coolmint.ngm.features.modules.client.ClickGui.getInstance().topRed.getValue(), me.coolmint.ngm.features.modules.client.ClickGui.getInstance().topGreen.getValue(), me.coolmint.ngm.features.modules.client.ClickGui.getInstance().topBlue.getValue(), 255);
-        context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, me.coolmint.ngm.features.modules.client.ClickGui.getInstance().rainbow.getValue() ? ColorUtil.rainbow(me.coolmint.ngm.features.modules.client.ClickGui.getInstance().rainbowHue.getValue()).getRGB() : color);
+        int color = ColorUtil.toARGB(ClickGuiModule.getInstance().topRed.getValue(), ClickGuiModule.getInstance().topGreen.getValue(), ClickGuiModule.getInstance().topBlue.getValue(), 255);
+        context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ClickGuiModule.getInstance().rainbow.getValue() ? ColorUtil.rainbow(ClickGuiModule.getInstance().rainbowHue.getValue()).getRGB() : color);
         if (this.open) {
             RenderUtil.rect(context.getMatrices(), this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, 0x77000000);
         }

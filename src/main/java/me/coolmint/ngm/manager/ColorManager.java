@@ -1,7 +1,7 @@
 package me.coolmint.ngm.manager;
 
 import me.coolmint.ngm.features.gui.Component;
-import me.coolmint.ngm.features.modules.client.ClickGui;
+import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.util.ColorUtil;
 
 import java.awt.*;
@@ -14,7 +14,7 @@ public class ColorManager {
     private Color color = new Color(this.red, this.green, this.blue, this.alpha);
 
     public void init() {
-        ClickGui ui = ClickGui.getInstance();
+        ClickGuiModule ui = ClickGuiModule.getInstance();
         setColor(ui.red.getValue(), ui.green.getValue(), ui.blue.getValue(), ui.hoverAlpha.getValue());
     }
 
@@ -35,8 +35,8 @@ public class ColorManager {
     }
 
     public int getColorWithAlpha(int alpha) {
-        if (ClickGui.getInstance().rainbow.getValue()) {
-            return ColorUtil.rainbow(Component.counter1[0] * ClickGui.getInstance().rainbowHue.getValue()).getRGB();
+        if (ClickGuiModule.getInstance().rainbow.getValue()) {
+            return ColorUtil.rainbow(Component.counter1[0] * ClickGuiModule.getInstance().rainbowHue.getValue()).getRGB();
         }
         return ColorUtil.toRGBA(new Color(this.red, this.green, this.blue, (float) alpha / 255.0f));
     }

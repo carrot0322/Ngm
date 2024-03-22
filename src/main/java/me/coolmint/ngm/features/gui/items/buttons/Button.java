@@ -4,6 +4,7 @@ import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.gui.Component;
 import me.coolmint.ngm.features.gui.ClickGui;
 import me.coolmint.ngm.features.gui.items.Item;
+import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.util.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -20,7 +21,7 @@ public class Button
 
     @Override
     public void drawScreen(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(me.coolmint.ngm.features.modules.client.ClickGui.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(me.coolmint.ngm.features.modules.client.ClickGui.class).alpha.getValue())) : (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515));
+        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue())) : (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515));
         drawString(this.getName(), this.x + 2.3f, this.y - 2.0f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }
 

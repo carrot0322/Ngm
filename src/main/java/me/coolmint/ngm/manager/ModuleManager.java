@@ -53,7 +53,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // CLIENT
         modules.add(new HudModule());
-        modules.add(new ClickGui());
+        modules.add(new ClickGuiModule());
     }
 
     public Module getModuleByName(String name) {
