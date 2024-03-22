@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "ngm",
+  "version": "${version}",
+  "name": "Ngm",
+  "description": "Ngm Client",
+  "authors": [
+    "coolmint",
+    "c_arrot_"
+  ],
+  "license": "GPL-3.0",
+  "environment": "client",
+  "accessWidener": "ngm.accesswidener",
+  "entrypoints": {
+    "client": [
+      "me.coolmint.ngm.Ngm"
+    ],
+    "main": [
+      "me.coolmint.ngm.Ngm"
+    ]
+  },
+  "mixins": [
+    "ngm.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
