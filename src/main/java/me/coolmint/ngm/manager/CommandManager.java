@@ -17,7 +17,7 @@ import java.util.List;
 import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class CommandManager {
-    private String prefix = "$";
+    private String prefix = ".";
 
     private final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
     private final CommandSource source = new ClientCommandSource(null, MinecraftClient.getInstance());

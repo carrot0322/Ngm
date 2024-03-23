@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 public class ClickGuiModule
         extends Module {
     private static ClickGuiModule INSTANCE = new ClickGuiModule();
-    public Setting<String> prefix = this.register(new Setting<>("Prefix", "$"));
+    public Setting<String> prefix = this.register(new Setting<>("Prefix", "."));
     public Setting<Integer> red = this.register(new Setting<>("Red", 6, 0, 255));
     public Setting<Integer> green = this.register(new Setting<>("Green", 251, 0, 255));
     public Setting<Integer> blue = this.register(new Setting<>("Blue", 150, 0, 255));

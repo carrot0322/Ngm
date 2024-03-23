@@ -31,7 +31,6 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         // Module Init
         // Combat
-        modules.add(new AutoCrystal());
         modules.add(new Criticals());
 
         // MOVEMENT
@@ -45,6 +44,7 @@ public class ModuleManager implements Jsonable, Util {
         // RENDER
 
         // MISC
+        modules.add(new AntiPacketKick());
         modules.add(new MCF());
 
         // EXPLOIT
