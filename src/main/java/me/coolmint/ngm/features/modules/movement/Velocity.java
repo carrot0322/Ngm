@@ -29,7 +29,7 @@ public class Velocity extends Module {
     public Setting<Boolean> blocks = register(new Setting<>("Blocks", true, v -> antiPush.getValue()));
     public Setting<Boolean> players = register(new Setting<>("Players", true, v -> antiPush.getValue()));
     public Setting<Boolean> water = register(new Setting<>("Water", true, v -> antiPush.getValue()));
-    private final Setting<modeEn> mode = register(new Setting<>("Mode", modeEn.GrimNew));
+    private final Setting<modeEn> mode = register(new Setting<>("Mode", modeEn.Custom));
     public Setting<Float> vertical = register(new Setting<>("Vertical", 0.0f, 0.0f, 100.0f, v -> mode.getValue() == modeEn.Custom));
     private final Setting<jumpModeEn> jumpMode = register(new Setting<>("JumpMode", jumpModeEn.Jump, v -> mode.getValue() == modeEn.Jump));
     public Setting<Float> horizontal = register(new Setting<>("Horizontal", 0.0f, 0.0f, 100.0f, v -> mode.getValue() == modeEn.Custom || mode.getValue() == modeEn.Jump));

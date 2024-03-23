@@ -32,6 +32,10 @@ public class FriendManager implements Jsonable {
         return this.friends;
     }
 
+    public boolean shouldAttack(PlayerEntity player) {
+        return !isFriend(player);
+    }
+
     @Override public JsonElement toJson() {
         JsonObject object = new JsonObject();
         JsonArray array = new JsonArray();

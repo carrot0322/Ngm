@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PacketByteBuf.class)
 public abstract class PacketByteBufMixin {
-    @ModifyArg(method = "readNbt()Lnet/minecraft/nbt/NbtCompound;", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readNbt(Lnet/minecraft/nbt/NbtSizeTracker;)Lnet/minecraft/nbt/NbtElement;"))
+    @ModifyArg(method = "readNbt()Lnet/minecraft/nbt/NbtCompound;", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readNbt(Lnet/minecraft/nbt/NbtTagSizeTracker;)Lnet/minecraft/nbt/NbtElement;"))
     private NbtTagSizeTracker xlPackets(NbtTagSizeTracker sizeTracker) {
         return Ngm.moduleManager.isModuleEnabled("AntiPacketKick") ? NbtTagSizeTracker.ofUnlimitedBytes() : sizeTracker;
     }
