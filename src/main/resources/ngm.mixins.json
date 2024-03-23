@@ -16,7 +16,8 @@
     "MixinKeyboard",
     "MixinRenderTickCounter",
     "MixinWorldRenderer",
-    "MixinKeyboard"
+    "MixinKeyboard",
+    "PacketByteBufMixin"
   ],
   "injectors": {
     "defaultRequire": 1
