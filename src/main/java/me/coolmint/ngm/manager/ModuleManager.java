@@ -110,6 +110,17 @@ public class ModuleManager implements Jsonable, Util {
         return module != null && module.isOn();
     }
 
+    private Module moduleToBind;
+
+    public void setModuleToBind(Module moduleToBind) {
+        this.moduleToBind = moduleToBind;
+    }
+
+
+    public ArrayList<Module> getAllModules() {
+        return new ArrayList<>(this.modules);
+    }
+
     public Module getModuleByDisplayName(String displayName) {
         for (Module module : this.modules) {
             if (!module.getDisplayName().equalsIgnoreCase(displayName)) continue;

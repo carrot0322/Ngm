@@ -4,26 +4,23 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.command.Command;
-import me.coolmint.ngm.features.command.args.ModuleArg;
+import me.coolmint.ngm.features.command.args.ModuleArgumentType;
 import me.coolmint.ngm.features.modules.Module;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
-import static me.coolmint.ngm.features.command.Command.*;
 
-public class Bind extends Command {
-    public Bind() {
+public class BindCommand extends Command {
+    public BindCommand() {
         super("bind");
     }
 
     @Override
     public void executeBuild(@NotNull LiteralArgumentBuilder<CommandSource> builder) {
-        builder.then(arg("module", ModuleArg.create())
+        builder.then(arg("module", ModuleArgumentType.create())
                 .then(arg("key", StringArgumentType.word()).executes(context -> {
                     final Module module = context.getArgument("module", Module.class);
                     final String stringKey = context.getArgument("key", String.class);

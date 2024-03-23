@@ -15,11 +15,11 @@ import net.minecraft.text.Text;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-public class ModuleArg implements ArgumentType<Module> {
+public class ModuleArgumentType implements ArgumentType<Module> {
     private static final Collection<String> EXAMPLES = Ngm.moduleManager.modules.stream().map(Module::getName).limit(5).toList();
 
-    public static ModuleArg create() {
-        return new ModuleArg();
+    public static ModuleArgumentType create() {
+        return new ModuleArgumentType();
     }
 
     @Override

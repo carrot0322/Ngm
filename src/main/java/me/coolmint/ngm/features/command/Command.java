@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+import static me.coolmint.ngm.manager.CommandManager.getClientMessage;
+
 public abstract class Command {
     protected static final CommandRegistryAccess REGISTRY_ACCESS = CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup());
     protected static final MinecraftClient mc = MinecraftClient.getInstance();
@@ -32,14 +34,14 @@ public abstract class Command {
 
     public static void sendMessage(String message) {
         if (mc.player == null) return;
-        mc.player.sendMessage(Text.of(me.coolmint.ngm.manager.CommandManager.getClientMessage() + " "  + message));
+        mc.player.sendMessage(Text.of(getClientMessage() + " "  + message));
     }
 
     protected static <T> @NotNull RequiredArgumentBuilder<CommandSource, T> arg(final String name, final ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
-    public static @NotNull LiteralArgumentBuilder<CommandSource> literal(final String name) {
+    protected static @NotNull LiteralArgumentBuilder<CommandSource> literal(final String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 

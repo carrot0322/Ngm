@@ -1,6 +1,7 @@
 package me.coolmint.ngm.manager;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.command.impl.*;
 import net.minecraft.client.MinecraftClient;
@@ -10,7 +11,10 @@ import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
+import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class CommandManager {
     private String prefix = "$";
@@ -20,7 +24,7 @@ public class CommandManager {
     private final List<Command> commands = new ArrayList<>();
 
     public CommandManager() {
-        add(new Bind());
+        add(new BindCommand());
     }
 
     private void add(@NotNull Command command) {
