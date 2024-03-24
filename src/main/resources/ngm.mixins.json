@@ -13,6 +13,7 @@
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
+    "MixinCustomPayloadS2CPacket",
     "MixinInGameHud",
     "MixinKeyboard",
     "MixinRenderTickCounter",

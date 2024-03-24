@@ -2,10 +2,15 @@ package me.coolmint.ngm.mixin;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.TimeoutException;
+import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.PacketEvent;
+import me.coolmint.ngm.features.modules.misc.AntiPacketKick;
+import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.PacketCallbacks;
+import net.minecraft.network.handler.PacketEncoderException;
 import net.minecraft.network.packet.Packet;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,5 +51,12 @@ public class MixinClientConnection {
         }
     }
 
-
+    @Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
+    private void exceptionCaught(ChannelHandlerContext context, Throwable throwable, CallbackInfo ci) {
+        AntiPacketKick apk = Ngm.moduleManager.getModuleByClass(AntiPacketKick.class);
+        if (!(throwable instanceof TimeoutException) && !(throwable instanceof PacketEncoderException) && apk.catchExceptions()) {
+            if (apk.logExceptions.getValue()) ChatUtil.sendWarning("Caught exception: " + throwable);
+            ci.cancel();
+        }
+    }
 }

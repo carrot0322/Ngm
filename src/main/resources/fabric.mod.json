@@ -6,10 +6,21 @@
   "description": "Ngm Client",
   "authors": [
     "coolmint",
-    "c_arrot_"
+    "c_arrot_",
+    "Henta1"
   ],
+  "contact": {
+    "homepage": "idk"
+  },
   "license": "GPL-3.0",
   "environment": "client",
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/coolmint"
+      }
+    }
+  },
   "accessWidener": "ngm.accesswidener",
   "entrypoints": {
     "client": [
