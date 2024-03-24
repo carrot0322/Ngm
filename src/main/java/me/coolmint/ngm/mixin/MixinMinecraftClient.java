@@ -15,7 +15,7 @@ import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
 
 
 @Mixin(value = MinecraftClient.class, priority = 1001)
-public abstract class MixinMinecraftClient implements IMinecraftClient {
+public abstract class MixinMinecraftClient {
 
     @Shadow public ClientWorld world;
 
