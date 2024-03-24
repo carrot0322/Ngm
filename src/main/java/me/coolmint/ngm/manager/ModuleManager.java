@@ -8,6 +8,7 @@ import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
 
@@ -47,6 +48,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new FastPlace());
 
         // RENDER
+        modules.add(new Fullbright());
 
         // MISC
         modules.add(new AntiPacketKick());

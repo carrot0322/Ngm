@@ -15,8 +15,10 @@
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCustomPayloadS2CPacket",
+    "MixinEntityRenderer",
     "MixinInGameHud",
     "MixinKeyboard",
+    "MixinLightmapTextureManager",
     "MixinRenderTickCounter",
     "MixinWorldRenderer",
     "PacketByteBufMixin"
