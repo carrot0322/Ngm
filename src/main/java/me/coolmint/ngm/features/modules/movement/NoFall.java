@@ -19,7 +19,7 @@ public class NoFall extends Module {
     private me.coolmint.ngm.util.models.Timer pearlCooldown = new me.coolmint.ngm.util.models.Timer();
 
     private enum Mode {
-        MatrixOffGround, Vanilla, Grim2b2t
+        MatrixOffGround, Vanilla, Grim
     }
 
     private enum FallDistance {
@@ -35,7 +35,7 @@ public class NoFall extends Module {
         if (isFalling()) {
             switch (mode.getValue()) {
 
-                case Grim2b2t -> {
+                case Grim -> {
                     mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(mc.player.getX(), mc.player.getY() + 0.000000001, mc.player.getZ(), mc.player.getYaw(), mc.player.getPitch(), false));
                     mc.player.onLanding();
                 }
