@@ -20,7 +20,7 @@ public class TpAura extends Module {
     private final Setting<Priority> priority = register(new Setting<>("Priority", Priority.HEALTH));
 
     public TpAura() {
-        super("TpAura", "", Category.EXPLOIT, true, false, false);
+        super("TpAura", "", Category.COMBAT, true, false, false);
     }
 
     private int tickTimer;
