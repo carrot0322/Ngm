@@ -53,6 +53,7 @@ public class ModuleManager implements Jsonable, Util {
         // MISC
         modules.add(new AntiPacketKick());
         modules.add(new MCF());
+        modules.add(new Spammer());
 
         // EXPLOIT
         modules.add(new CompletionCrash());
