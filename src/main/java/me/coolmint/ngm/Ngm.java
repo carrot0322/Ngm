@@ -1,5 +1,6 @@
 package me.coolmint.ngm;
 
+import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;

@@ -1,5 +1,7 @@
 package me.coolmint.ngm.features.modules.misc;
 
+import com.google.common.eventbus.Subscribe;
+import me.coolmint.ngm.event.impl.GameLeftEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.util.models.Timer;
@@ -13,6 +15,7 @@ public class Spammer extends Module {
     public static ArrayList<String> SpamList = new ArrayList<>();
     public Setting<Boolean> bypass = register(new Setting<>("bypass", true));
     public Setting<Float> delay = register(new Setting<>("delay", 1.0f, 0.0f, 30.0f));
+    private final Setting<Boolean> autoDisable = register(new Setting<>("Auto Disable", true));
     private final Timer timer_delay = new Timer();
 
     public Spammer() {
@@ -90,5 +93,9 @@ public class Spammer extends Module {
 
             timer_delay.reset();
         }
+    }
+    @Subscribe
+    private void onGameLeft(GameLeftEvent event) {
+        if (autoDisable.getValue()) toggle();
     }
 }

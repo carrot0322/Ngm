@@ -7,6 +7,7 @@
     "IClientPlayerEntity",
     "IClientPlayNetworkHandlerAccessor",
     "IExplosionS2CPacket",
+    "IMinecraftClient",
     "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity"
   ],
@@ -19,6 +20,7 @@
     "MixinInGameHud",
     "MixinKeyboard",
     "MixinLightmapTextureManager",
+    "MixinMinecraftClient",
     "MixinRenderTickCounter",
     "MixinWorldRenderer",
     "PacketByteBufMixin"
