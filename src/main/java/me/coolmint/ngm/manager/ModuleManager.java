@@ -37,6 +37,7 @@ public class ModuleManager implements Jsonable, Util {
         // MOVEMENT
         modules.add(new Flight());
         modules.add(new NoFall());
+        modules.add(new Parkour());
         modules.add(new Sprint());
         modules.add(new Step());
         modules.add(new Velocity());
