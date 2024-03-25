@@ -17,7 +17,6 @@ import me.coolmint.ngm.features.modules.combat.*;
 import me.coolmint.ngm.features.modules.misc.*;
 import me.coolmint.ngm.features.modules.movement.*;
 import me.coolmint.ngm.features.modules.player.*;
-import thunder.hack.modules.movement.GuiMove;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +43,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Step());
         modules.add(new Velocity());
         modules.add(new GuiMove());
+        modules.add(new NoSlow());
 
         // PLAYER
         modules.add(new AntiHunger());
