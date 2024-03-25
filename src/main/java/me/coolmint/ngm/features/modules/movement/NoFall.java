@@ -3,6 +3,7 @@ package me.coolmint.ngm.features.modules.movement;
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.features.modules.Module;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import me.coolmint.ngm.event.impl.EventSync;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import me.coolmint.ngm.mixin.IPlayerMoveC2SPacket;
 import me.coolmint.ngm.features.settings.Setting;

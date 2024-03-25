@@ -6,7 +6,6 @@
   "mixins": [
     "IClientPlayerEntity",
     "IClientPlayNetworkHandlerAccessor",
-    "IClientWorldMixin",
     "IExplosionS2CPacket",
     "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity"
