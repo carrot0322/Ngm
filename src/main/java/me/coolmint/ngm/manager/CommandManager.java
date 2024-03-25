@@ -1,20 +1,16 @@
 package me.coolmint.ngm.manager;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.coolmint.ngm.features.command.Command;
-import me.coolmint.ngm.features.command.impl.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
+import me.coolmint.ngm.features.command.Command;
+import me.coolmint.ngm.features.command.impl.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-
-import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class CommandManager {
     private String prefix = ".";
@@ -48,7 +44,7 @@ public class CommandManager {
     }
 
     public static @NotNull String getClientMessage() {
-        return Formatting.WHITE + "⌊" + Formatting.GOLD + "⚡" + Formatting.WHITE + "⌉" + Formatting.RESET;
+        return Formatting.WHITE + "[" + Formatting.DARK_RED + "NGM" + Formatting.WHITE + "]" + Formatting.RESET;
     }
 
     public List<Command> getCommands() {

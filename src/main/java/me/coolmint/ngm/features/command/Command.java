@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import me.coolmint.ngm.Ngm;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.command.CommandRegistryAccess;
@@ -15,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static me.coolmint.ngm.manager.CommandManager.getClientMessage;
 
 public abstract class Command {
     protected static final CommandRegistryAccess REGISTRY_ACCESS = CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup());
@@ -34,7 +33,7 @@ public abstract class Command {
 
     public static void sendMessage(String message) {
         if (mc.player == null) return;
-        mc.player.sendMessage(Text.of(getClientMessage() + " "  + message));
+        mc.player.sendMessage(Text.of(Ngm.commandManager.getClientMessage() + " "  + message));
     }
 
     protected static <T> @NotNull RequiredArgumentBuilder<CommandSource, T> arg(final String name, final ArgumentType<T> type) {

@@ -57,6 +57,13 @@ public class BindCommand extends Command {
 
         builder.then(literal("list").executes(context -> {
             StringBuilder binds = new StringBuilder("Binds: ");
+            for (Module feature : Ngm.moduleManager.modules) {
+                /*
+                if (!Objects.equals(feature.getBind().getBind(), "None")) {
+                    binds.append("\n- ").append(feature.getName()).append(" -> ").append(getShortKeyName(feature)).append(feature.getBind().isHold() ? "[hold]" : "");
+                }
+                 */
+            }
             sendMessage(binds.toString());
             return SINGLE_SUCCESS;
         }));
