@@ -1,5 +1,7 @@
 package me.coolmint.ngm.features.modules.combat;
 
+import com.google.common.eventbus.Subscribe;
+import me.coolmint.ngm.event.impl.GameLeftEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.util.entity.EntityFilterList;
@@ -18,6 +20,7 @@ public class TpAura extends Module {
     private final Setting<Integer> attackTime = register(new Setting<>("AttackTime", 1, 1, 20));
     private final Setting<Float> range = register(new Setting<>("Range", 3.2f, 1.0f, 6.0f));
     private final Setting<Priority> priority = register(new Setting<>("Priority", Priority.HEALTH));
+    private final Setting<Boolean> autoDisable = register(new Setting<>("Auto Disable", true));
 
     public TpAura() {
         super("TpAura", "", Category.COMBAT, true, false, false);
@@ -48,12 +51,11 @@ public class TpAura extends Module {
     private final EntityFilterList entityFilters = EntityFilterList.genericCombat();
 
     @Override
-    public void onUpdate()
-    {
+    public void onUpdate() {
         assert mc.player != null;
 
         updateTimer();
-        if(!isTimeToAttack())
+        if (!isTimeToAttack())
             return;
 
         ClientPlayerEntity player = mc.player;
@@ -66,7 +68,7 @@ public class TpAura extends Module {
         stream = entityFilters.applyTo(stream);
 
         Entity entity = stream.min(priority.getValue().comparator).orElse(null);
-        if(entity == null)
+        if (entity == null || entity == mc.player)
             return;
 
         // teleport
@@ -74,7 +76,7 @@ public class TpAura extends Module {
                 entity.getY(), entity.getZ() + random.nextInt(3) * 2 - 2);
 
         // check cooldown
-        if(player.getAttackCooldownProgress(0) < 1)
+        if (player.getAttackCooldownProgress(0) < 1)
             return;
 
         // attack entity
@@ -110,5 +112,9 @@ public class TpAura extends Module {
         {
             return name;
         }
+    }
+    @Subscribe
+    private void onGameLeft(GameLeftEvent event) {
+        if (autoDisable.getValue()) toggle();
     }
 }
