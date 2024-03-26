@@ -28,7 +28,6 @@ public class GuiMove extends Module {
     public void onUpdate() {
         if (mc.currentScreen != null) {
             if (!(mc.currentScreen instanceof ChatScreen)) {
-                mc.player.setSprinting(true);
 
                 for (KeyBinding k : new KeyBinding[]{mc.options.forwardKey, mc.options.backKey, mc.options.leftKey, mc.options.rightKey, mc.options.jumpKey, mc.options.sprintKey}) {
                     k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
