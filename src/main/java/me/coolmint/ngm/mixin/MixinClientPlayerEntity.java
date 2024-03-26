@@ -2,12 +2,12 @@ package me.coolmint.ngm.mixin;
 
 import com.mojang.authlib.GameProfile;
 import me.coolmint.ngm.event.Stage;
-import me.coolmint.ngm.event.impl.EventSync;
-import me.coolmint.ngm.event.impl.UpdateEvent;
-import me.coolmint.ngm.event.impl.UpdateWalkingPlayerEvent;
+import me.coolmint.ngm.event.impl.*;
+import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,11 +15,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static me.coolmint.ngm.features.modules.Module.fullNullCheck;
-import static me.coolmint.ngm.util.player.PlayerUtils.isSprinting;
 import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
+    @Shadow
+    public Input input;
+
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
@@ -46,5 +48,17 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
         EVENT_BUS.post(event);
 
         if (event.isCancelled()) info.cancel();
+    }
+
+    @Inject(method = "setCurrentHand", at = @At(value = "HEAD"))
+    private void hookSetCurrentHand(Hand hand, CallbackInfo ci) {
+        SetCurrentHandEvent setCurrentHandEvent = new SetCurrentHandEvent(hand);
+        EVENT_BUS.post(setCurrentHandEvent);
+    }
+
+    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;" + "ticksLeftToDoubleTapSprint:I", shift = At.Shift.AFTER))
+    private void hookTickMovementPost(CallbackInfo ci) {
+        MovementSlowdownEvent movementUpdateEvent = new MovementSlowdownEvent(input);
+        EVENT_BUS.post(movementUpdateEvent);
     }
 }

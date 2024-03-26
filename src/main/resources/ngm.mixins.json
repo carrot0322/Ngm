@@ -13,11 +13,13 @@
     "ISPacketEntityVelocity"
   ],
   "client": [
+    "MixinBlock",
     "MixinChatInputSuggestor",
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCustomPayloadS2CPacket",
+    "MixinEntity",
     "MixinEntityRenderer",
     "MixinInGameHud",
     "MixinKeyboard",
@@ -25,6 +27,7 @@
     "MixinMinecraftClient",
     "MixinRenderTickCounter",
     "MixinScreen",
+    "MixinSlimeBlock",
     "MixinWorldRenderer",
     "PacketByteBufMixin"
   ],
