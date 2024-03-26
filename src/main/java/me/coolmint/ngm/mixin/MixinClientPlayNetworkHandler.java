@@ -3,6 +3,7 @@ package me.coolmint.ngm.mixin;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.ChatEvent;
+import me.coolmint.ngm.event.impl.GameJoinEvent;
 import me.coolmint.ngm.event.impl.GameLeftEvent;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.EnterReconfigurationS2CPacket;
@@ -30,6 +31,12 @@ public class MixinClientPlayNetworkHandler {
         if (fullNullCheck()) {
             EVENT_BUS.post(GameLeftEvent.get());
         }
+    }
+
+    @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
+    private void hookOnGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+        GameJoinEvent gameJoinEvent = new GameJoinEvent();
+        EVENT_BUS.post(gameJoinEvent);
     }
 
     // the server sends a GameJoin packet after the reconfiguration phase

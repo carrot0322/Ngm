@@ -25,6 +25,8 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.ModuleManager moduleManager;
     public static me.coolmint.ngm.manager.ConfigManager configManager;
     public static me.coolmint.ngm.manager.PlayerManager playerManager;
+    public static me.coolmint.ngm.manager.NetworkManager networkManager;
+    public static me.coolmint.ngm.manager.TickManager tickManager;
 
 
     @Override public void onInitialize() {
@@ -39,6 +41,8 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         speedManager = new me.coolmint.ngm.manager.SpeedManager();
         holeManager = new me.coolmint.ngm.manager.HoleManager();
         playerManager = new me.coolmint.ngm.manager.PlayerManager();
+        networkManager = new me.coolmint.ngm.manager.NetworkManager();
+        tickManager = new me.coolmint.ngm.manager.TickManager();
     }
 
 
