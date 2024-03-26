@@ -11,6 +11,7 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static final String VERSION = "1.0.0-dev";
 
     public static float TIMER = 1f;
+    public static float TICK_TIMER = 1f;
 
     public static final Logger LOGGER = LogManager.getLogger("Ngm");
     public static me.coolmint.ngm.manager.ServerManager serverManager;
