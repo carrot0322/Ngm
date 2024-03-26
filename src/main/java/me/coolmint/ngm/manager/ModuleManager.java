@@ -33,6 +33,7 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         // Module Init
         // Combat
+        modules.add(new Aura());
         modules.add(new Criticals());
         modules.add(new TpAura());
         modules.add(new OneTap());

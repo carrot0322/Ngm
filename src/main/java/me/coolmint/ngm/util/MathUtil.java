@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MathUtil
         implements Util {
@@ -203,5 +204,13 @@ public class MathUtil
         double difZ = to.z - from.z;
         double dist = Math.sqrt(difX * difX + difZ * difZ);
         return new float[]{(float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difZ, difX)) - 90.0), (float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difY, dist)))};
+    }
+
+    public static double random(double min, double max) {
+        return ThreadLocalRandom.current().nextDouble() * (max - min) + min;
+    }
+
+    public static float random(float min, float max) {
+        return (float) (Math.random() * (max - min) + min);
     }
 }
