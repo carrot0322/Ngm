@@ -3,8 +3,10 @@ package me.coolmint.ngm.features.modules.client;
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.ClientEvent;
+import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
+import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 
 public class ClickGuiModule
@@ -48,8 +50,8 @@ public class ClickGuiModule
     public void onSettingChange(ClientEvent event) {
         if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {
             if (event.getSetting().equals(this.prefix)) {
-                //Ngm.commandManager.setPrefix(this.prefix.getPlannedValue());
-                //Command.sendMessage("Prefix set to " + Formatting.DARK_GRAY + Ngm.commandManager.getPrefix());
+                Ngm.commandManager.setPrefix(this.prefix.getPlannedValue());
+                Command.sendMessage("Prefix set to " + Formatting.DARK_GRAY + Ngm.commandManager.getPrefix());
             }
             Ngm.colorManager.setColor(this.red.getPlannedValue(), this.green.getPlannedValue(), this.blue.getPlannedValue(), this.hoverAlpha.getPlannedValue());
         }
@@ -63,7 +65,7 @@ public class ClickGuiModule
     @Override
     public void onLoad() {
         Ngm.colorManager.setColor(this.red.getValue(), this.green.getValue(), this.blue.getValue(), this.hoverAlpha.getValue());
-        //Ngm.commandManager.setPrefix(this.prefix.getValue());
+        Ngm.commandManager.setPrefix(this.prefix.getValue());
     }
 
     @Override
