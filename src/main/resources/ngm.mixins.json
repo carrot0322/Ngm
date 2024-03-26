@@ -15,6 +15,7 @@
     "MixinChatInputSuggestor",
     "MixinClientConnection",
     "MixinClientPlayerEntity",
+    "MixinClientPlayerInteractionManager",
     "MixinClientPlayNetworkHandler",
     "MixinCustomPayloadS2CPacket",
     "MixinEntityRenderer",

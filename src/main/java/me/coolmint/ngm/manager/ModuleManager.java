@@ -8,6 +8,8 @@ import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.exploit.Reach;
+import me.coolmint.ngm.features.modules.render.FreeCam;
 import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
@@ -51,6 +53,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // RENDER
         modules.add(new Fullbright());
+        modules.add(new FreeCam());
 
         // MISC
         modules.add(new AntiPacketKick());
@@ -61,6 +64,7 @@ public class ModuleManager implements Jsonable, Util {
         // EXPLOIT
         modules.add(new CompletionCrash());
         modules.add(new ErrorCrash());
+        modules.add(new Reach());
 
         // CLIENT
         modules.add(new HudModule());
