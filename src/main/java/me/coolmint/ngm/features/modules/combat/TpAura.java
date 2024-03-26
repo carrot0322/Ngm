@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class TpAura extends Module {
     private final Setting<Integer> attackTime = register(new Setting<>("AttackTime", 1, 1, 20));
-    private final Setting<Float> range = register(new Setting<>("Range", 3.2f, 1.0f, 6.0f));
+    private final Setting<Float> range = register(new Setting<>("Range", 3.2f, 1.0f, 40.0f));
     private final Setting<Priority> priority = register(new Setting<>("Priority", Priority.HEALTH));
     private final Setting<Boolean> autoDisable = register(new Setting<>("Auto Disable", true));
 
