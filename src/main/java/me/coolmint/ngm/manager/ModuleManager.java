@@ -43,6 +43,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Step());
         modules.add(new Velocity());
         modules.add(new GuiMove());
+        modules.add(new NoJumpDelay());
 
         // PLAYER
         modules.add(new AntiHunger());
