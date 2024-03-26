@@ -1,11 +1,11 @@
-package me.coolmint.ngm.features.modules.exploit;
+package me.coolmint.ngm.features.modules.player;
 
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 
 public class Reach extends Module {
     public Reach() {
-        super("Reach", "", Category.EXPLOIT, true, false, false);
+        super("Reach", "", Category.PLAYER, true, false, false);
     }
 
     public Setting<Float> range = register(new Setting<>("range", 3f, 3.0f, 6.0f));
