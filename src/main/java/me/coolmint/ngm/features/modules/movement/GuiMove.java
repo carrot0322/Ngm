@@ -14,9 +14,9 @@ import me.coolmint.ngm.util.MovementUtility;
 
 public class GuiMove extends Module {
 
-    public Setting<Boolean> rotateOnArrows = new Setting<>("RotateOnArrows", true);
-    public Setting<Boolean> clickBypass = new Setting<>("strict", false);
-    public Setting<Boolean> sneak = new Setting<>("sneak", false);
+    public Setting<Boolean> rotateOnArrows = register(new Setting<>("RotateOnArrows", true));
+    public Setting<Boolean> clickBypass = register(new Setting<>("strict", false));
+    public Setting<Boolean> sneak = register(new Setting<>("sneak", false));
 
     public GuiMove() {
         super("GuiMove", "", Module.Category.MOVEMENT, true, false, false);

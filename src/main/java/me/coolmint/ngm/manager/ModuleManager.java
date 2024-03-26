@@ -35,6 +35,8 @@ public class ModuleManager implements Jsonable, Util {
         // Combat
         modules.add(new Criticals());
         modules.add(new TpAura());
+        modules.add(new OneTap());
+        modules.add(new BowSpam());
 
         // MOVEMENT
         modules.add(new Flight());
