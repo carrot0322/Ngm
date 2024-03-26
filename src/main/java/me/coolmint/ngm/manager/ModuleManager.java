@@ -56,6 +56,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new AntiPacketKick());
         modules.add(new MCF());
         modules.add(new Spammer());
+        modules.add(new XCarry());
 
         // EXPLOIT
         modules.add(new CompletionCrash());
