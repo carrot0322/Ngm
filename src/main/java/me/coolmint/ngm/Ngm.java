@@ -1,6 +1,7 @@
 package me.coolmint.ngm;
 
 import com.google.common.eventbus.EventBus;
+import me.coolmint.ngm.manager.PlayerManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +29,7 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.PlayerManager playerManager;
     public static me.coolmint.ngm.manager.NetworkManager networkManager;
     public static me.coolmint.ngm.manager.TickManager tickManager;
+    public static me.coolmint.ngm.manager.PlayerManager PlayerManager;
 
 
     @Override public void onInitialize() {
