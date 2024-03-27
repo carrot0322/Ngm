@@ -33,12 +33,6 @@ public class Flight extends Module {
 
         final double[] dir = MovementUtility.forward(hSpeed.getValue());
         mc.player.setVelocity(dir[0], mc.player.getVelocity().getY(), dir[1]);
-
-        if (mode.getValue() == Mode.Groundspoof) {
-            if (MovementUtility.isMoving() && mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().expand(0.5, 0.0, 0.5).offset(0.0, -1.0, 0.0)).iterator().hasNext()) {
-                mc.player.setOnGround(true);
-            }
-        }
     }
 
     @Subscribe
@@ -53,16 +47,7 @@ public class Flight extends Module {
         }
     }
 
-    @Subscribe
-    public void onSync(EventSync e) {
-        if (mode.getValue() == Mode.Vanilla) {
-            if (mc.player.isSneaking()) {
-                mc.player.getAbilities().flying = true;
-            }
-        }
-    }
-
     private enum Mode {
-        Vanilla, Groundspoof
+        Vanilla
     }
 }
