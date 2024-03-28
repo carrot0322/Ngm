@@ -6,7 +6,7 @@ import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 
 public class Reach extends Module {
-    public Setting<Float> reach = register(new Setting<>("reach", 3f, 3f, 10f));
+    public Setting<Float> reach = register(new Setting<>("ReachAdd", 0f, 0f, 3f));
 
     public Reach() {
         super("Reach", "", Category.PLAYER, true, false, false);
