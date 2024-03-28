@@ -54,6 +54,7 @@ public class ModuleManager implements Jsonable, Util {
         // PLAYER
         modules.add(new AntiHunger());
         modules.add(new FastPlace());
+        modules.add(new Reach());
 
         // RENDER
         modules.add(new Fullbright());

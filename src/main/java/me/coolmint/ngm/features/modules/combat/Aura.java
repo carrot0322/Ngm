@@ -44,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static me.coolmint.ngm.util.MathUtil.random;
 import static net.minecraft.util.UseAction.BLOCK;
@@ -277,11 +279,11 @@ public class Aura extends Module {
     }
 
     public float getAttackCooldownProgressPerTick() {
-        return (float) (1.0 / mc.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) * (20.0 * Ngm.TICK_TIMER * (tpsSync.getValue() ? ThunderHack.serverManager.getTPSFactor() : 1f)));
+        return (float) (1.0 / mc.player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) * (20.0 * Ngm.TICK_TIMER * 1f));
     }
 
     public float getAttackCooldown() {
-        return MathHelper.clamp(((float) ((ILivingEntity) mc.player).getLastAttackedTicks() + attackBaseTime.getValue()) / getAttackCooldownProgressPerTick(), 0.0F, 1.0F);
+        return MathHelper.clamp(((float) ((ILivingEntity) mc.player).getLastAttackedTicks() + (0.5f) / getAttackCooldownProgressPerTick()), 0.0F, 1.0F);
     }
 
     private void updateTarget() {
@@ -304,7 +306,7 @@ public class Aura extends Module {
 
     private void calcRotations(boolean ready) {
         if (ready) {
-            trackticks = interactTicks.getValue();
+            trackticks = 3;
         } else if (trackticks > 0) {
             trackticks--;
         }
@@ -322,7 +324,7 @@ public class Aura extends Module {
                 if (targetVec == null)
                     return;
 
-                pitchAcceleration = lookingAtHitbox ? aimedPitchStep.getValue() : pitchAcceleration < maxPitchStep.getValue() ? pitchAcceleration * pitchAccelerate.getValue() : maxPitchStep.getValue();
+                pitchAcceleration = lookingAtHitbox ? 1f : pitchAcceleration < 8f ? pitchAcceleration * 1.65f : 8f;
 
                 float prevYaw = rotationYaw;
                 float prevPitch = rotationPitch;
@@ -330,13 +332,8 @@ public class Aura extends Module {
                 float delta_yaw = wrapDegrees((float) wrapDegrees(Math.toDegrees(Math.atan2(targetVec.z - mc.player.getZ(), (targetVec.x - mc.player.getX()))) - 90) - rotationYaw);
                 float delta_pitch = ((float) (-Math.toDegrees(Math.atan2(targetVec.y - (mc.player.getPos().y + mc.player.getEyeHeight(mc.player.getPose())), Math.sqrt(Math.pow((targetVec.x - mc.player.getX()), 2) + Math.pow(targetVec.z - mc.player.getZ(), 2))))) - rotationPitch);
 
-                float yawStep = mode.getValue() == Mode.Interact ? 360f : random(minYawStep.getValue(), maxYawStep.getValue());
-                float pitchStep = mode.getValue() == Mode.Interact ? 180f : pitchAcceleration + random(-1f, 1f);
-
-                if (accelerateOnHit.getValue() && ready) {
-                    yawStep = 180f;
-                    pitchStep = 90f;
-                }
+                float yawStep = random(minYawStep.getValue(), maxYawStep.getValue());
+                float pitchStep = pitchAcceleration + random(-1f, 1f);
 
                 if (delta_yaw > 180)
                     delta_yaw = delta_yaw - 180;
@@ -350,7 +347,7 @@ public class Aura extends Module {
 
                 double gcdFix = (Math.pow(mc.options.getMouseSensitivity().getValue() * 0.6 + 0.2, 3.0)) * 1.2;
 
-                if (trackticks > 0 || mode.getValue() == Mode.Track) {
+                if (trackticks > 0) {
                     rotationYaw = (float) (newYaw - (newYaw - rotationYaw) % gcdFix);
                     rotationPitch = (float) (newPitch - (newPitch - rotationPitch) % gcdFix);
                 } else {
@@ -358,11 +355,9 @@ public class Aura extends Module {
                     rotationPitch = mc.player.getPitch();
                 }
 
-                ModuleManager.rotations.fixRotation = rotationYaw;
-
                 lookingAtHitbox = Ngm.playerManager.checkRtx(
-                        rayTraceAngle.getValue() == RayTraceAngle.Calculated ? rotationYaw : prevYaw,
-                        rayTraceAngle.getValue() == RayTraceAngle.Calculated ? rotationPitch : prevPitch,
+                        rotationYaw,
+                        rotationPitch,
                         attackRange.getValue(), wallRange.getValue(), rayTrace.getValue());
             }
             case SunRise -> {
@@ -378,7 +373,7 @@ public class Aura extends Module {
                 if (Math.abs(additionYaw - prevYaw) <= 3.0f)
                     additionYaw = prevYaw + 3.1f;
 
-                if (trackticks > 0 || mode.getValue() == Mode.Track) {
+                if (trackticks > 0) {
                     rotationYaw = rotationYaw + (yawDelta > 0.0f ? additionYaw : -additionYaw) * 1.0001f;
                     rotationPitch = MathHelper.clamp(rotationPitch + (pitchDelta > 0.0f ? additionPitch : -additionPitch) * 1.0001f, -90.0f, 90.0f);
                 } else {
@@ -388,7 +383,6 @@ public class Aura extends Module {
 
                 prevYaw = additionYaw;
                 lookingAtHitbox = Ngm.playerManager.checkRtx(rotationYaw, rotationPitch, attackRange.getValue(), wallRange.getValue(), rayTrace.getValue());
-                Ngm.moduleManager.fixRotation = rotationYaw;
             }
         }
     }
@@ -419,6 +413,7 @@ public class Aura extends Module {
             mc.player.setYaw((float) Render2DEngine.interpolate(mc.player.prevYaw, rotationYaw, mc.getTickDelta()));
             mc.player.setPitch((float) Render2DEngine.interpolate(mc.player.prevPitch, rotationPitch, mc.getTickDelta()));
         }
+
 
     @Override
     public void onDisable() {
@@ -485,7 +480,7 @@ public class Aura extends Module {
 
                             if (PlayerUtility.squaredDistanceFromEyes(v1) > attackRange.getPow2Value()) continue;
 
-                            rotation = Ngm.calcAngle(v1);
+                            rotation = Ngm.playerManager.calcAngle(v1);
                             if (Ngm.playerManager.checkRtx(rotation[0], rotation[1], attackRange.getValue(), 0, rayTrace.getValue())) {
                                 rotationPoint = new Vec3d(x1, y1, z1);
                                 break;
@@ -510,7 +505,7 @@ public class Aura extends Module {
         for (float x1 = -halfBox; x1 <= halfBox; x1 += 0.15f) {
             for (float z1 = -halfBox; z1 <= halfBox; z1 += 0.15f) {
                 for (float y1 = 0.05f; y1 <= target.getBoundingBox().getLengthY(); y1 += 0.25f) {
-                    if (PlayerUtility.squaredDistanceFromEyes(new Vec3d(target.getX() + x1, target.getY() + y1, target.getZ() + z1));
+                    if (PlayerUtility.squaredDistanceFromEyes(new Vec3d(target.getX() + x1, target.getY() + y1, target.getZ() + z1)) < getSquaredRotateDistance());
                         continue;
 
                     rotation = Ngm.PlayerManager.calcAngle(new Vec3d(target.getX() + x1, target.getY() + y1, target.getZ() + z1));
@@ -523,13 +518,20 @@ public class Aura extends Module {
         return false;
     }
 
+    private float getSquaredRotateDistance() {
+        float dst = attackRange.getValue();
+        dst += aimRange.getValue();
+        if ((mc.player.isFallFlying()) && target != null) dst += 4f;
+
+        return dst * dst;
+    }
+
     public Entity findTarget() {
         List<LivingEntity> first_stage = new CopyOnWriteArrayList<>();
         for (Entity ent : mc.world.getEntities()) {
             if ((ent instanceof ShulkerBulletEntity || ent instanceof FireballEntity)
                     && ent.isAlive()
-                    && isInRange(ent)
-                    && Projectiles.getValue()) {
+                    && isInRange(ent)) {
                 return ent;
             }
             if (skipEntity(ent)) continue;
@@ -580,17 +582,16 @@ public class Aura extends Module {
         if (ent.isDead() || !entity.isAlive()) return true;
         if (entity instanceof ArmorStandEntity) return true;
         if (entity instanceof CatEntity) return true;
-        if (skipNotSelected(entity)) return true;
         if (!isInFOV(ent)) return true;
 
         if (entity instanceof PlayerEntity player) {
             if (player == mc.player || Ngm.friendManager.isFriend(player))
                 return true;
-            if (player.isCreative() && ignoreCreative.getValue())
+            if (player.isCreative())
                 return true;
             if (player.isInvisible() && ignoreInvisible.getValue())
                 return true;
-            if (player.getTeamColorValue() == mc.player.getTeamColorValue() && ignoreTeam.getValue() && mc.player.getTeamColorValue() != 16777215)
+            if (player.getTeamColorValue() == mc.player.getTeamColorValue() && mc.player.getTeamColorValue() != 16777215)
                 return true;
         }
 
@@ -599,18 +600,7 @@ public class Aura extends Module {
 
     private boolean isBullet(Entity entity) {
         return (entity instanceof ShulkerBulletEntity || entity instanceof FireballEntity)
-                && entity.isAlive()
-                && PlayerUtility.squaredDistanceFromEyes(entity.getPos())
-                && Projectiles.getValue();
-    }
-
-    private boolean skipNotSelected(Entity entity) {
-        if (entity instanceof SlimeEntity && !Slimes.getValue()) return true;
-        if (entity instanceof HostileEntity he && !he.isAngryAt(mc.player) && onlyAngry.getValue()) return true;
-        if (entity instanceof PlayerEntity && !Players.getValue()) return true;
-        if (entity instanceof VillagerEntity && !Villagers.getValue()) return true;
-        if (entity instanceof MobEntity && !Mobs.getValue()) return true;
-        return entity instanceof AnimalEntity && !Animals.getValue();
+                && entity.isAlive();
     }
 
     private boolean isInFOV(@NotNull LivingEntity e) {
