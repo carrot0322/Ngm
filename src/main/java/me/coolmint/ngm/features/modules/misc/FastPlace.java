@@ -1,11 +1,11 @@
-package me.coolmint.ngm.features.modules.player;
+package me.coolmint.ngm.features.modules.misc;
 
 import me.coolmint.ngm.features.modules.Module;
 import net.minecraft.item.Items;
 
 public class FastPlace extends Module {
     public FastPlace() {
-        super("FastPlace", "", Category.PLAYER, true, false, false);
+        super("FastPlace", "", Category.MISC, true, false, false);
     }
 
     @Override public void onUpdate() {

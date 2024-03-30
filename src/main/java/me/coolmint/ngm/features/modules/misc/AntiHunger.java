@@ -1,4 +1,4 @@
-package me.coolmint.ngm.features.modules.player;
+package me.coolmint.ngm.features.modules.misc;
 
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.features.modules.Module;
@@ -10,7 +10,7 @@ import me.coolmint.ngm.mixin.IPlayerMoveC2SPacket;
 
 public class AntiHunger extends Module {
     public AntiHunger() {
-        super("AntiHunger", "", Category.PLAYER, true, false, false);
+        super("AntiHunger", "", Category.MISC, true, false, false);
     }
 
     @Subscribe

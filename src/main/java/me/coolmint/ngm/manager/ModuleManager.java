@@ -8,6 +8,8 @@ import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.legit.Reach;
+import me.coolmint.ngm.features.modules.legit.Trigger;
 import me.coolmint.ngm.features.modules.render.FreeCam;
 import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
@@ -17,7 +19,6 @@ import me.coolmint.ngm.features.modules.client.*;
 import me.coolmint.ngm.features.modules.combat.*;
 import me.coolmint.ngm.features.modules.misc.*;
 import me.coolmint.ngm.features.modules.movement.*;
-import me.coolmint.ngm.features.modules.player.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,29 +53,31 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Speed());
         modules.add(new Scaffold());
 
-        // PLAYER
-        modules.add(new AntiHunger());
-        modules.add(new FastPlace());
-        modules.add(new Reach());
-
         // RENDER
         modules.add(new Fullbright());
         modules.add(new FreeCam());
 
         // MISC
+        modules.add(new AntiHunger());
         modules.add(new AntiPacketKick());
+        modules.add(new FastPlace());
         modules.add(new MCF());
+
         modules.add(new Spammer());
         modules.add(new XCarry());
-
-        // EXPLOIT
-        modules.add(new CompletionCrash());
-        modules.add(new ErrorCrash());
 
         // CLIENT
         modules.add(new HudModule());
         modules.add(new ClickGuiModule());
         modules.add(new Rotations());
+
+        // LEGIT
+        modules.add(new Reach());
+        modules.add(new Trigger());
+
+        // EXPLOIT
+        modules.add(new CompletionCrash());
+        modules.add(new ErrorCrash());
     }
 
     public Module getModuleByName(String name) {

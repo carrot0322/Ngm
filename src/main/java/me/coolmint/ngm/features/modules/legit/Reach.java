@@ -1,4 +1,4 @@
-package me.coolmint.ngm.features.modules.player;
+package me.coolmint.ngm.features.modules.legit;
 
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.event.impl.ReachEvent;
@@ -9,7 +9,7 @@ public class Reach extends Module {
     public Setting<Float> reach = register(new Setting<>("ReachAdd", 0f, 0f, 3f));
 
     public Reach() {
-        super("Reach", "", Category.PLAYER, true, false, false);
+        super("Reach", "", Category.LEGIT, true, false, false);
     }
 
     @Subscribe

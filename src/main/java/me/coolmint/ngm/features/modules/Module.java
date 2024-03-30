@@ -196,11 +196,11 @@ public class Module extends Feature implements Jsonable {
     public enum Category {
         COMBAT("Combat"),
         MOVEMENT("Movement"),
-        PLAYER("Player"),
         RENDER("Render"),
         MISC("Misc"),
+        CLIENT("Client"),
         EXPLOIT("Exploit"),
-        CLIENT("Client");
+        LEGIT("Legit");
 
         private final String name;
 
