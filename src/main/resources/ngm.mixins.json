@@ -15,6 +15,7 @@
   "client": [
     "MixinBlock",
     "MixinChatInputSuggestor",
+    "MixinClientCommonNetworkHandler",
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
