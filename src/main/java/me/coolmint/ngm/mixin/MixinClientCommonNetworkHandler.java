@@ -16,7 +16,7 @@ public class MixinClientCommonNetworkHandler {
     @Inject(method = "onDisconnected", at = @At("HEAD"), cancellable = true)
     private void onDisconnected(Text reason, CallbackInfo info) {
         if (Ngm.moduleManager.isModuleEnabled("SilentDisconnect") && mc.world != null && mc.player != null) {
-            ChatUtil.sendInfo(Text.translatable("disconnect.lost").getString() + " : " + reason.getString());
+            ChatUtil.sendWarning(Text.translatable("disconnect.lost").getString() + " : " + reason.getString());
             info.cancel();
         }
     }
