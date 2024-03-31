@@ -4,7 +4,7 @@ import me.coolmint.ngm.event.Event;
 import net.minecraft.network.packet.Packet;
 
 public class PacketEvent extends Event {
-    private final Packet<?> packet;
+    public final Packet<?> packet;
 
     public PacketEvent(Packet<?> packet) {
         this.packet = packet;

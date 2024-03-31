@@ -44,14 +44,13 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Flight());
         modules.add(new GuiMove());
         modules.add(new NoFall());
-        modules.add(new NoSlow());
         modules.add(new NoJumpDelay());
+        modules.add(new NoSlow());
         modules.add(new Parkour());
+        modules.add(new Speed());
         modules.add(new Sprint());
         modules.add(new Step());
         modules.add(new Velocity());
-        modules.add(new Speed());
-        modules.add(new Scaffold());
 
         // RENDER
         modules.add(new Fullbright());
@@ -67,8 +66,9 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new XCarry());
 
         // CLIENT
-        modules.add(new HudModule());
         modules.add(new ClickGuiModule());
+        modules.add(new ClientSpoof());
+        modules.add(new HudModule());
         modules.add(new Rotations());
 
         // LEGIT
