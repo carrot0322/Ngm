@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 public class ClientSpoof extends Module {
     private Setting<Boolean> spoofBrand = register(new Setting<>("SpoofBrand", false));
     private Setting<brandList> brand = register(new Setting<>("Brand", brandList.vanilla, v -> spoofBrand.getValue()));
-    private Setting<Boolean> resourcePack = register(new Setting<>("ResourcePack", false));
+    private Setting<Boolean> resourcePack = register(new Setting<>("ResourcePack Block", false));
 
     public enum brandList {
         vanilla,
