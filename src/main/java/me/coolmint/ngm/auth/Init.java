@@ -18,7 +18,7 @@ public class Init {
     public static boolean auth() {
         String hwid = getHwid();
         try {
-            URL url = new URL("http://121.254.171.162:20831/hwid/" + hwid + "/" + mc.getSession().getUsername());
+            URL url = new URL("http://121.254.171.162:20831/auth/" + hwid + "/" + mc.getSession().getUsername());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoOutput(true);

@@ -1,5 +1,6 @@
 package me.coolmint.ngm.mixin;
 
+import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.auth.Init;
 import me.coolmint.ngm.features.gui.fonts.FontRenderers;
 import net.minecraft.client.MinecraftClient;
@@ -23,7 +24,7 @@ public class MixinNGM {
     public void init(RunArgs args, CallbackInfo ci) {
         if (!Init.auth()) {
             //Send Log
-            LOGGER.warn("Invalid Hwid : " + Init.encodeHWID(Init.getHwid()));
+            LOGGER.warn("[{}] Invalid Hwid : " + Init.encodeHWID(Init.getHwid()), Ngm.NAME);
             System.exit(1);
         }
 
