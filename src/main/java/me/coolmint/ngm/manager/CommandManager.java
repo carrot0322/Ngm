@@ -21,7 +21,6 @@ public class CommandManager {
 
     public CommandManager() {
         add(new BindCommand());
-        add(new ToggleCommand());
     }
 
     private void add(@NotNull Command command) {

@@ -47,7 +47,7 @@ public class ClickGui extends Screen {
     private void load() {
         int x = -84;
         for (final Module.Category category : Ngm.moduleManager.getCategories()) {
-            this.components.add(new Component(category.getName(), x += 105, 4, true) {
+            this.components.add(new Component(category, category.getName(), x += 105, 4, true) {
 
                 @Override
                 public void setupItems() {
@@ -77,7 +77,7 @@ public class ClickGui extends Screen {
 
     @Override public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         Item.context = context;
-        context.fill(0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight(), new Color(0, 0, 0, 120).hashCode());
+        //context.fill(0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight(), new Color(0, 0, 0, 120).hashCode());
         this.components.forEach(components -> components.drawScreen(context, mouseX, mouseY, delta));
     }
 

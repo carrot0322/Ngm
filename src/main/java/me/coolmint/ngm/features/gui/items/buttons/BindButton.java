@@ -2,16 +2,18 @@ package me.coolmint.ngm.features.gui.items.buttons;
 
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.gui.ClickGui;
+import me.coolmint.ngm.features.gui.fonts.FontRenderers;
 import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.features.settings.Bind;
 import me.coolmint.ngm.features.settings.Setting;
-import me.coolmint.ngm.util.ColorUtil;
 import me.coolmint.ngm.util.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
+
+import java.awt.*;
 
 public class BindButton
         extends Button {
@@ -26,14 +28,15 @@ public class BindButton
 
     @Override
     public void drawScreen(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        int color = ColorUtil.toARGB(ClickGuiModule.getInstance().red.getValue(), ClickGuiModule.getInstance().green.getValue(), ClickGuiModule.getInstance().blue.getValue(), 255);
-        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? 0x11555555 : -2007673515) : (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue())));
+        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width + 7.4f, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? new Color(0, 0, 0, 0).getRGB() : -2007673515) : (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue())));
         if (this.isListening) {
-            drawString("Press a Key...", this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), -1);
+            //drawString("Press a Key...", this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), -1);
+            FontRenderers.Main.drawString(context.getMatrices(), "Press a Key...", this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), Color.WHITE.getRGB(), true);
         } else {
             String str = this.setting.getValue().toString().toUpperCase();
             str = str.replace("KEY.KEYBOARD", "").replace(".", " ");
-            drawString(this.setting.getName() + " " + Formatting.GRAY + str, this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+            //drawString(this.setting.getName() + " " + Formatting.GRAY + str, this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
+            FontRenderers.Main.drawString(context.getMatrices(), this.setting.getName() + " " + Formatting.GRAY + str, this.x + 2.3f, this.y - 1.7f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406, true);
         }
     }
 

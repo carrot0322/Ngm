@@ -13,7 +13,7 @@
     "ISPacketEntityVelocity"
   ],
   "client": [
-    "IClientPlayNetworkHandler",
+    "MixinNGM",
     "MixinBlock",
     "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",

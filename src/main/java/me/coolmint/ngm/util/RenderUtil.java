@@ -2,16 +2,71 @@ package me.coolmint.ngm.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.coolmint.ngm.util.traits.Util;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import java.awt.*;
 
 public class RenderUtil implements Util {
+    public static void renderRoundedQuad(@NotNull DrawContext context, double fromX, double fromY, double toX, double toY, double rad, double samples, @NotNull Color c) {
+        int color = c.getRGB();
+        Matrix4f matrix = context.getMatrices().peek().getPositionMatrix();
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float g = (float) (color >> 16 & 255) / 255.0F;
+        float h = (float) (color >> 8 & 255) / 255.0F;
+        float k = (float) (color & 255) / 255.0F;
+        RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+
+        renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples);
+
+        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+    }
+
+    public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples) {
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+
+        double toX1 = toX - rad;
+        double toY1 = toY - rad;
+        double fromX1 = fromX + rad;
+        double fromY1 = fromY + rad;
+        double[][] map = new double[][]{new double[]{toX1, toY1}, new double[]{toX1, fromY1}, new double[]{fromX1, fromY1}, new double[]{fromX1, toY1}};
+        for (int i = 0; i < 4; i++) {
+            double[] current = map[i];
+            for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                float rad1 = (float) Math.toRadians(r);
+                float sin = (float) (Math.sin(rad1) * rad);
+                float cos = (float) (Math.cos(rad1) * rad);
+                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+            }
+        }
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+    }
+
+    public static void renderRoundedQuadMatrix(@NotNull MatrixStack matrices, double fromX, double fromY, double toX, double toY, double rad, double samples, @NotNull Color c) {
+        int color = c.getRGB();
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float g = (float) (color >> 16 & 255) / 255.0F;
+        float h = (float) (color >> 8 & 255) / 255.0F;
+        float k = (float) (color & 255) / 255.0F;
+        RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+
+        renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples);
+
+        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+    }
 
     public static void rect(MatrixStack stack, float x1, float y1, float x2, float y2, int color) {
         rectFilled(stack, x1, y1, x2, y2, color);

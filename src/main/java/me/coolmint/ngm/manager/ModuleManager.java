@@ -35,11 +35,11 @@ public class ModuleManager implements Jsonable, Util {
         // Module Init
         // Combat
         modules.add(new Criticals());
+        modules.add(new KillAura());
         modules.add(new TpAura());
         modules.add(new OneTap());
         modules.add(new BowSpam());
         modules.add(new Replenish());
-        modules.add(new KillAura());
 
         // MOVEMENT
         modules.add(new Flight());
@@ -99,38 +99,30 @@ public class ModuleManager implements Jsonable, Util {
 
     public void enableModule(Class<Module> clazz) {
         Module module = this.getModuleByClass(clazz);
-        if (module != null)
+        if (module != null) {
             module.enable();
+        }
     }
 
     public void disableModule(Class<Module> clazz) {
         Module module = this.getModuleByClass(clazz);
-        if (module != null)
+        if (module != null) {
             module.disable();
-    }
-
-    public void toggleModule(Class<Module> clazz){
-        Module module = this.getModuleByClass(clazz);
-        if (module != null)
-            module.toggle();
+        }
     }
 
     public void enableModule(String name) {
         Module module = this.getModuleByName(name);
-        if (module != null)
+        if (module != null) {
             module.enable();
+        }
     }
 
     public void disableModule(String name) {
         Module module = this.getModuleByName(name);
-        if (module != null)
+        if (module != null) {
             module.disable();
-    }
-
-    public void toggleModule(String name){
-        Module module = this.getModuleByName(name);
-        if (module != null)
-            module.toggle();
+        }
     }
 
     public boolean isModuleEnabled(String name) {

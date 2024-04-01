@@ -20,7 +20,6 @@ public abstract class MixinMinecraftClient {
     @Shadow public ClientWorld world;
 
 
-
     @Inject(method = "disconnect(Lnet/minecraft/client/gui/screen/Screen;)V", at = @At("HEAD"))
     private void onDisconnect(Screen screen, CallbackInfo info) {
         if (world != null) {
