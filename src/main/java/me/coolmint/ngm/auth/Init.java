@@ -37,32 +37,6 @@ public class Init {
         }
     }
 
-    public static void sendFailed() throws IOException {
-        Webhook webhook = new Webhook("https://discord.com/api/webhooks/1223945919033249812/Ergny2Y2B9FPMtyJzAHpwUXZvv6-hbRypc5XTlF8d0NbkihRSFsQ1z5hzwUkSnZg19SF");
-        Webhook.EmbedObject embed = new Webhook.EmbedObject();
-        //embed.setThumbnail("https://cdn.discordapp.com/attachments/1223945894790172693/1224233204781678602/Screenshot_20240401_144325_CapCut.png?ex=661cbf05&is=660a4a05&hm=cf0c9f905ea5818535372baef3b412bc8e00b11dd78775572057481b2188f538&");
-        embed.setThumbnail("https://minotar.net/helm/" + mc.getSession().getUsername() + "/600.png");
-        embed.setTitle("Auth failed - " + MinecraftClient.getInstance().getSession().getUsername());
-        embed.setDescription(getHwid());
-        embed.setColor(Color.red);
-        webhook.addEmbed(embed);
-
-        if (!auth()) webhook.execute();
-    }
-
-    public static void sendWebhook() throws IOException {
-        Webhook webhook = new Webhook("https://discord.com/api/webhooks/1223945919033249812/Ergny2Y2B9FPMtyJzAHpwUXZvv6-hbRypc5XTlF8d0NbkihRSFsQ1z5hzwUkSnZg19SF");
-        Webhook.EmbedObject embed = new Webhook.EmbedObject();
-        //embed.setThumbnail("https://cdn.discordapp.com/attachments/1223945894790172693/1224233204781678602/Screenshot_20240401_144325_CapCut.png?ex=661cbf05&is=660a4a05&hm=cf0c9f905ea5818535372baef3b412bc8e00b11dd78775572057481b2188f538&");
-        embed.setThumbnail("https://minotar.net/helm/" + mc.getSession().getUsername() + "/600.png");
-        embed.setTitle("New login - " + MinecraftClient.getInstance().getSession().getUsername());
-        embed.setDescription(getHwid());
-        embed.setColor(Color.GREEN);
-        webhook.addEmbed(embed);
-
-        if (auth()) webhook.execute();
-    }
-
     public static String getHwid() {
         String hwid = System.getenv("PROCESSOR_IDENTIFIER")
                 + System.getProperty("user.name")
