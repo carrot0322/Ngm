@@ -1,18 +1,23 @@
 package me.coolmint.ngm.features.modules.misc;
 
 import me.coolmint.ngm.features.modules.Module;
-import net.minecraft.item.Items;
+import me.coolmint.ngm.mixin.IMinecraftClientAccessor;
+import net.minecraft.client.MinecraftClient;
 
 public class FastPlace extends Module {
     public FastPlace() {
         super("FastPlace", "", Category.MISC, true, false, false);
     }
 
-    @Override public void onUpdate() {
-        if (nullCheck()) return;
-
-        if (mc.player.isHolding(Items.EXPERIENCE_BOTTLE)) {
-            mc.itemUseCooldown = 0;
-        }
+    @Override
+    public void onTick() {
+        ((IMinecraftClientAccessor) MinecraftClient.getInstance()).setItemUseCooldown(0);
+        super.onTick();
     }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+    }
+
 }

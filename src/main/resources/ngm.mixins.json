@@ -9,6 +9,7 @@
     "IClientWorldMixin",
     "IExplosionS2CPacket",
     "ILivingEntity",
+    "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity"
   ],
