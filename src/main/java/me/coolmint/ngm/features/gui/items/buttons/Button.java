@@ -24,7 +24,7 @@ public class Button
 
     @Override
     public void drawScreen(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue())) : (!this.isHovering(mouseX, mouseY) ? new Color(0, 0, 0, 0).getRGB() : -2007673515));
+        RenderUtil.rect(context.getMatrices(), this.x, this.y, this.x + (float) this.width, this.y + (float) this.height - 0.5f, this.getState() ? (!this.isHovering(mouseX, mouseY) ? Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue()) : Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue())) : (!this.isHovering(mouseX, mouseY) ? new Color(0, 0, 0, 0).getRGB() : -2007673515));
         FontRenderers.Main.drawString(context.getMatrices(), this.getName(), this.x + 2.3f, this.y - 2.0f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406, true);
         //drawString(this.getName(), this.x + 2.3f, this.y - 2.0f - (float) ClickGui.getClickGui().getTextOffset(), this.getState() ? -1 : -5592406);
     }

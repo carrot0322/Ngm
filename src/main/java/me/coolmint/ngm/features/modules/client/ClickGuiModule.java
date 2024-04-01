@@ -13,20 +13,16 @@ public class ClickGuiModule
         extends Module {
     private static ClickGuiModule INSTANCE = new ClickGuiModule();
     public Setting<String> prefix = this.register(new Setting<>("Prefix", "."));
-    public Setting<Integer> red = this.register(new Setting<>("Red", 6, 0, 255));
-    public Setting<Integer> green = this.register(new Setting<>("Green", 251, 0, 255));
-    public Setting<Integer> blue = this.register(new Setting<>("Blue", 150, 0, 255));
-    public Setting<Integer> hoverAlpha = this.register(new Setting<>("Alpha", 255, 0, 255));
-    public Setting<Integer> topRed = this.register(new Setting<>("SecondRed", 5, 0, 255));
-    public Setting<Integer> topGreen = this.register(new Setting<>("SecondGreen", 200, 0, 255));
-    public Setting<Integer> topBlue = this.register(new Setting<>("SecondBlue", 150, 0, 255));
-    public Setting<Integer> alpha = this.register(new Setting<>("HoverAlpha", 100, 0, 255));
     public Setting<Boolean> rainbow = this.register(new Setting<>("Rainbow", false));
-    public Setting<rainbowMode> rainbowModeHud = this.register(new Setting<>("HRainbowMode", rainbowMode.Static, v -> this.rainbow.getValue()));
-    public Setting<rainbowModeArray> rainbowModeA = this.register(new Setting<>("ARainbowMode", rainbowModeArray.Static, v -> this.rainbow.getValue()));
-    public Setting<Integer> rainbowHue = this.register(new Setting<>("Delay", 240, 0, 600, v -> this.rainbow.getValue()));
-    public Setting<Float> rainbowBrightness = this.register(new Setting<>("Brightness ", 150.0f, 1.0f, 255.0f, v -> this.rainbow.getValue()));
-    public Setting<Float> rainbowSaturation = this.register(new Setting<>("Saturation", 150.0f, 1.0f, 255.0f, v -> this.rainbow.getValue()));
+    public Setting<Integer> rainbowHue = this.register(new Setting<>("Delay", 240, 0, 600, v -> rainbow.getValue()));
+    public Setting<Float> rainbowBrightness = this.register(new Setting<>("Brightness ", 150.0f, 1.0f, 255.0f, v -> rainbow.getValue()));
+    public Setting<Float> rainbowSaturation = this.register(new Setting<>("Saturation", 150.0f, 1.0f, 255.0f, v -> rainbow.getValue()));
+    public Setting<Integer> red = this.register(new Setting<>("Red", 20, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> green = this.register(new Setting<>("Green", 255, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> blue = this.register(new Setting<>("Blue", 80, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> alpha = this.register(new Setting<>("Alpha", 90, 0, 255));
+    public Setting<Integer> hoverAlpha = this.register(new Setting<>("HoverAlpha", 40, 0, 255, v -> !rainbow.getValue()));
+
     private me.coolmint.ngm.features.gui.ClickGui click;
 
     public ClickGuiModule() {
@@ -53,7 +49,7 @@ public class ClickGuiModule
                 Ngm.commandManager.setPrefix(this.prefix.getPlannedValue());
                 Command.sendMessage("Prefix set to " + Formatting.DARK_GRAY + Ngm.commandManager.getPrefix());
             }
-            Ngm.colorManager.setColor(this.red.getPlannedValue(), this.green.getPlannedValue(), this.blue.getPlannedValue(), this.hoverAlpha.getPlannedValue());
+            Ngm.colorManager.setColor(this.red.getPlannedValue(), this.green.getPlannedValue(), this.blue.getPlannedValue(), this.alpha.getPlannedValue());
         }
     }
 
@@ -64,7 +60,7 @@ public class ClickGuiModule
 
     @Override
     public void onLoad() {
-        Ngm.colorManager.setColor(this.red.getValue(), this.green.getValue(), this.blue.getValue(), this.hoverAlpha.getValue());
+        Ngm.colorManager.setColor(this.red.getValue(), this.green.getValue(), this.blue.getValue(), this.alpha.getValue());
         Ngm.commandManager.setPrefix(this.prefix.getValue());
     }
 
@@ -73,17 +69,5 @@ public class ClickGuiModule
         if (!(ClickGuiModule.mc.currentScreen instanceof me.coolmint.ngm.features.gui.ClickGui)) {
             this.disable();
         }
-    }
-
-    public enum rainbowModeArray {
-        Static,
-        Up
-
-    }
-
-    public enum rainbowMode {
-        Static,
-        Sideway
-
     }
 }

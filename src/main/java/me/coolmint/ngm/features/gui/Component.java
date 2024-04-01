@@ -69,7 +69,7 @@ public class Component
         this.drag(mouseX, mouseY);
         counter1 = new int[]{1};
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
-        FontRenderers.Main.drawString(context.getMatrices(), "N", 3, 3,  Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).alpha.getValue()), true);
+        FontRenderers.Main.drawString(context.getMatrices(), "N", 3, 3,  Ngm.colorManager.getColorWithAlpha(Ngm.moduleManager.getModuleByClass(ClickGuiModule.class).hoverAlpha.getValue()), true);
         FontRenderers.Main.drawString(context.getMatrices(), "GM Client", 3 + FontRenderers.Main.getStringWidth("N"), 3,  new Color(255, 255, 255, 255).getRGB(), true);
         RenderUtil.renderRoundedQuad(context, this.x, this.y - 1, this.x + this.width, this.y + this.height + totalItemHeight, 4, 20, new Color(50 ,50, 50, 255));
 

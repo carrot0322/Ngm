@@ -15,7 +15,7 @@ public class ColorManager {
 
     public void init() {
         ClickGuiModule ui = ClickGuiModule.getInstance();
-        setColor(ui.red.getValue(), ui.green.getValue(), ui.blue.getValue(), ui.hoverAlpha.getValue());
+        setColor(ui.red.getValue(), ui.green.getValue(), ui.blue.getValue(), ui.alpha.getValue());
     }
 
     public Color getColor() {
