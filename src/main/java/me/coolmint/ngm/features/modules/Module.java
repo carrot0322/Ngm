@@ -10,6 +10,7 @@ import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.settings.Bind;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.manager.ConfigManager;
+import me.coolmint.ngm.util.ChatUtil;
 import me.coolmint.ngm.util.traits.Jsonable;
 import net.minecraft.util.Formatting;
 
@@ -83,6 +84,7 @@ public class Module extends Feature implements Jsonable {
 
     public void enable() {
         this.enabled.setValue(true);
+        ChatUtil.sendInfo(this.getName() + " Enabled");
         this.onToggle();
         this.onEnable();
         if (this.isOn() && this.hasListener && !this.alwaysListening) {
@@ -95,6 +97,7 @@ public class Module extends Feature implements Jsonable {
             EVENT_BUS.unregister(this);
         }
         this.enabled.setValue(false);
+        ChatUtil.sendInfo(this.getName() + " Disabled");
         this.onToggle();
         this.onDisable();
     }
