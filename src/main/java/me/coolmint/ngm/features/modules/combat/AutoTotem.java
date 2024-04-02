@@ -34,29 +34,25 @@ import me.coolmint.ngm.util.player.InventoryUtility;
 import me.coolmint.ngm.util.player.SearchInvResult;
 
 public final class AutoTotem extends Module {
-    private final Setting<Mode> mode = new Setting<>("Mode", Mode.Matrix);
-    private final Setting<OffHand> offhand = new Setting<>("Item", OffHand.Totem);
-    private final Setting<Float> healthF = new Setting<>("HP", 16f, 0f, 36f);
-    private final Setting<Float> healthS = new Setting<>("ShieldGappleHp", 16f, 0f, 20f, v -> offhand.getValue() == OffHand.Shield);
-    private final Setting<Boolean> calcAbsorption = new Setting<>("CalcAbsorption", true);
-    private final Setting<Boolean> stopMotion = new Setting<>("stopMotion", false);
-    private final Setting<Boolean> resetAttackCooldown = new Setting<>("ResetAttackCooldown", false);
-    private final Setting<Boolean> safety = new Setting<>("Safety", false);
-    private final Setting<Boolean> hotbarFallBack = new Setting<>("HotbarFallback", false, v -> safety.getValue());
-    private final Setting<Boolean> onElytra = new Setting<>("OnElytra", true, v -> safety.getValue());
-    private final Setting<Boolean> onFall = new Setting<>("OnFall", true, v -> safety.getValue());
-    private final Setting<Boolean> onObsidianPlace = new Setting<>("OnObsidianPlace", false, v -> safety.getValue());
-    private final Setting<Boolean> onMinecartTnt = new Setting<>("OnMinecartTNT", true, v -> safety.getValue());
-    private final Setting<Boolean> onCreeper = new Setting<>("OnCreeper", true, v -> safety.getValue());
-    private final Setting<Boolean> onAnchor = new Setting<>("OnAnchor", true, v -> safety.getValue());
+    private final Setting<Mode> mode = register(new Setting<>("Mode", Mode.Matrix));
+    private final Setting<OffHand> offhand = register(new Setting<>("Item", OffHand.Totem));
+    private final Setting<Float> healthF = register(new Setting<>("HP", 36f, 0f, 36f));
+    private final Setting<Float> healthS = register(new Setting<>("ShieldGappleHp", 16f, 0f, 20f, v -> offhand.getValue() == OffHand.Shield));
+    private final Setting<Boolean> calcAbsorption = register(new Setting<>("CalcAbsorption", true));
+    private final Setting<Boolean> stopMotion = register(new Setting<>("stopMotion", false));
+    private final Setting<Boolean> resetAttackCooldown = register(new Setting<>("ResetAttackCooldown", false));
+    private final Setting<Boolean> safety = register(new Setting<>("Safety", false));
+    private final Setting<Boolean> hotbarFallBack = register(new Setting<>("HotbarFallback", false, v -> safety.getValue()));
+    private final Setting<Boolean> onElytra = register(new Setting<>("OnElytra", true, v -> safety.getValue()));
+    private final Setting<Boolean> onFall = register(new Setting<>("OnFall", true, v -> safety.getValue()));
+    private final Setting<Boolean> onObsidianPlace = register(new Setting<>("OnObsidianPlace", false, v -> safety.getValue()));
+    private final Setting<Boolean> onMinecartTnt = register(new Setting<>("OnMinecartTNT", true, v -> safety.getValue()));
+    private final Setting<Boolean> onCreeper = register(new Setting<>("OnCreeper", true, v -> safety.getValue()));
+    private final Setting<Boolean> onAnchor = register(new Setting<>("OnAnchor", true, v -> safety.getValue()));
 
-    private final Setting<Boolean> onTnt = new Setting<>("OnTNT", true, v -> safety.getValue());
-    public final Setting<Boolean> rcGap = new Setting<>("RCGap", false);
-    private final Setting<Boolean> crappleSpoof = new Setting<>("CrappleSpoof", true, v -> offhand.getValue() == OffHand.GApple);
-
-    private enum OffHand {Totem, GApple, Shield}
-
-    private enum Mode {Default, Matrix, NewVersion}
+    private final Setting<Boolean> onTnt = register(new Setting<>("OnTNT", true, v -> safety.getValue()));
+    public final Setting<Boolean> rcGap = register(new Setting<>("RCGap", false));
+    private final Setting<Boolean> crappleSpoof = register(new Setting<>("CrappleSpoof", true, v -> offhand.getValue() == OffHand.GApple));
 
     private static AutoTotem instance;
 
@@ -300,5 +296,12 @@ public final class AutoTotem extends Module {
 
     public static AutoTotem getInstance() {
         return instance;
+    }
+
+    private enum Mode {
+        Default, Matrix, NewVersion
+    }
+    private enum OffHand {
+        Totem, GApple, Shield
     }
 }
