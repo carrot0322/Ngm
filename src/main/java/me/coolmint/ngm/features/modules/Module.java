@@ -12,6 +12,7 @@ import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.manager.ConfigManager;
 import me.coolmint.ngm.util.traits.Jsonable;
 import net.minecraft.util.Formatting;
+import net.minecraft.screen.slot.SlotActionType;
 
 public class Module extends Feature implements Jsonable {
     private final String description;
@@ -120,6 +121,16 @@ public class Module extends Feature implements Jsonable {
             return;
         }
         //Command.sendMessage(Formatting.RED + "A module of this name already exists.");
+    }
+
+    public static void clickSlot(int id) {
+        if (id == -1 || mc.interactionManager == null || mc.player == null) return;
+        mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, id, 0, SlotActionType.PICKUP, mc.player);
+    }
+
+    public static void clickSlot(int id, SlotActionType type) {
+        if (id == -1 || mc.interactionManager == null || mc.player == null) return;
+        mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, id, 0, type, mc.player);
     }
 
     @Override public boolean isEnabled() {
