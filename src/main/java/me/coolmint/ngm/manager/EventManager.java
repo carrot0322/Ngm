@@ -22,17 +22,10 @@ public class EventManager extends Feature {
 
     @Subscribe
     public void onUpdate(UpdateEvent event) {
-        // mc.getWindow().setTitle("OyVey 0.0.3");
         if (!fullNullCheck()) {
-//            OyVey.inventoryManager.update();
             Ngm.moduleManager.onUpdate();
             Ngm.moduleManager.sortModules(true);
             onTick();
-//            if ((HUD.getInstance()).renderingMode.getValue() == HUD.RenderingMode.Length) {
-//                OyVey.moduleManager.sortModules(true);
-//            } else {
-//                OyVey.moduleManager.sortModulesABC();
-//            }
         }
     }
 

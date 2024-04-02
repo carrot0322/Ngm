@@ -38,6 +38,8 @@ public class HudModule extends Module {
                     modules.remove(i);
             }
 
+            modules.sort(Comparator.comparingInt(mod -> -mc.textRenderer.getWidth(mod.getDisplayName())));
+
             int y = 2;
 
             for (me.coolmint.ngm.features.modules.Module mod : modules) {
