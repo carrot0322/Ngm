@@ -36,7 +36,7 @@ import me.coolmint.ngm.util.player.SearchInvResult;
 public final class AutoTotem extends Module {
     private final Setting<Mode> mode = register(new Setting<>("Mode", Mode.Matrix));
     private final Setting<OffHand> offhand = register(new Setting<>("Item", OffHand.Totem));
-    private final Setting<Float> healthF = register(new Setting<>("HP", 16f, 0f, 36f));
+    private final Setting<Float> healthF = register(new Setting<>("HP", 36f, 0f, 36f));
     private final Setting<Float> healthS = register(new Setting<>("ShieldGappleHp", 16f, 0f, 20f, v -> offhand.getValue() == OffHand.Shield));
     private final Setting<Boolean> calcAbsorption = register(new Setting<>("CalcAbsorption", true));
     private final Setting<Boolean> stopMotion = register(new Setting<>("stopMotion", false));
