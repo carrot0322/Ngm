@@ -1,6 +1,7 @@
 package me.coolmint.ngm;
 
 import com.google.common.eventbus.EventBus;
+import me.coolmint.ngm.auth.Init;
 import me.coolmint.ngm.manager.PlayerManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -29,8 +30,7 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.PlayerManager playerManager;
     public static me.coolmint.ngm.manager.NetworkManager networkManager;
     public static me.coolmint.ngm.manager.TickManager tickManager;
-    public static me.coolmint.ngm.manager.PlayerManager PlayerManager;
-
+    public static me.coolmint.ngm.features.memojang.Memojang memojang;
 
     @Override public void onInitialize() {
         eventManager = new me.coolmint.ngm.manager.EventManager();
@@ -46,10 +46,16 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         playerManager = new me.coolmint.ngm.manager.PlayerManager();
         networkManager = new me.coolmint.ngm.manager.NetworkManager();
         tickManager = new me.coolmint.ngm.manager.TickManager();
+        memojang = new me.coolmint.ngm.features.memojang.Memojang();
     }
 
 
     @Override public void onInitializeClient() {
+        if (!Init.auth()) {
+            //Send Log
+            LOGGER.warn("[{}] Invalid Hwid : " + Init.encodeHWID(Init.getHwid()), Ngm.NAME);
+            System.exit(1);
+        }
         LOGGER.info("[{}] Initializing Client", NAME);
         eventManager.init();
         moduleManager.init();
@@ -57,6 +63,8 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         configManager = new me.coolmint.ngm.manager.ConfigManager();
         configManager.load();
         colorManager.init();
+        memojang.init();
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> configManager.save()));
     }
 }
