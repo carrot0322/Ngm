@@ -31,9 +31,12 @@ public class HudModule extends Module {
         }
 
         if (Arraylist.getValue()) {
-            List<me.coolmint.ngm.features.modules.Module> modules = Ngm.moduleManager.getEnabledModules();
+            List<me.coolmint.ngm.features.modules.Module> modules = Ngm.moduleManager.sortedModules;
 
-            modules.sort(Comparator.comparingInt(mod -> -mc.textRenderer.getWidth(mod.getDisplayName())));
+            for (int i = 0; i == modules.size(); i++){
+                if (!modules.get(i).drawn.getValue())
+                    modules.remove(i);
+            }
 
             int y = 2;
 
