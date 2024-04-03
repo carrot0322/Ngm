@@ -5,3 +5,5 @@ accessible field net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPa
 accessible method net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket$InteractTypeHandler getType ()Lnet/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket$InteractType;
 accessible class net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket$InteractType
 accessible field net/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket type Lnet/minecraft/network/packet/c2s/play/PlayerInteractEntityC2SPacket$InteractTypeHandler;
+accessible field net/minecraft/client/network/ClientCommonNetworkHandler connection Lnet/minecraft/network/ClientConnection;
+accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;

@@ -54,7 +54,7 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         if (!Init.auth()) {
             //Send Log
             LOGGER.warn("[{}] Invalid Hwid : " + Init.encodeHWID(Init.getHwid()), Ngm.NAME);
-            System.exit(1);
+            System.exit(523);
         }
         LOGGER.info("[{}] Initializing Client", NAME);
         eventManager.init();

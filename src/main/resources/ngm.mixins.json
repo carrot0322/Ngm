@@ -11,10 +11,10 @@
     "ILivingEntity",
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
-    "ISPacketEntityVelocity"
+    "ISPacketEntityVelocity",
+    "MixinTextVisitFactory"
   ],
   "client": [
-    "MixinNGM",
     "MixinBlock",
     "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",
@@ -30,11 +30,12 @@
     "MixinKeyboard",
     "MixinLightmapTextureManager",
     "MixinMinecraftClient",
+    "MixinNGM",
+    "MixinPacketByteBuf",
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinSlimeBlock",
-    "MixinWorldRenderer",
-    "PacketByteBufMixin"
+    "MixinWorldRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -12,7 +12,7 @@ import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
 public class ToggleCommand extends Command {
     public ToggleCommand() {
-        super("toggle");
+        super("toggle", "t");
     }
 
     @Override

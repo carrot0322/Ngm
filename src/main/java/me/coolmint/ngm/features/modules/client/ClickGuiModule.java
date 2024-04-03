@@ -13,7 +13,7 @@ public class ClickGuiModule
         extends Module {
     private static ClickGuiModule INSTANCE = new ClickGuiModule();
     public Setting<String> prefix = this.register(new Setting<>("Prefix", "."));
-    public Setting<Boolean> rainbow = this.register(new Setting<>("Rainbow", true));
+    public Setting<Boolean> rainbow = this.register(new Setting<>("Rainbow", false));
     public Setting<Integer> rainbowHue = this.register(new Setting<>("Delay", 240, 0, 600, v -> rainbow.getValue()));
     public Setting<Float> rainbowBrightness = this.register(new Setting<>("Brightness ", 150.0f, 1.0f, 255.0f, v -> rainbow.getValue()));
     public Setting<Float> rainbowSaturation = this.register(new Setting<>("Saturation", 150.0f, 1.0f, 255.0f, v -> rainbow.getValue()));

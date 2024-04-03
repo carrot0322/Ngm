@@ -2,7 +2,14 @@ package me.coolmint.ngm.features.memojang;
 
 import net.minecraft.util.Identifier;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
+
+import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class Memojang {
     private static final Map<Identifier, Collection<String>> suggestions;
@@ -49,11 +56,25 @@ public class Memojang {
     }
 
     Identifier id = new Identifier("memojang", "bad_words");
-    List<String> badWords = List.of("nigger", "느그어매", "병신장애 고아새끼");
+    ArrayList<String> badWords = new ArrayList<>();
 
     public Memojang() {}
 
     public void init() {
+        try {
+            URL url = new URL("https://pastebin.com/raw/8E4zN237");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                badWords.add(line.trim());
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Memojang.registerSuggestions(id, badWords, SuggestionCondition.ALWAYS);
     }
 }

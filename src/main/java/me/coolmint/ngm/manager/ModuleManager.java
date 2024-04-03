@@ -7,6 +7,7 @@ import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
+import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
 import me.coolmint.ngm.features.modules.legit.Reach;
 import me.coolmint.ngm.features.modules.legit.Trigger;
@@ -81,6 +82,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // EXPLOIT
         modules.add(new CompletionCrash());
+        modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
     }
 
