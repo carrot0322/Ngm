@@ -1,16 +1,17 @@
 package me.coolmint.ngm;
 
-import com.google.common.eventbus.EventBus;
 import me.coolmint.ngm.auth.Init;
-import me.coolmint.ngm.manager.PlayerManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Ngm implements ModInitializer, ClientModInitializer {
-    public static final String NAME = "Ngm";
-    public static final String VERSION = "1.0.0-dev";
+    public static final ModMetadata MOD_META = FabricLoader.getInstance().getModContainer("ngm").orElseThrow().getMetadata();
+    public static final String NAME = MOD_META.getName();
+    public static final String VERSION = MOD_META.getVersion().getFriendlyString();;
 
     public static float TIMER = 1f;
     public static float TICK_TIMER = 1f;
