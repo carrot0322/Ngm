@@ -61,10 +61,6 @@ public enum RotationUtils
         return MathHelper.wrapDegrees(currentYaw - neededYaw);
     }
 
-    /**
-     * Returns true if the player is already facing within 1 degree of the
-     * specified rotation.
-     */
     public static boolean isAlreadyFacing(Rotation rotation)
     {
         return getAngleToLastReportedLookVec(rotation) <= 1.0;
@@ -83,10 +79,6 @@ public enum RotationUtils
         return lastReported.getAngleTo(rotation);
     }
 
-    /**
-     * Returns true if the player is facing anywhere within the given box
-     * and is no further away than the given range.
-     */
     public static boolean isFacingBox(Box box, double range)
     {
         Vec3d start = getEyesPos();
@@ -94,11 +86,6 @@ public enum RotationUtils
         return box.raycast(start, end).isPresent();
     }
 
-    /**
-     * Returns the next rotation that the player should be facing in order to
-     * slowly turn towards the specified end rotation, at a rate of roughly
-     * <code>maxChange</code> degrees per tick.
-     */
     public static Rotation slowlyTurnTowards(Rotation end, float maxChange)
     {
         float startYaw = mc.player.prevYaw;
@@ -122,15 +109,6 @@ public enum RotationUtils
         return new Rotation(nextYaw, nextPitch);
     }
 
-    /**
-     * Limits the change in angle between the current and intended rotation to
-     * the specified maximum change. Useful for smoothing out rotations and
-     * making combat hacks harder to detect.
-     *
-     * <p>
-     * For best results, do not wrap the current angle before calling this
-     * method!
-     */
     public static float limitAngleChange(float current, float intended,
                                          float maxChange)
     {
@@ -143,19 +121,6 @@ public enum RotationUtils
         return current + change;
     }
 
-    /**
-     * Removes unnecessary changes in angle caused by wrapping. Useful for
-     * making combat hacks harder to detect.
-     *
-     * <p>
-     * For example, if the current angle is 179 degrees and the intended angle
-     * is -179 degrees, you only need to turn 2 degrees to face the intended
-     * angle, not 358 degrees.
-     *
-     * <p>
-     * DO NOT wrap the current angle before calling this method! You will get
-     * incorrect results if you do.
-     */
     public static float limitAngleChange(float current, float intended)
     {
         float currentWrapped = MathHelper.wrapDegrees(current);

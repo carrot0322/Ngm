@@ -8,6 +8,7 @@
     "IClientPlayNetworkHandlerAccessor",
     "IClientWorldMixin",
     "IExplosionS2CPacket",
+    "IHorseScreenHandler",
     "ILivingEntity",
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
@@ -15,6 +16,7 @@
     "MixinTextVisitFactory"
   ],
   "client": [
+    "ICreativeInventoryScreen",
     "MixinBlock",
     "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",
