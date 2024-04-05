@@ -3,6 +3,9 @@ package me.coolmint.ngm.util.models;
 public class Timer {
     private long time = -1L;
 
+    public boolean passedTick(double tick) {
+        return ((System.currentTimeMillis() - this.time) >= tick * 50);
+    }
     public boolean passedS(double s) {
         return this.getMs(System.nanoTime() - this.time) >= (long) (s * 1000.0);
     }
