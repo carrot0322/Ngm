@@ -19,7 +19,7 @@ public class NoFall extends Module {
     private me.coolmint.ngm.util.models.Timer pearlCooldown = new me.coolmint.ngm.util.models.Timer();
 
     private enum Mode {
-        MatrixOffGround, Vanilla, Grim
+        Vanilla, Grim
     }
 
     private enum FallDistance {
@@ -40,7 +40,7 @@ public class NoFall extends Module {
                     mc.player.onLanding();
                 }
 
-                case MatrixOffGround, Vanilla -> {
+                case Vanilla -> {
                     cancelGround = true;
                 }
             }
