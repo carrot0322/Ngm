@@ -76,7 +76,6 @@ public class ChestStealer extends Module {
                     }
                 }
             }
-            mc.player.closeScreen();
         } else
             steal((GenericContainerScreen) mc.currentScreen);
 
