@@ -1,6 +1,7 @@
 package me.coolmint.ngm.mixin;
 
 import me.coolmint.ngm.event.impl.SlowMovementEvent;
+import me.coolmint.ngm.event.impl.TeamColorEvent;
 import me.coolmint.ngm.event.impl.VelocityMultiplierEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
 import static me.coolmint.ngm.util.traits.Util.mc;
@@ -41,5 +43,16 @@ public abstract class MixinEntity {
             return Blocks.DIRT;
         }
         return instance.getBlock();
+    }
+
+    @Inject(method = "getTeamColorValue", at = @At(value = "HEAD"),
+            cancellable = true)
+    private void hookGetTeamColorValue(CallbackInfoReturnable<Integer> cir) {
+        TeamColorEvent teamColorEvent = new TeamColorEvent((Entity) (Object) this);
+        EVENT_BUS.post(teamColorEvent);
+        if (teamColorEvent.isCancelled()) {
+            cir.setReturnValue(teamColorEvent.getColor());
+            cir.cancel();
+        }
     }
 }

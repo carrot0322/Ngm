@@ -1,8 +1,5 @@
 package me.coolmint.ngm.auth;
 
-import net.minecraft.client.MinecraftClient;
-
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
