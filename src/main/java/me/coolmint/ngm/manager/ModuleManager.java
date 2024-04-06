@@ -31,7 +31,7 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         // Module Init
         // Combat'
-        //modules.add(new AutoArmor()); 장애
+        modules.add(new AutoArmor());
         modules.add(new AutoTotem());
         //modules.add(new BowAim());
         modules.add(new Criticals());

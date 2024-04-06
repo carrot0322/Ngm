@@ -1,238 +1,259 @@
 package me.coolmint.ngm.features.modules.combat;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import me.coolmint.ngm.event.Stage;
 import me.coolmint.ngm.event.impl.TickEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import me.coolmint.ngm.util.player.InvUtils;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
-import net.minecraft.registry.Registries;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-
-import static me.coolmint.ngm.util.player.InvUtils.click;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class AutoArmor extends Module {
-    Setting<Priority> priorityConfig = register(new Setting<>("Priority", Priority.BLAST_PROTECTION));
-    Setting<Float> minDurabilityConfig = register(new Setting<>("MinDurability", 0.0f, 0.0f, 20.0f));
-    Setting<Boolean> elytraPriorityConfig = register(new Setting<>("ElytraPriority", true));
-    Setting<Boolean> blastLeggingsConfig = register(new Setting<>("Leggings-BlastPriority",true));
-    Setting<Boolean> noBindingConfig = register(new Setting<>("NoBinding", true));
-    Setting<Boolean> inventoryConfig = register(new Setting<>("AllowInventory", false));
+    public Setting<Protection> preferredProtection = register(new Setting<>("", Protection.Protection));
+    public Setting<Boolean> blastLeggings = register(new Setting<>("blastLeggings", true));
+    public Setting<Integer> delay = register(new Setting<>("Delay", 0, 0, 5));
+    public Setting<Boolean> antiBreak = register(new Setting<>("AntiBreak", false));
+    public Setting<Boolean> ignoreElytra = new Setting<>("IgnoreElytra", false); // 장애라서 register 빼놓음
 
     public AutoArmor() {
         super("AutoArmor", "", Category.COMBAT, true, false, false);
+        armorPieces[0] = helmet;
+        armorPieces[1] = chestplate;
+        armorPieces[2] = leggings;
+        armorPieces[3] = boots;
     }
 
-    private final Queue<ArmorSlot> helmet = new PriorityQueue<>();
-    private final Queue<ArmorSlot> chestplate = new PriorityQueue<>();
-    private final Queue<ArmorSlot> leggings = new PriorityQueue<>();
-    private final Queue<ArmorSlot> boots = new PriorityQueue<>();
+    private final Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
+    private final ArmorPiece[] armorPieces = new ArmorPiece[4];
+    private final ArmorPiece helmet = new ArmorPiece(3);
+    private final ArmorPiece chestplate = new ArmorPiece(2);
+    private final ArmorPiece leggings = new ArmorPiece(1);
+    private final ArmorPiece boots = new ArmorPiece(0);
+    private int timer;
+
+    @Override
+    public void onEnable() {
+        timer = 0;
+    }
 
     @Override
     public void onTick() {
-        if (mc.currentScreen != null && !(mc.currentScreen instanceof InventoryScreen
-                && inventoryConfig.getValue())) {
+        // Wait for timer (delay)
+        if (timer > 0) {
+            timer--;
             return;
         }
-        //
-        helmet.clear();
-        chestplate.clear();
-        leggings.clear();
-        boots.clear();
-        for (int j = 9; j < 45; j++) {
-            ItemStack stack = mc.player.getInventory().getStack(j);
-            if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem armor)) {
+
+        // Reset armor pieces
+        for (ArmorPiece armorPiece : armorPieces) armorPiece.reset();
+
+        // Loop through items in inventory
+        for (int i = 0; i < mc.player.getInventory().main.size(); i++) {
+            ItemStack itemStack = mc.player.getInventory().getStack(i);
+            if (itemStack.isEmpty() || !(itemStack.getItem() instanceof ArmorItem)) continue;
+
+            // Check for durability if anti break is enabled
+            if (antiBreak.getValue() && itemStack.isDamageable() && itemStack.getMaxDamage() - itemStack.getDamage() <= 10) {
                 continue;
             }
-            if (noBindingConfig.getValue() && EnchantmentHelper.hasBindingCurse(stack)) {
-                continue;
-            }
-            int index = armor.getSlotType().getEntitySlotId();
-            float dura = (stack.getMaxDamage() - stack.getDamage()) / (float) stack.getMaxDamage();
-            if (dura < minDurabilityConfig.getValue()) {
-                continue;
-            }
-            ArmorSlot data = new ArmorSlot(index, j, stack);
-            switch (index) {
-                case 0 -> helmet.add(data);
-                case 1 -> chestplate.add(data);
-                case 2 -> leggings.add(data);
-                case 3 -> boots.add(data);
+
+            // Get enchantments on the item
+            InvUtils.getEnchantments(itemStack, enchantments);
+
+            // Check for avoided enchantments
+            if (hasAvoidedEnchantment()) continue;
+
+            // Add the item to the correct armor piece
+            switch (getItemSlotId(itemStack)) {
+                case 0 -> boots.add(itemStack, i);
+                case 1 -> leggings.add(itemStack, i);
+                case 2 -> chestplate.add(itemStack, i);
+                case 3 -> helmet.add(itemStack, i);
             }
         }
-        for (int i = 0; i < 4; i++) {
-            ItemStack armorStack = mc.player.getInventory().getArmorStack(i);
-            if (elytraPriorityConfig.getValue() && armorStack.getItem() == Items.ELYTRA) {
-                continue;
-            }
-            float armorDura = (armorStack.getMaxDamage() - armorStack.getDamage()) / (float) armorStack.getMaxDamage();
-            if (!armorStack.isEmpty() || armorDura >= minDurabilityConfig.getValue()) {
-                continue;
-            }
-            switch (i) {
-                case 0 -> {
-                    if (!helmet.isEmpty()) {
-                        ArmorSlot helmetSlot = helmet.poll();
-                        swapArmor(helmetSlot.getType(), helmetSlot.getSlot());
-                    }
-                }
-                case 1 -> {
-                    if (!chestplate.isEmpty()) {
-                        ArmorSlot chestSlot = chestplate.poll();
-                        swapArmor(chestSlot.getType(), chestSlot.getSlot());
-                    }
-                }
-                case 2 -> {
-                    if (!leggings.isEmpty()) {
-                        ArmorSlot leggingsSlot = leggings.poll();
-                        swapArmor(leggingsSlot.getType(), leggingsSlot.getSlot());
-                    }
-                }
-                case 3 -> {
-                    if (!boots.isEmpty()) {
-                        ArmorSlot bootsSlot = boots.poll();
-                        swapArmor(bootsSlot.getType(), bootsSlot.getSlot());
-                    }
-                }
+
+        // Apply armor pieces
+        for (ArmorPiece armorPiece : armorPieces) armorPiece.calculate();
+        Arrays.sort(armorPieces, Comparator.comparingInt(ArmorPiece::getSortScore));
+        for (ArmorPiece armorPiece : armorPieces) armorPiece.apply();
+    }
+
+    private boolean hasAvoidedEnchantment() {
+        if (enchantments.containsKey(Enchantments.BINDING_CURSE)) return true;
+
+        return false;
+    }
+
+    private int getItemSlotId(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof ElytraItem) return 2;
+        return ((ArmorItem) itemStack.getItem()).getSlotType().getEntitySlotId();
+    }
+
+    private int getScore(ItemStack itemStack) {
+        if (itemStack.isEmpty()) return 0;
+
+        // Score calculated based on enchantments, protection and toughness
+        int score = 0;
+
+        // Prefer blast protection on leggings if enabled
+        Enchantment protection = preferredProtection.getValue().enchantment;
+        if (itemStack.getItem() instanceof ArmorItem && blastLeggings.getValue() && getItemSlotId(itemStack) == 1) {
+            protection = Enchantments.BLAST_PROTECTION;
+        }
+
+        score += 3 * enchantments.getInt(protection);
+        score += enchantments.getInt(Enchantments.PROTECTION);
+        score += enchantments.getInt(Enchantments.BLAST_PROTECTION);
+        score += enchantments.getInt(Enchantments.FIRE_PROTECTION);
+        score += enchantments.getInt(Enchantments.PROJECTILE_PROTECTION);
+        score += enchantments.getInt(Enchantments.UNBREAKING);
+        score += 2 * enchantments.getInt(Enchantments.MENDING);
+        score += itemStack.getItem() instanceof ArmorItem ? ((ArmorItem) itemStack.getItem()).getProtection() : 0;
+        score += itemStack.getItem() instanceof ArmorItem ? ((ArmorItem) itemStack.getItem()).getToughness() : 0;
+
+        return score;
+    }
+
+    private boolean cannotSwap() {
+        return timer > 0;
+    }
+
+    private void swap(int from, int armorSlotId) {
+        InvUtils.move().from(from).toArmor(armorSlotId);
+
+        // Apply delay
+        timer = delay.getValue();
+    }
+
+    private void moveToEmpty(int armorSlotId) {
+        for (int i = 0; i < mc.player.getInventory().main.size(); i++) {
+            if (mc.player.getInventory().getStack(i).isEmpty()) {
+                InvUtils.move().fromArmor(armorSlotId).to(i);
+
+                // Apply delay
+                timer = delay.getValue();
+
+                break;
             }
         }
     }
 
-    private void click(int slot, int button, SlotActionType type) {
-        ScreenHandler screenHandler = mc.player.currentScreenHandler;
-        DefaultedList<Slot> defaultedList = screenHandler.slots;
-        int i = defaultedList.size();
-        ArrayList<ItemStack> list = Lists.newArrayListWithCapacity(i);
-        for (Slot slot1 : defaultedList) {
-            list.add(slot1.getStack().copy());
-        }
-        screenHandler.onSlotClick(slot, button, type, mc.player);
-        Int2ObjectOpenHashMap<ItemStack> int2ObjectMap = new Int2ObjectOpenHashMap<>();
-        for (int j = 0; j < i; ++j) {
-            ItemStack itemStack2;
-            ItemStack itemStack = list.get(j);
-            if (ItemStack.areEqual(itemStack, itemStack2 = defaultedList.get(j).getStack())) continue;
-            int2ObjectMap.put(j, itemStack2.copy());
-        }
-        mc.player.networkHandler.sendPacket(new ClickSlotC2SPacket(screenHandler.syncId, screenHandler.getRevision(), slot, button, type, screenHandler.getCursorStack().copy(), int2ObjectMap));
-    }
+    public enum Protection {
+        Protection(Enchantments.PROTECTION),
+        BlastProtection(Enchantments.BLAST_PROTECTION),
+        FireProtection(Enchantments.FIRE_PROTECTION),
+        ProjectileProtection(Enchantments.PROJECTILE_PROTECTION);
 
-    public void pickupSlot(final int slot) {
-        click(slot, 0, SlotActionType.PICKUP);
-    }
+        private final Enchantment enchantment;
 
-    public void swapArmor(int armorSlot, int slot) {
-        ItemStack stack = mc.player.getInventory().getArmorStack(armorSlot);
-
-        armorSlot = 8 - armorSlot;
-        pickupSlot(slot);
-        boolean rt = !stack.isEmpty();
-        pickupSlot(armorSlot);
-        if (rt) {
-            pickupSlot(slot);
+        Protection(Enchantment enchantment) {
+            this.enchantment = enchantment;
         }
     }
 
-    public float getPriority(int i, ItemStack armorStack) {
-        return 1.0f;
-    }
+    private class ArmorPiece {
+        private final int id;
 
-    public enum Priority {
-        BLAST_PROTECTION(Enchantments.BLAST_PROTECTION),
-        PROTECTION(Enchantments.PROTECTION),
-        PROJECTILE_PROTECTION(Enchantments.PROJECTILE_PROTECTION);
+        private int bestSlot;
+        private int bestScore;
 
-        private final Enchantment enchant;
+        private int score;
+        private int durability;
 
-        Priority(Enchantment enchant) {
-            this.enchant = enchant;
+        public ArmorPiece(int id) {
+            this.id = id;
         }
 
-        public Enchantment getEnchantment() {
-            return enchant;
-        }
-    }
-
-    public class ArmorSlot implements Comparable<ArmorSlot> {
-        private final int armorType;
-        private final int slot;
-        private final ItemStack armorStack;
-
-        public ArmorSlot(int armorType, int slot, ItemStack armorStack) {
-            this.armorType = armorType;
-            this.slot = slot;
-            this.armorStack = armorStack;
+        public void reset() {
+            bestSlot = -1;
+            bestScore = -1;
+            score = -1;
+            durability = Integer.MAX_VALUE;
         }
 
-        @Override
-        public int compareTo(ArmorSlot other) {
-            final ItemStack otherStack = other.getArmorStack();
-            ArmorItem armorItem = (ArmorItem) armorStack.getItem();
-            ArmorItem otherItem = (ArmorItem) otherStack.getItem();
-            float durabilityDiff = otherItem.getMaterial().getDurability(otherItem.getType())
-                    - armorItem.getMaterial().getDurability(armorItem.getType());
-            if (durabilityDiff != 0.0f) {
-                return (int) durabilityDiff;
+        public void add(ItemStack itemStack, int slot) {
+            // Calculate armor piece score and check if its higher than the last one
+            int score = getScore(itemStack);
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestSlot = slot;
             }
-            Enchantment enchantment = priorityConfig.getValue().getEnchantment();
-            if (blastLeggingsConfig.getValue() && armorType == 2
-                    && hasEnchantment(Enchantments.BLAST_PROTECTION)) {
+        }
+
+        public void calculate() {
+            if (cannotSwap()) return;
+
+            ItemStack itemStack = mc.player.getInventory().getArmorStack(id);
+
+            // Check if the item is an elytra
+            if ((ignoreElytra.getValue())) {
+                score = Integer.MAX_VALUE; // Setting score to Integer.MAX_VALUE so its now swapped later
+                return;
+            }
+
+            InvUtils.getEnchantments(itemStack, enchantments);
+
+            // Return if current armor piece has Curse of Binding
+            if (enchantments.containsKey(Enchantments.BINDING_CURSE)) {
+                score = Integer.MAX_VALUE; // Setting score to Integer.MAX_VALUE so its now swapped later
+                return;
+            }
+
+            // Calculate current score
+            score = getScore(itemStack);
+            score = decreaseScoreByAvoidedEnchantments(score);
+            score = applyAntiBreakScore(score, itemStack);
+
+            // Calculate durability
+            if (!itemStack.isEmpty()) {
+                durability = itemStack.getMaxDamage() - itemStack.getDamage();
+            }
+        }
+
+        public int getSortScore() {
+            if (antiBreak.getValue() && durability <= 10) return -1;
+            return bestScore;
+        }
+
+        public void apply() {
+            // Integer.MAX_VALUE check is there because it indicates that the current piece shouldn't be moved
+            if (cannotSwap() || score == Integer.MAX_VALUE) return;
+
+            // Check if new score is better and swap if it is
+            if (bestScore > score) swap(bestSlot, id);
+            else if (antiBreak.getValue() && durability <= 10) {
+                // If no better piece has been found but current piece is broken find an empty slot and move it there
+                moveToEmpty(id);
+            }
+        }
+
+        private int decreaseScoreByAvoidedEnchantments(int score) {
+            /*
+            for (Enchantment enchantment : avoidedEnchantments.get()) {
+                score -= 2 * enchantments.getInt(enchantment);
+            }
+
+             */
+
+            return score;
+        }
+
+        private int applyAntiBreakScore(int score, ItemStack itemStack) {
+            if (antiBreak.getValue() && itemStack.isDamageable() && itemStack.getMaxDamage() - itemStack.getDamage() <= 10) {
                 return -1;
             }
-            if (hasEnchantment(enchantment)) {
-                return other.hasEnchantment(enchantment) ? 0 : -1;
-            } else {
-                return other.hasEnchantment(enchantment) ? 1 : 0;
-            }
-        }
 
-        public boolean hasEnchantment(Enchantment enchantment) {
-            Object2IntMap<Enchantment> enchants =
-                    getEnchantments(armorStack);
-            return enchants.containsKey(enchantment);
-        }
-
-        public ItemStack getArmorStack() {
-            return armorStack;
-        }
-
-        public int getType() {
-            return armorType;
-        }
-
-        public int getSlot() {
-            return slot;
-        }
-
-        public static Object2IntMap<Enchantment> getEnchantments(ItemStack itemStack) {
-            Object2IntMap<Enchantment> enchants = new Object2IntOpenHashMap<>();
-            NbtList list = itemStack.getEnchantments();
-            for (int i = 0; i < list.size(); i++) {
-                NbtCompound tag = list.getCompound(i);
-                Registries.ENCHANTMENT.getOrEmpty(Identifier.tryParse(tag.getString("id"))).ifPresent((enchantment) -> enchants.put(enchantment, tag.getInt("lvl")));
-            }
-            return enchants;
+            return score;
         }
     }
 }

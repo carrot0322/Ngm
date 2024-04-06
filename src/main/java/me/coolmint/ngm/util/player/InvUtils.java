@@ -1,10 +1,20 @@
 package me.coolmint.ngm.util.player;
 
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import me.coolmint.ngm.mixin.IClientPlayerInteractionManager;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.Identifier;
 
 import java.util.function.Predicate;
 
@@ -149,7 +159,7 @@ public class InvUtils {
         else if (!swapBack) previousSlot = -1;
 
         mc.player.getInventory().selectedSlot = slot;
-        //((IClientPlayerInteractionManager) mc.interactionManager).syncSelected();
+        ((IClientPlayerInteractionManager) mc.interactionManager).syncSelected();
         return true;
     }
 
@@ -325,5 +335,29 @@ public class InvUtils {
         private void click(int id) {
             mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, id, data, type, mc.player);
         }
+    }
+
+    public static void getEnchantments(ItemStack itemStack, Object2IntMap<Enchantment> enchantments) {
+        enchantments.clear();
+
+        if (!itemStack.isEmpty()) {
+            NbtList listTag = itemStack.getItem() == Items.ENCHANTED_BOOK ? EnchantedBookItem.getEnchantmentNbt(itemStack) : itemStack.getEnchantments();
+
+            for (int i = 0; i < listTag.size(); ++i) {
+                NbtCompound tag = listTag.getCompound(i);
+
+                Registries.ENCHANTMENT.getOrEmpty(Identifier.tryParse(tag.getString("id"))).ifPresent((enchantment) -> enchantments.put(enchantment, tag.getInt("lvl")));
+            }
+        }
+    }
+
+    public static boolean hasEnchantments(ItemStack itemStack, Enchantment... enchantments) {
+        if (itemStack.isEmpty()) return false;
+
+        Object2IntMap<Enchantment> itemEnchantments = new Object2IntArrayMap<>();
+        getEnchantments(itemStack, itemEnchantments);
+        for (Enchantment enchantment : enchantments) if (!itemEnchantments.containsKey(enchantment)) return false;
+
+        return true;
     }
 }
