@@ -64,6 +64,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new SilentDisconnect());
         modules.add(new Spammer());
         modules.add(new XCarry());
+        modules.add(new VisualRange());
 
         // CLIENT
         modules.add(new ClickGuiModule());
