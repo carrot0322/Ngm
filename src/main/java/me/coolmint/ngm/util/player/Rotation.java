@@ -1,5 +1,6 @@
 package me.coolmint.ngm.util.player;
 
+import net.minecraft.entity.player.PlayerEntity;
 import org.joml.Quaternionf;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -13,7 +14,7 @@ public record Rotation(float yaw, float pitch)
     public void applyToClientPlayer()
     {
         float adjustedYaw =
-                RotationUtils.limitAngleChange(mc.player.getYaw(), yaw);
+                RotationUtils.limitAngleChange(mc.player.getYaw(), yaw, 1f);
         mc.player.setYaw(adjustedYaw);
         mc.player.setPitch(pitch);
     }
@@ -91,5 +92,38 @@ public record Rotation(float yaw, float pitch)
     {
         return new Rotation(MathHelper.wrapDegrees(yaw),
                 MathHelper.wrapDegrees(pitch));
+    }
+
+    public void toPlayer(PlayerEntity player) {
+        if (Float.isNaN(yaw) || Float.isNaN(pitch))
+            return;
+
+        // Fixed sensitivity
+        Double sensitivity = mc.options.getMouseSensitivity().getValue();
+        fixedSensitivity(sensitivity);
+
+        // Set rotation to player
+        player.setYaw(yaw);
+        player.setPitch(pitch);
+    }
+
+    public void fixedSensitivity(Double sensitivity) {
+        Double f = sensitivity * 0.8F;
+        Double gcd = f * f * f * 1.2F;
+
+        // Get previous rotation
+        Rotation rotation = RotationUtils.getNeededRotations(RotationUtils.getClientLookVec(1f));
+
+        if (rotation != null) {
+            // Fix yaw
+            float deltaYaw = yaw - rotation.yaw();
+            deltaYaw -= deltaYaw % gcd;
+            //yaw = rotation.yaw() + deltaYaw;
+
+            // Fix pitch
+            float deltaPitch = pitch - rotation.pitch();
+            deltaPitch -= deltaPitch % gcd;
+            //pitch = rotation.pitch() + deltaPitch;
+        }
     }
 }
