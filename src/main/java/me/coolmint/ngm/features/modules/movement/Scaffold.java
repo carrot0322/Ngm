@@ -32,12 +32,22 @@ public class Scaffold extends Module {
 
     private final BlockPos.Mutable bp = new BlockPos.Mutable();
     private int placeRange = 4;
+    private int aheadDistance = 0;
 
     @Override
     public void onTick() {
         Vec3d vec = mc.player.getPos().add(mc.player.getVelocity()).add(0, -0.75, 0);
         Vec3d pos = mc.player.getPos();
+        if (aheadDistance != 0 && !towering() && !mc.world.getBlockState(mc.player.getBlockPos().down()).getCollisionShape(mc.world, mc.player.getBlockPos()).isEmpty()) {
+            Vec3d dir = Vec3d.fromPolar(0, mc.player.getYaw()).multiply(aheadDistance, 0, aheadDistance);
+            if (mc.options.forwardKey.isPressed()) pos = pos.add(dir.x, 0, dir.z);
+            if (mc.options.backKey.isPressed()) pos = pos.add(-dir.x, 0, -dir.z);
+            if (mc.options.leftKey.isPressed()) pos = pos.add(dir.z, 0, -dir.x);
+            if (mc.options.rightKey.isPressed()) pos = pos.add(-dir.z, 0, dir.x);
+        }
+
         bp.set(pos.x, vec.y, pos.z);
+
         if (mc.options.sneakKey.isPressed() && !mc.options.jumpKey.isPressed() && mc.player.getY() + vec.y > -1) {
             bp.setY(bp.getY() - 1);
         }
