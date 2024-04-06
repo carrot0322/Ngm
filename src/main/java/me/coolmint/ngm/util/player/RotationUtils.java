@@ -1,10 +1,15 @@
 package me.coolmint.ngm.util.player;
 
+import me.coolmint.ngm.Ngm;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Random;
 
 import static me.coolmint.ngm.util.traits.Util.mc;
 
@@ -121,13 +126,48 @@ public enum RotationUtils
         return current + change;
     }
 
-    public static float limitAngleChange(float current, float intended)
-    {
-        float currentWrapped = MathHelper.wrapDegrees(current);
-        float intendedWrapped = MathHelper.wrapDegrees(intended);
+    public static Rotation limitAngleChange(Rotation currentRotation, Rotation targetRotation, float turnSpeed) {
+        float yawDifference = getAngleDifference(targetRotation.yaw(), currentRotation.yaw());
+        float pitchDifference = getAngleDifference(targetRotation.pitch(), currentRotation.pitch());
 
-        float change = MathHelper.wrapDegrees(intendedWrapped - currentWrapped);
+        float newYaw = currentRotation.yaw() + (yawDifference > turnSpeed ? turnSpeed : Math.max(yawDifference, -turnSpeed));
+        float newPitch = currentRotation.pitch() + (pitchDifference > turnSpeed ? turnSpeed : Math.max(pitchDifference, -turnSpeed));
 
-        return current + change;
+        return new Rotation(newYaw, newPitch);
     }
+
+    public static float getAngleDifference(float a, float b) {
+        return ((a - b) % 360.0f + 540.0f) % 360.0f - 180.0f;
+    }
+
+    public static void faceBow(Entity target, boolean silent, boolean predict, float predictSize) {
+        ClientPlayerEntity player = mc.player;
+
+        double posX = target.getX() + (predict ? (target.getX() - target.prevX) * predictSize : 0) - (player.getX() + (predict ? player.getX() - player.prevX : 0));
+        double posY = target.getBoundingBox().minY + (predict ? (target.getBoundingBox().minY - target.prevY) * predictSize : 0) + target.getEyeY() - 0.15 - (player.getBoundingBox().minY + (predict ? player.getY() - player.prevY : 0)) - player.getEyeY();
+        double posZ = target.getZ() + (predict ? (target.getZ() - target.prevZ) * predictSize : 0) - (player.getZ() + (predict ? player.getZ() - player.prevZ : 0));
+
+        double posSqrt = Math.sqrt(posX * posX + posZ * posZ);
+
+        float velocity = Ngm.moduleManager.isModuleEnabled("BowSpam") ? 1f : player.getItemUseTime() / 20f;
+        velocity = (velocity * velocity + velocity * 2) / 3;
+        if (velocity > 1) velocity = 1f;
+
+        float yaw = (float) (Math.atan2(posZ, posX) * 180 / Math.PI) - 90f;
+        float pitch = (float) -Math.toDegrees(Math.atan((velocity * velocity - Math.sqrt(velocity * velocity * velocity * velocity - 0.006f * (0.006f * (posSqrt * posSqrt) + 2 * posY * (velocity * velocity)))) / (0.006f * posSqrt)));
+
+        if (silent) {
+            //setTargetRotation(new Rotation(yaw, pitch));
+        } else {
+            Rotation currentRotation = new Rotation(player.getYaw(), player.getPitch());
+            Rotation targetRotation = limitAngleChange(currentRotation, new Rotation(yaw, pitch), (10 + new Random().nextInt(6)));
+            targetRotation.toPlayer(mc.player);
+        }
+    }
+
+    /*
+    public static void setTargetRotation(Rotation rotation) {
+        setTargetRotation(rotation);
+    }
+     */
 }
