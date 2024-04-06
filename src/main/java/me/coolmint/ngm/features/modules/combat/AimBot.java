@@ -174,10 +174,7 @@ public final class AimBot extends Module {
     private Vec3d getResolvedPos(@NotNull Entity pl) {
         return new Vec3d(pl.getX() + pl.getVelocity().x * predict.getValue(), pl.getY(), pl.getZ() + pl.getVelocity().z * predict.getValue());
     }
-
-    private enum Part {
-        Chest, Head, Neck, Leggings, Boots
-    }
+    
 
     private enum Rotation {
         Client, Silent
