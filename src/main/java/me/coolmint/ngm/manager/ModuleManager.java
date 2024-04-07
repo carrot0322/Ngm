@@ -2,22 +2,24 @@ package me.coolmint.ngm.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import javafx.scene.input.KeyCode;
 import me.coolmint.ngm.event.impl.Render2DEvent;
 import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
-import me.coolmint.ngm.util.KeyboardUtil;
-import me.coolmint.ngm.util.traits.Jsonable;
-import me.coolmint.ngm.util.traits.Util;
-
 import me.coolmint.ngm.features.modules.client.*;
 import me.coolmint.ngm.features.modules.combat.*;
-import me.coolmint.ngm.features.modules.exploit.*;
-import me.coolmint.ngm.features.modules.legit.*;
+import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
+import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
+import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.legit.Reach;
+import me.coolmint.ngm.features.modules.legit.Trigger;
 import me.coolmint.ngm.features.modules.misc.*;
 import me.coolmint.ngm.features.modules.movement.*;
-import me.coolmint.ngm.features.modules.render.*;
+import me.coolmint.ngm.features.modules.render.Esp;
+import me.coolmint.ngm.features.modules.render.FreeCam;
+import me.coolmint.ngm.features.modules.render.Fullbright;
+import me.coolmint.ngm.util.traits.Jsonable;
+import me.coolmint.ngm.util.traits.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
