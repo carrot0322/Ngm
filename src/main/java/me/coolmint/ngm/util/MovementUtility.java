@@ -3,7 +3,10 @@ package me.coolmint.ngm.util;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.EventMove;
 import me.coolmint.ngm.features.modules.Module;
+import me.coolmint.ngm.util.player.RotationUtils;
+import net.minecraft.block.AirBlock;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 import static me.coolmint.ngm.util.traits.Util.mc;
@@ -12,10 +15,6 @@ public final class MovementUtility {
 
     public static boolean isMoving() {
         return mc.player.input.movementForward != 0.0 || mc.player.input.movementSideways != 0.0;
-    }
-
-    public static double getSpeed() {
-        return Math.hypot(mc.player.getVelocity().x, mc.player.getVelocity().z);
     }
 
     public static double[] forward(final double d) {
@@ -130,5 +129,42 @@ public final class MovementUtility {
 
     public static boolean sprintIsLegit(float yaw) {
         return (Math.abs(Math.abs(MathHelper.wrapDegrees(yaw)) - Math.abs(MathHelper.wrapDegrees(Ngm.playerManager.yaw))) < 40);
+    }
+
+    public static boolean isRidingBlock() {
+        return !(mc.world.getBlockState(new BlockPos((int) mc.player.getX(), (int) (mc.player.getY() - 1.8), (int) mc.player.getZ())).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) mc.player.getX(), (int) (mc.player.getY() - 1), (int) mc.player.getZ())).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) mc.player.getX(), (int) (mc.player.getY() - 0.5), (int) mc.player.getZ())).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 1.8), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 1.8), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 1.8), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 1.8), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 1), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 1), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 1), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 1), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 0.5), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 0.5), (int) (mc.player.getZ() + 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() + 0.5), (int) (mc.player.getY() - 0.5), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock) || !(mc.world.getBlockState(new BlockPos((int) (mc.player.getX() - 0.5), (int) (mc.player.getY() - 0.5), (int) (mc.player.getZ() - 0.5))).getBlock() instanceof AirBlock);
+    }
+
+    public static float getSpeed() {
+        return (float) getSpeed(mc.player.getVelocity().x, mc.player.getVelocity().z);
+    }
+
+    public static double getSpeed(double motionX, double motionZ) {
+        return Math.sqrt(motionX * motionX + motionZ * motionZ);
+    }
+
+    public static void strafe(float speed) {
+        strafe(getSpeed());
+    }
+
+    public static float getRawDirection() {
+        float rotationYaw = RotationUtils.cameraYaw;
+
+        if (mc.player.forwardSpeed < 0F)
+            rotationYaw += 180F;
+
+        float forward = 1F;
+        if (mc.player.forwardSpeed < 0F)
+            forward = -0.5F;
+        else if (mc.player.forwardSpeed > 0F)
+            forward = 0.5F;
+
+        if (mc.player.sidewaysSpeed > 0F)
+            rotationYaw -= 90F * forward;
+
+        if (mc.player.sidewaysSpeed < 0F)
+            rotationYaw += 90F * forward;
+
+        return rotationYaw;
     }
 }

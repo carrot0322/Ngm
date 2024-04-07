@@ -21,9 +21,14 @@ public class MixinRenderTickCounter {
     @Shadow
     private float tickTime;
 
-    @Inject(method = "beginRenderTick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/RenderTickCounter;prevTimeMillis:J"))
-    public void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> cir) {
-        this.lastFrameDuration *= Ngm.TIMER;
+    @Inject(method = "beginRenderTick", at = @At("HEAD"), cancellable = true)
+    private void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> cir) {
+        this.lastFrameDuration = ((timeMillis - this.prevTimeMillis) / this.tickTime) * Ngm.TICK_TIMER;
+        this.prevTimeMillis = timeMillis;
+        this.tickDelta += this.lastFrameDuration;
+        int i = (int) this.tickDelta;
+        this.tickDelta -= i;
+        cir.setReturnValue(i);
     }
 
     @Inject(method = "beginRenderTick", at = @At(value = "HEAD"),

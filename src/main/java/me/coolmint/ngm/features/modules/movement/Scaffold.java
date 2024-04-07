@@ -5,10 +5,8 @@ import javafx.scene.input.KeyCode;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.Stage;
 import me.coolmint.ngm.event.impl.*;
-import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
-import me.coolmint.ngm.util.ChatUtil;
 import me.coolmint.ngm.util.ChatUtil.sendInfoUtil;
 import me.coolmint.ngm.util.MathUtil;
 import me.coolmint.ngm.util.MovementUtility;
@@ -16,13 +14,13 @@ import me.coolmint.ngm.util.models.Timer;
 import me.coolmint.ngm.util.player.InventoryUtility;
 import me.coolmint.ngm.util.player.Rotation;
 import me.coolmint.ngm.util.player.RotationUtils;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.input.KeyCodes;
+import net.minecraft.client.Keyboard;
 import net.minecraft.client.network.SequencedPacketCreator;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.util.Window;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
@@ -30,13 +28,18 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
-import net.minecraft.util.Formatting;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import org.apache.commons.lang3.RandomUtils;
+import org.joml.Vector3f;
 
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static me.coolmint.ngm.util.MovementUtility.getSpeed;
 
 public class Scaffold extends Module {
     private Setting<Boolean> allowTower = register(new Setting<>("EnableTower", true));
@@ -242,7 +245,7 @@ public class Scaffold extends Module {
     
     @Override
     public void onUpdate() {
-        if (!faceBlock && startPlaceplayer.passedMs(1))
+        if (!faceBlock && startPlaceTimer.passedMs(1))
             startPlaceTimer.reset();
 
         if (getBlocksAmount() <= 0) {
@@ -251,7 +254,7 @@ public class Scaffold extends Module {
         }
 
         if (lockRotation != null) {
-            Rotation serverRotation = RotationUtils.getServerRotation();
+            Rotation serverRotation = RotationUtils.getServerLookVec();
             if (serverRotation != null) {
                 Rotation targetRotation = RotationUtils.limitAngleChange(
                         serverRotation,
@@ -269,7 +272,7 @@ public class Scaffold extends Module {
                     float yaw = MovementUtility.getRawDirection() - 180f;
                     float pitch = 83f;
                     Rotation targetRotation = RotationUtils.limitAngleChange(
-                            RotationUtils.getServerRotation(),
+                            RotationUtils.getServerLookVec(),
                             new Rotation(yaw, pitch),
                             RandomUtils.nextFloat(minTurnSpeed.getValue(), maxTurnSpeed.getValue())
                     );
@@ -289,21 +292,21 @@ public class Scaffold extends Module {
                 new BlockPos((int) mc.player.getX(), (int) (mc.player.getY() - 1.0), (int) mc.player.getZ())
         ).getBlock() == Blocks.AIR;
 
-        if (!canTower && (autoSneakValue.getValue() && mc.player.isOnGround() && shouldEagle || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)))
-            mc.gameSettings.keyBindSneak.pressed = true;
-        else if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            mc.gameSettings.keyBindSneak.pressed = false;
+        if (!canTower && (autoSneakValue.getValue() && mc.player.isOnGround() && shouldEagle || mc.options.sneakKey.isPressed()))
+            mc.options.sneakKey.setPressed(true);
+        else if (!mc.options.sneakKey.isPressed())
+            mc.options.sneakKey.setPressed(false);
 
-        if (!canTower && towerModeValue.getValue().equalsIgnoreCase("watchdog") && mc.player.ticksExisted % 2 == 0) {
+        if (!canTower && towerModeValue.getValue() == towerMode.Watchdog && mc.player.ticksExisted % 2 == 0) {
             wdTick = 5;
             towerTick = 0;
             wdSpoof = false;
         }
 
-        if (allowTower.getValue() && Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && blocksAmount > 0 && MovementUtility.isRidingBlock() &&
-                (towerMove.getValue().equalsIgnoreCase("always") ||
-                        (!MovementUtility.isMoving() && towerMove.getValue().equalsIgnoreCase("standing")) ||
-                        (MovementUtility.isMoving() && towerMove.getValue().equalsIgnoreCase("moving")))) {
+        if (allowTower.getValue() && mc.options.jumpKey.isPressed() && !mc.options.sneakKey.isPressed() && getBlocksAmount() > 0 && MovementUtility.isRidingBlock() &&
+                (towerMove.getValue() == towerMove1.Always ||
+                        (!MovementUtility.isMoving() && towerMove.getValue() == towerMove1.Standing) ||
+                        (MovementUtility.isMoving() && towerMove.getValue() == towerMove1.Moving))) {
 
             canTower = true;
             String towerMode = towerModeValue.getValue().toString().toLowerCase();
@@ -339,9 +342,9 @@ public class Scaffold extends Module {
                     if (teleportNoMotionValue.getValue()) {
                         mc.player.setVelocity(mc.player.getVelocity().x, 0, mc.player.getVelocity().z);
                     }
-                    if ((mc.player.isOnGround() || !teleportGroundValue.getValue()) && player.passedMs(teleportDelayValue.getValue())) {
+                    if ((mc.player.isOnGround() || !teleportGroundValue.getValue()) && delayTimer.passedMs(teleportDelayValue.getValue())) {
                         fakeJump();
-                        mc.player.setPositionAndUpdate(
+                        mc.player.refreshPositionAfterTeleport(
                                 mc.player.getX(),
                                 mc.player.getY() + teleportHeightValue.getValue(),
                                 mc.player.getZ()
@@ -355,7 +358,7 @@ public class Scaffold extends Module {
                         fakeJump();
                     }
                     mc.player.setVelocity(mc.player.getVelocity().x, stableMotionValue.getValue(), mc.player.getVelocity().z);
-                    if (stableStopValue.getValue() && towerDelayplayer.passedMs(stableStopDelayValue.getValue())) {
+                    if (stableStopValue.getValue() && towerDelayTimer.passedMs(stableStopDelayValue.getValue())) {
                         mc.player.setVelocity(mc.player.getVelocity().x, -0.28, mc.player.getVelocity().z);
                         towerDelayTimer.reset();
                     }
@@ -434,10 +437,10 @@ public class Scaffold extends Module {
                         fakeJump();
                         mc.player.setVelocity(mc.player.getVelocity().x, 0.4001, mc.player.getVelocity().z);
                     }
-                    mc.timer.timerSpeed = 1f;
+                    Ngm.TICK_TIMER = 1f;
                     if (mc.player.getVelocity().y < 0) {
                         mc.player.setVelocity(mc.player.getVelocity().x, 0.00000945, mc.player.getVelocity().z);
-                        mc.timer.timerSpeed = 1.6f;
+                        Ngm.TICK_TIMER = 1.6f;
                     }
                     break;
 
@@ -458,12 +461,15 @@ public class Scaffold extends Module {
             canTower = false;
         }
 
+        /* 스피드 아직 없다
         if (autoDisableSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState()) {
             Launch.moduleManager.getModule(Speed.class).setState(false);
             ChatUtil.sendInfo("Speed was disabled");
         }
 
-        mc.timer.timerSpeed = timerValue.getValue();
+         */
+
+        Ngm.TICK_TIMER = timerValue.getValue();
 
         if (mc.player.isOnGround()) {
             offGroundTicks = 0;
@@ -473,9 +479,9 @@ public class Scaffold extends Module {
 
         if (desyncValue.getValue()) {
             synchronized (positions) {
-                positions.add(new double[]{mc.player.getX(), mc.player.entityBoundingBox.minY, mc.player.getZ()});
+                positions.add(new double[]{mc.player.getX(), mc.player.getBoundingBox().minY, mc.player.getZ()});
             }
-            if (pulseplayer.passedMs(desyncDelayValue.getValue())) {
+            if (pulseTimer.passedMs(desyncDelayValue.getValue())) {
                 blink();
                 pulseTimer.reset();
             }
@@ -486,26 +492,26 @@ public class Scaffold extends Module {
             MovementUtility.strafe(customMoveSpeedValue.getValue());
         }
 
-        if (sprintModeValue.getValue().equalsIgnoreCase("off") ||
-                (sprintModeValue.getValue().equalsIgnoreCase("ground") && !mc.player.isOnGround()) ||
-                (sprintModeValue.getValue().equalsIgnoreCase("air") && mc.player.isOnGround())) {
+        if (sprintModeValue.getValue() == sprintModes.Off ||
+                (sprintModeValue.getValue() == sprintModes.Ground && !mc.player.isOnGround()) ||
+                (sprintModeValue.getValue() == sprintModes.Air && mc.player.isOnGround())) {
             mc.player.setSprinting(false);
         }
 
-        if (!autoJumpValue.getValue().equalsIgnoreCase("keepy") &&
-                !(smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState()) ||
-                Keyboard.isKeyDown(Keyboard.KEY_SPACE) || mc.player.getY() < launchY) {
-            launchY = mc.player.getY();
+        if (autoJumpValue.getValue() != autoJumps.KeepY /*&&
+                !(smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState())*/ ||
+                mc.options.jumpKey.isPressed() || mc.player.getY() < launchY) {
+            launchY = (int) mc.player.getY();
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && mc.player.isOnGround()) {
+        if (mc.options.jumpKey.isPressed() && mc.player.isOnGround()) {
             placeCount = 0;
         }
 
-        if ((autoJumpValue.getValue().equalsIgnoreCase("keepy") && !Launch.moduleManager.getModule(Speed.class).getState()) ||
-                (autoJumpValue.getValue().equalsIgnoreCase("normal") && faceBlock) ||
-                (autoJumpValue.getValue().equalsIgnoreCase("breezily") && placeCount >= breezilyDelayValue.getValue()) &&
-                        MovementUtility.isMoving() && mc.player.isOnGround()) {
+        if ((autoJumpValue.getValue() == autoJumps.KeepY /*&& !Launch.moduleManager.getModule(Speed.class).getState())*/ ||
+                (autoJumpValue.getValue() == autoJumps.Normal && faceBlock) ||
+                (autoJumpValue.getValue() == autoJumps.Breezily && placeCount >= breezilyDelayValue.getValue()) &&
+                        MovementUtility.isMoving() && mc.player.isOnGround())) {
             mc.player.jump();
             placeCount = 0;
         }
@@ -529,9 +535,9 @@ public class Scaffold extends Module {
 
         if (packet instanceof PlayerInteractBlockC2SPacket) {
             PlayerInteractBlockC2SPacket placementPacket = (PlayerInteractBlockC2SPacket) packet;
-            placementPacket.setFacingX(MathHelper.clamp_float(placementPacket.getFacingX(), -1.0F, 1.0F));
-            placementPacket.setFacingY(MathHelper.clamp_float(placementPacket.getFacingY(), -1.0F, 1.0F));
-            placementPacket.setFacingZ(MathHelper.clamp_float(placementPacket.getFacingZ(), -1.0F, 1.0F));
+            placementPacket.setFacingX(MathHelper.clamp(placementPacket.getFacingX(), -1.0F, 1.0F));
+            placementPacket.setFacingY(MathHelper.clamp(placementPacket.getFacingY(), -1.0F, 1.0F));
+            placementPacket.setFacingZ(MathHelper.clamp(placementPacket.getFacingZ(), -1.0F, 1.0F));
         }
 
         if (packet instanceof PlayerInteractBlockC2SPacket && !mc.isIntegratedServerRunning()) {
@@ -549,9 +555,10 @@ public class Scaffold extends Module {
         }
     }
 
+    /*
     @Subscribe
     public void onStrafe(StrafeEvent event) {
-        if (blocksAmount <= 0 || RotationUtils.targetRotation == null)
+        if (getBlocksAmount() <= 0 || RotationUtils.targetRotation == null)
             return;
 
         boolean silentRotationsState = Launch.moduleManager.getModule(SilentRotations.class).state;
@@ -561,9 +568,10 @@ public class Scaffold extends Module {
             event.yaw = RotationUtils.targetRotation.yaw - 180f;
         }
     }
+     */
 
     private boolean shouldPlace() {
-        String placeCondition = placeConditionValue.getValue().toLowerCase();
+        String placeCondition = placeConditionValue.getValue().toString().toLowerCase();
         boolean placeWhenAir = placeCondition.equals("air");
         boolean placeWhenFall = placeCondition.equals("falldown");
         boolean placeWhenNegativeMotion = placeCondition.equals("negativemotion");
@@ -598,7 +606,7 @@ public class Scaffold extends Module {
         }
 
         // Decrease watchdog tick if in watchdog mode
-        if (towerModeValue.getValue().equalsIgnoreCase("watchdog")) {
+        if (towerModeValue.getValue() == towerMode.Watchdog) {
             if (wdTick > 0) {
                 wdTick--;
             }
@@ -655,9 +663,9 @@ public class Scaffold extends Module {
 
         // Adjust timer speed and handle floating mode
         if (canTower) {
-            mc.timer.timerSpeed = towerTimerValue.getValue();
-            if (eventState == EventState.POST && towerModeValue.getValue().equalsIgnoreCase("float")) {
-                if (BlockUtils.getBlock(new BlockPos(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ())) instanceof BlockAir) {
+            Ngm.TICK_TIMER = towerTimerValue.getValue();
+            if (eventState == Stage.POST && towerModeValue.getValue() == towerMode.Float) {
+                if (BlockUtils.getBlock(new BlockPos(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ())) instanceof AirBlock) {
                     floatUP(event);
                 }
             }
@@ -666,6 +674,7 @@ public class Scaffold extends Module {
         }
     }
 
+    @Subscribe
     private void floatUP(MotionEvent event) {
         if (!mc.world.getEntityCollisions(mc.player, mc.player.getBoundingBox().offset(0.0, -0.01, 0.0)).isEmpty()
                 && mc.player.isOnGround() && mc.player.isCollidable()) {
@@ -674,7 +683,7 @@ public class Scaffold extends Module {
         }
 
         if (verusJumped) {
-            MovementUtility.strafe();
+            MovementUtility.strafe(getSpeed());
 
             switch (verusState) {
                 case 0:
@@ -711,15 +720,15 @@ public class Scaffold extends Module {
     private void findBlock() {
         BlockPos blockPosition;
 
-        if (!canTower && ((autoJumpValue.getValue().equalsIgnoreCase("keepy")
-                || (smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState()))
-                && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump))
+        if (!canTower && ((autoJumpValue.getValue() == autoJumps.KeepY
+                /*|| (smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState())*/)
+                && !mc.options.jumpKey.isPressed())
                 && launchY <= mc.player.getY()) {
-            blockPosition = new BlockPos(mc.player.getX(), launchY - 1.0, mc.player.getZ());
+            blockPosition = new BlockPos((int) mc.player.getX(), (int) (launchY - 1.0), (int) mc.player.getZ());
         } else if (mc.player.getY() == (int) mc.player.getY() + 0.5) {
-            blockPosition = new BlockPos(mc.player);
+            blockPosition = new BlockPos(mc.player.getBlockPos());
         } else {
-            blockPosition = new BlockPos(mc.player.getX(), mc.player.getY(), mc.player.getZ()).down();
+            blockPosition = new BlockPos((int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()).down();
         }
 
         if (!isReplaceable(blockPosition) || search(blockPosition)) {
@@ -743,7 +752,7 @@ public class Scaffold extends Module {
         }
 
         // Handle start place delay if enabled
-        if (startPlaceDelayValue.getValue() && faceBlock && !startPlaceplayer.passedMs(startPlaceDelay.getValue())) {
+        if (startPlaceDelayValue.getValue() && faceBlock && !startPlaceTimer.passedMs(startPlaceDelay.getValue())) {
             if (!mc.player.isOnGround()) {
                 startPlaceTimer.tick = startPlaceDelay.getValue();
             } else {
@@ -761,10 +770,10 @@ public class Scaffold extends Module {
         }
 
         // Check conditions before placing
-        if (!canTower && (!delayplayer.passedMs(delay)
-                || ((autoJumpValue.getValue().equalsIgnoreCase("keepy")
-                || (smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState()))
-                && !GameSettings.isKeyDown(mc.gameSettings.keyBindJump))
+        if (!canTower && (!delayTimer.passedMs(delay)
+                || ((autoJumpValue.getValue() == autoJumps.KeepY
+                /*|| (smartSpeedValue.getValue() && Launch.moduleManager.getModule(Speed.class).getState())*/)
+                && !mc.options.jumpKey.isPressed())
                 && launchY - 1 != (int) targetPlace.vec3.yCoord)
         ) {
             return;
@@ -774,7 +783,6 @@ public class Scaffold extends Module {
         if (mc.player.getMainHandStack() != null && mc.player.getMainHandStack().getItem() instanceof BlockItem) {
             Block block = ((BlockItem) mc.player.getMainHandStack().getItem()).getBlock();
             if (InventoryUtility.BLOCK_BLACKLIST.contains(block)
-                    || !block.isFullCube()
                     || mc.player.getMainHandStack().getCount() <= 0) {
                 return;
             }
@@ -828,7 +836,7 @@ public class Scaffold extends Module {
 
         lockRotation = null;
         lookupRotation = null;
-        mc.timer.timerSpeed = 1.0f;
+        Ngm.TICK_TIMER = 1.0f;
         faceBlock = false;
 
         // Reset the selected item slot to the last used slot
@@ -900,35 +908,35 @@ public class Scaffold extends Module {
         for (EnumFacing side : EnumFacing.VALUES) {
             BlockPos neighbor = blockPosition.offset(side);
             if (!canBeClicked(neighbor)) continue;
-            Vec3 dirVec = new Vec3(side.getDirectionVec());
+            Vec3d dirVec = new Vec3d(side.getDirectionVec());
             double xSearch = 0.1;
             while (xSearch < 0.9) {
                 double ySearch = 0.1;
                 while (ySearch < 0.9) {
                     double zSearch = 0.1;
                     while (zSearch < 0.9) {
-                        Vec3 posVec = new Vec3(blockPosition).addVector(xSearch, ySearch, zSearch);
+                        Vec3d posVec = new BlockPos(blockPosition).add((int) xSearch,(int) ySearch,(int) zSearch).toCenterPos();
                         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
-                        Vec3 hitVec = posVec.addVector(dirVec.xCoord * 0.5, dirVec.yCoord * 0.5, dirVec.zCoord * 0.5);
-                        if (eyesPos.squareDistanceTo(hitVec) > 18.0 ||
-                                distanceSqPosVec > eyesPos.squareDistanceTo(posVec.add(dirVec)) ||
-                                mc.theWorld.rayTraceBlocks(eyesPos, hitVec, false, true, false) != null) {
+                        Vec3d hitVec = posVec.add(dirVec.x * 0.5, dirVec.y * 0.5, dirVec.z * 0.5);
+                        if (eyesPos.squaredDistanceTo(hitVec) > 18.0 ||
+                                distanceSqPosVec > eyesPos.squaredDistanceTo(posVec.add(dirVec)) ||
+                                mc.world.raycastBlock(eyesPos, hitVec, false, true, false) != null) {
                             zSearch += 0.1;
                             continue;
                         }
-                        for (int i = 0; i < (rotationModeValue.getValue().equalsIgnoreCase("Smooth") ? 2 : 1); i++) {
-                            double diffX = (rotationModeValue.getValue().equalsIgnoreCase("Smooth") && i == 0) ? 0.0 : hitVec.xCoord - eyesPos.xCoord;
-                            double diffY = hitVec.yCoord - eyesPos.yCoord;
-                            double diffZ = (rotationModeValue.getValue().equalsIgnoreCase("Smooth") && i == 1) ? 0.0 : hitVec.zCoord - eyesPos.zCoord;
-                            double diffXZ = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
+                        for (int i = 0; i < (rotationModeValue.getValue() == rotationModes.Smooth ? 2 : 1); i++) {
+                            double diffX = (rotationModeValue.getValue()  == rotationModes.Smooth && i == 0) ? 0.0 : hitVec.x - eyesPos.z;
+                            double diffY = hitVec.y - eyesPos.y;
+                            double diffZ = (rotationModeValue.getValue() == rotationModes.Smooth && i == 1) ? 0.0 : hitVec.z - eyesPos.z;
+                            double diffXZ = MathHelper.sqrt((float) (diffX * diffX + diffZ * diffZ));
                             Rotation rotation = new Rotation(
-                                    MathHelper.wrapAngleTo180_float((float) (Math.toDegrees(Math.atan2(diffZ, diffX)) - 90f)),
-                                    MathHelper.wrapAngleTo180_float((float) (-Math.toDegrees(Math.atan2(diffY, diffXZ))))
+                                    MathHelper.wrapDegrees((float) (Math.toDegrees(Math.atan2(diffZ, diffX)) - 90f)),
+                                    MathHelper.wrapDegrees((float) (-Math.toDegrees(Math.atan2(diffY, diffXZ))))
                             );
                             lookupRotation = rotation;
-                            Vec3 rotationVector = RotationUtils.getVectorForRotation(rotation);
-                            Vec3 vector = eyesPos.addVector(rotationVector.xCoord * 4, rotationVector.yCoord * 4, rotationVector.zCoord * 4);
-                            MovingObjectPosition obj = mc.theWorld.rayTraceBlocks(eyesPos, vector, false, false, true);
+                            Vec3d rotationVector = RotationUtils.getVectorForRotation(rotation);
+                            Vec3d vector = eyesPos.add(rotationVector.x * 4, rotationVector.y * 4, rotationVector.z * 4);
+                            BlockHitResult obj = mc.world.raycastBlock(eyesPos, vector, false, false, true);
                             if (obj != null && obj.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && obj.blockPos.equals(neighbor)) {
                                 if (placeRotation == null || RotationUtils.getRotationDifference(rotation) < RotationUtils.getRotationDifference(placeRotation.rotation)) {
                                     placeRotation = new PlaceRotation(new PlaceInfo(neighbor, side.getOpposite(), hitVec), rotation);
@@ -947,8 +955,8 @@ public class Scaffold extends Module {
             return false;
         }
         Rotation limitedRotation = RotationUtils.limitAngleChange(RotationUtils.serverRotation, placeRotation.rotation, RandomUtils.nextFloat(minTurnSpeed.getValue(), maxTurnSpeed.getValue()));
-        if (Math.round(10 * MathHelper.wrapAngleTo180_float(limitedRotation.getYaw())) == Math.round(10 * MathHelper.wrapAngleTo180_float(placeRotation.rotation.getYaw())) &&
-                Math.round(10 * MathHelper.wrapAngleTo180_float(limitedRotation.getPitch())) == Math.round(10 * MathHelper.wrapAngleTo180_float(placeRotation.rotation.getPitch()))) {
+        if (Math.round(10 * MathHelper.wrapDegrees(limitedRotation.yaw())) == Math.round(10 * MathHelper.wrapDegrees(placeRotation.rotation.getYaw())) &&
+                Math.round(10 * MathHelper.wrapDegrees(limitedRotation.pitch())) == Math.round(10 * MathHelper.wrapDegrees(placeRotation.rotation.getPitch()))) {
             RotationUtils.setTargetRotation(placeRotation.rotation, 0);
             lockRotation = placeRotation.rotation;
             faceBlock = true;

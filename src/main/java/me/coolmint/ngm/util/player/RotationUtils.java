@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.coolmint.ngm.util.MathUtil.random;
 import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class RotationUtils
@@ -245,4 +246,25 @@ public class RotationUtils
             if (callback != null) callback.run();
         }
     }
+
+    public static float cameraYaw = 0f;
+    public static Rotation targetRotation = null;
+
+    public void setTargetRotation(Rotation rotation) {
+        setTargetRotation(rotation, 0);
+    }
+
+    public void setTargetRotation(Rotation rotation, int a) {
+        try {
+            if (Double.isNaN(rotation.yaw()) || Double.isNaN(rotation.pitch()) || rotation.pitch() > 90 || rotation.pitch() < -90) {
+                return;
+            }
+        } catch (Exception ignored) {
+            return;
+        }
+        rotation.fixedSensitivity(mc.options.getMouseSensitivity().getValue());
+        targetRotation = rotation;
+    }
+
+
 }

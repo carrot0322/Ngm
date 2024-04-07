@@ -13,7 +13,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static final String NAME = MOD_META.getName();
     public static final String VERSION = MOD_META.getVersion().getFriendlyString();;
 
-    public static float TIMER = 1f;
     public static float TICK_TIMER = 1f;
 
     public static final Logger LOGGER = LogManager.getLogger("Ngm");

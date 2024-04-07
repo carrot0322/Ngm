@@ -2,10 +2,12 @@ package me.coolmint.ngm.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import javafx.scene.input.KeyCode;
 import me.coolmint.ngm.event.impl.Render2DEvent;
 import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
+import me.coolmint.ngm.util.KeyboardUtil;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
 
