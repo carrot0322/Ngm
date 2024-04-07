@@ -7,6 +7,7 @@ import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.MovementType;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static me.coolmint.ngm.features.modules.Module.fullNullCheck;
 import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
+import static me.coolmint.ngm.util.traits.Util.mc;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
@@ -45,7 +47,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
     @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
     private void sendMovementPacketsHook(CallbackInfo info) {
         if (fullNullCheck()) return;
-        EventSync event = new EventSync(getYaw(), getPitch());
+        EventSync event = new EventSync(getYaw(), getPitch(), getX(), getY(), getZ());
         EVENT_BUS.post(event);
 
         if (event.isCancelled()) info.cancel();

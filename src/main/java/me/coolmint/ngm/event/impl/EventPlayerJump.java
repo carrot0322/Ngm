@@ -1,6 +1,8 @@
 package me.coolmint.ngm.event.impl;
 
-public class EventPlayerJump {
+import me.coolmint.ngm.event.Event;
+
+public class EventPlayerJump extends Event {
     private boolean pre;
 
     public EventPlayerJump(boolean pre) {
