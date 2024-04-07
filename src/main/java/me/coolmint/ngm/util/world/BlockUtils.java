@@ -1,9 +1,8 @@
 package me.coolmint.ngm.util.world;
 
 import com.google.common.eventbus.Subscribe;
-import me.coolmint.ngm.util.player.FindItemResult;
-import me.coolmint.ngm.util.player.Rotation;
-import me.coolmint.ngm.util.player.RotationUtils;
+import me.coolmint.ngm.event.impl.TickEvent;
+import me.coolmint.ngm.util.player.*;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.SlabType;
@@ -27,7 +26,6 @@ import net.minecraft.world.World;
 
 import static me.coolmint.ngm.util.traits.Util.mc;
 
-@SuppressWarnings("ConstantConditions")
 public class BlockUtils {
     public static boolean breaking;
     private static boolean breakingThisTick;
@@ -67,7 +65,7 @@ public class BlockUtils {
         if (slot < 0 || slot > 8) return false;
 
         Block toPlace = Blocks.OBSIDIAN;
-        ItemStack i = hand == Hand.MAIN_HAND ? mc.player.getInventory().getStack(slot) : mc.player.getInventory().getStack(45);
+        ItemStack i = hand == Hand.MAIN_HAND ? mc.player.getInventory().getStack(slot) : mc.player.getInventory().getStack(SlotUtils.OFFHAND);
         if (i.getItem() instanceof BlockItem blockItem) toPlace = blockItem.getBlock();
         if (!canPlaceBlock(blockPos, checkEntities, toPlace)) return false;
 
@@ -86,13 +84,36 @@ public class BlockUtils {
 
         BlockHitResult bhr = new BlockHitResult(hitPos, side.getOpposite(), neighbour, false);
 
+        /*
+        if (rotate) {
+            RotationUtils.rotate(RotationUtils.getYaw(hitPos), RotationUtils.getPitch(hitPos), rotationPriority);
+
+            InvUtils.swap(slot, swapBack);
+
+            interact(bhr, hand, swingHand);
+
+            if (swapBack) InvUtils.swapBack();
+        } else {
+            InvUtils.swap(slot, swapBack);
+
+            interact(bhr, hand, swingHand);
+
+            if (swapBack) InvUtils.swapBack();
+        }
+
+         */
         if (rotate) {
             RotationUtils.slowlyTurnTowards(RotationUtils.getNeededRotations(hitPos), 100);
-            mc.player.getInventory().swapSlotWithHotbar(slot);
+            //mc.player.getInventory().swapSlotWithHotbar(slot);
+            mc.player.getInventory().selectedSlot = slot;
+            //InvUtils.swap(slot, swapBack);
             interact(bhr, hand, swingHand);
+            //if (swapBack) InvUtils.swapBack();
         } else {
             mc.player.getInventory().swapSlotWithHotbar(slot);
+            //InvUtils.swap(slot, swapBack);
             interact(bhr, hand, swingHand);
+            //if (swapBack) InvUtils.swapBack();
         }
 
 
@@ -180,27 +201,32 @@ public class BlockUtils {
 
     // Breaking
 
-    /*
     @Subscribe
-    private static void onTickPre(TickEvent.Pre event) {
+    private static void onTickPre(TickEvent event) {
         breakingThisTick = false;
     }
 
     @Subscribe
-    private static void onTickPost(TickEvent.Post event) {
+    private static void onTickPost(TickEvent event) {
         if (!breakingThisTick && breaking) {
             breaking = false;
             if (mc.interactionManager != null) mc.interactionManager.cancelBlockBreaking();
         }
     }
 
-     */
-
     public static boolean breakBlock(BlockPos blockPos, boolean swing) {
         if (!canBreak(blockPos, mc.world.getBlockState(blockPos))) return false;
 
         // Creating new instance of block pos because minecraft assigns the parameter to a field, and we don't want it to change when it has been stored in a field somewhere
         BlockPos pos = blockPos instanceof BlockPos.Mutable ? new BlockPos(blockPos) : blockPos;
+
+        /*
+        InstaMine im = Modules.get().get(InstaMine.class);
+        if (im != null && im.isActive() && im.blockPos.equals(pos) && im.shouldMine()) {
+            im.sendPacket();
+            return true;
+        }
+         */
 
         if (mc.interactionManager.isBreakingBlock())
             mc.interactionManager.updateBlockBreakingProgress(pos, getDirection(blockPos));

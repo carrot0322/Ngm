@@ -13,7 +13,6 @@
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity",
-    "MixinEntityLivingBase",
     "MixinTextVisitFactory"
   ],
   "client": [
