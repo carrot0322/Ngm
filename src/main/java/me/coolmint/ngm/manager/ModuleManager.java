@@ -34,10 +34,9 @@ public class ModuleManager implements Jsonable, Util {
 
     public void init() {
         // Module Init
-        // Combat'
+        // COMBAT
         modules.add(new AutoArmor());
         modules.add(new AutoTotem());
-        //modules.add(new BowAim());
         modules.add(new Criticals());
         modules.add(new KillAura());
         modules.add(new TpAura());
@@ -56,6 +55,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Scaffold());
         modules.add(new Step());
         modules.add(new Velocity());
+        modules.add(new AutoWalk());
 
         // RENDER
         modules.add(new Esp());
