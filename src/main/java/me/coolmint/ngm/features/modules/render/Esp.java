@@ -16,30 +16,30 @@ import net.minecraft.entity.player.PlayerEntity;
 import java.awt.*;
 
 public class Esp extends Module {
-    Setting<ESPMode> modeConfig = register(new Setting<>("Mode", ESPMode.GLOW));
-    Setting<Float> widthConfig = register(new Setting<>("Linewidth", 0.1f, 1.25f, 5.0f));
-    Setting<Boolean> playersConfig = register(new Setting<>("Players", true));
-    Setting<Color> playersColorConfig = register(new Setting<>("PlayersColor", new Color(200, 60, 60, 255), v -> playersConfig.getValue()));
-    Setting<Boolean> monstersConfig = register(new Setting<>("Monsters", true));
-    Setting<Color> monstersColorConfig = register(new Setting<>("MonstersColor", new Color(200, 60, 60, 255), v -> monstersConfig.getValue()));
-    Setting<Boolean> animalsConfig = register(new Setting<>("Animals", true));
-    Setting<Color> animalsColorConfig = register(new Setting<>("AnimalsColor", new Color(0, 200, 0, 255), v -> animalsConfig.getValue()));
-    Setting<Boolean> vehiclesConfig = register(new Setting<>("Vehicles", false));
-    Setting<Color> vehiclesColorConfig = register(new Setting<>("VehiclesColor", new Color(200, 100, 0, 255), v -> vehiclesConfig.getValue()));
-    Setting<Boolean> itemsConfig = register(new Setting<>("Items", false));
-    Setting<Color> itemsColorConfig = register(new Setting<>("ItemsColor", new Color(200, 100, 0, 255), v -> itemsConfig.getValue()));
-    Setting<Boolean> crystalsConfig = register(new Setting<>("EndCrystals", false));
-    Setting<Color> crystalsColorConfig = register(new Setting<>("EndCrystalsColor", new Color(200, 100, 200, 255), v -> crystalsConfig.getValue()));
-    Setting<Boolean> chestsConfig = register(new Setting<>("Chests", true));
-    Setting<Color> chestsColorConfig = register(new Setting<>("ChestsColor", new Color(200, 200, 101, 255), v -> chestsConfig.getValue()));
-    Setting<Boolean> echestsConfig = register(new Setting<>("EnderChests", true));
-    Setting<Color> echestsColorConfig = register(new Setting<>("EnderChestsColor", new Color(155, 0, 200, 255), v -> echestsConfig.getValue()));
-    Setting<Boolean> shulkersConfig = register(new Setting<>("Shulkers", true));
-    Setting<Color> shulkersColorConfig = register(new Setting<>("ShulkersColor", new Color(200, 0, 106, 255), v -> shulkersConfig.getValue()));
-    Setting<Boolean> hoppersConfig = register(new Setting<>("Hoppers", false));
-    Setting<Color> hoppersColorConfig = register(new Setting<>("HoppersColor", new Color(100, 100, 100, 255), v -> hoppersConfig.getValue()));
-    Setting<Boolean> furnacesConfig = register(new Setting<>("Furnaces", false));
-    Setting<Color> furnacesColorConfig = register(new Setting<>("FurnacesColor", new Color(100, 100, 100, 255), v -> furnacesConfig.getValue()));
+    Setting<ESPMode> mode = register(new Setting<>("Mode", ESPMode.GLOW));
+    Setting<Float> width = register(new Setting<>("Linewidth", 0.1f, 1.25f, 5.0f));
+    Setting<Boolean> players = register(new Setting<>("Players", true));
+    Setting<Color> playersColor = register(new Setting<>("PlayersColor", new Color(200, 60, 60, 255), v -> players.getValue()));
+    Setting<Boolean> monsters = register(new Setting<>("Monsters", true));
+    Setting<Color> monstersColor = register(new Setting<>("MonstersColor", new Color(200, 60, 60, 255), v -> monsters.getValue()));
+    Setting<Boolean> animals = register(new Setting<>("Animals", true));
+    Setting<Color> animalsColor = register(new Setting<>("AnimalsColor", new Color(0, 200, 0, 255), v -> animals.getValue()));
+    Setting<Boolean> vehicles = register(new Setting<>("Vehicles", false));
+    Setting<Color> vehiclesColor = register(new Setting<>("VehiclesColor", new Color(200, 100, 0, 255), v -> vehicles.getValue()));
+    Setting<Boolean> items = register(new Setting<>("Items", false));
+    Setting<Color> itemsColor = register(new Setting<>("ItemsColor", new Color(200, 100, 0, 255), v -> items.getValue()));
+    Setting<Boolean> crystals = register(new Setting<>("EndCrystals", false));
+    Setting<Color> crystalsColor = register(new Setting<>("EndCrystalsColor", new Color(200, 100, 200, 255), v -> crystals.getValue()));
+    Setting<Boolean> chests = register(new Setting<>("Chests", true));
+    Setting<Color> chestsColor = register(new Setting<>("ChestsColor", new Color(200, 200, 101, 255), v -> chests.getValue()));
+    Setting<Boolean> echests = register(new Setting<>("EnderChests", true));
+    Setting<Color> echestsColor = register(new Setting<>("EnderChestsColor", new Color(155, 0, 200, 255), v -> echests.getValue()));
+    Setting<Boolean> shulkers = register(new Setting<>("Shulkers", true));
+    Setting<Color> shulkersColor = register(new Setting<>("ShulkersColor", new Color(200, 0, 106, 255), v -> shulkers.getValue()));
+    Setting<Boolean> hoppers = register(new Setting<>("Hoppers", false));
+    Setting<Color> hoppersColor = register(new Setting<>("HoppersColor", new Color(100, 100, 100, 255), v -> hoppers.getValue()));
+    Setting<Boolean> furnaces = register(new Setting<>("Furnaces", false));
+    Setting<Color> furnacesColor = register(new Setting<>("FurnacesColor", new Color(100, 100, 100, 255), v -> furnaces.getValue()));
 
 
     public Esp() {
@@ -48,14 +48,14 @@ public class Esp extends Module {
 
     @Subscribe
     public void onEntityOutline(EntityOutlineEvent event) {
-        if (modeConfig.getValue() == ESPMode.GLOW && checkESP(event.getEntity())) {
+        if (mode.getValue() == ESPMode.GLOW && checkESP(event.getEntity())) {
             event.cancel();
         }
     }
 
     @Subscribe
     public void onTeamColor(TeamColorEvent event) {
-        if (modeConfig.getValue() == ESPMode.GLOW && checkESP(event.getEntity())) {
+        if (mode.getValue() == ESPMode.GLOW && checkESP(event.getEntity())) {
             event.cancel();
             event.setColor(Ngm.colorManager.getColor().getRGB());
         }
@@ -63,53 +63,53 @@ public class Esp extends Module {
 
     public Color getStorageESPColor(BlockEntity tileEntity) {
         if (tileEntity instanceof ChestBlockEntity) {
-            return chestsColorConfig.getValue();
+            return chestsColor.getValue();
         }
         if (tileEntity instanceof EnderChestBlockEntity) {
-            return echestsColorConfig.getValue();
+            return echestsColor.getValue();
         }
         if (tileEntity instanceof ShulkerBoxBlockEntity) {
-            return shulkersColorConfig.getValue();
+            return shulkersColor.getValue();
         }
         if (tileEntity instanceof HopperBlockEntity) {
-            return hoppersColorConfig.getValue();
+            return hoppersColor.getValue();
         }
         if (tileEntity instanceof FurnaceBlockEntity) {
-            return furnacesColorConfig.getValue();
+            return furnacesColor.getValue();
         }
         return null;
     }
 
     public Color getESPColor(Entity entity) {
         if (entity instanceof PlayerEntity) {
-            return playersColorConfig.getValue();
+            return playersColor.getValue();
         }
         if (EntityUtil.isMonster(entity)) {
-            return monstersColorConfig.getValue();
+            return monstersColor.getValue();
         }
         if (EntityUtil.isNeutral(entity) || EntityUtil.isPassive(entity)) {
-            return animalsColorConfig.getValue();
+            return animalsColor.getValue();
         }
         if (EntityUtil.isVehicle(entity)) {
-            return vehiclesColorConfig.getValue();
+            return vehiclesColor.getValue();
         }
         if (entity instanceof EndCrystalEntity) {
-            return crystalsColorConfig.getValue();
+            return crystalsColor.getValue();
         }
         if (entity instanceof ItemEntity) {
-            return itemsColorConfig.getValue();
+            return itemsColor.getValue();
         }
         return null;
     }
 
     public boolean checkESP(Entity entity) {
-        return entity != mc.player && entity instanceof PlayerEntity && playersConfig.getValue()
-                || EntityUtil.isMonster(entity) && monstersConfig.getValue()
+        return entity != mc.player && entity instanceof PlayerEntity && players.getValue()
+                || EntityUtil.isMonster(entity) && monsters.getValue()
                 || (EntityUtil.isNeutral(entity)
-                || EntityUtil.isPassive(entity)) && animalsConfig.getValue()
-                || EntityUtil.isVehicle(entity) && vehiclesConfig.getValue()
-                || entity instanceof EndCrystalEntity && crystalsConfig.getValue()
-                || entity instanceof ItemEntity && itemsConfig.getValue();
+                || EntityUtil.isPassive(entity)) && animals.getValue()
+                || EntityUtil.isVehicle(entity) && vehicles.getValue()
+                || entity instanceof EndCrystalEntity && crystals.getValue()
+                || entity instanceof ItemEntity && items.getValue();
     }
 
     public enum ESPMode {
