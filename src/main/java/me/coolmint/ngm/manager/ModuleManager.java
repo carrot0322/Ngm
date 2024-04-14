@@ -11,12 +11,12 @@ import me.coolmint.ngm.features.modules.combat.*;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.exploit.GrimDisabler;
 import me.coolmint.ngm.features.modules.legit.Reach;
 import me.coolmint.ngm.features.modules.legit.Trigger;
 import me.coolmint.ngm.features.modules.misc.*;
 import me.coolmint.ngm.features.modules.movement.*;
 import me.coolmint.ngm.features.modules.render.Esp;
-import me.coolmint.ngm.features.modules.render.FreeCam;
 import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
@@ -60,7 +60,6 @@ public class ModuleManager implements Jsonable, Util {
         // RENDER
         modules.add(new Esp());
         modules.add(new Fullbright());
-        modules.add(new FreeCam());
 
         // MISC
         modules.add(new AntiHunger());
@@ -88,6 +87,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new CompletionCrash());
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
+        modules.add(new GrimDisabler());
     }
 
     public Module getModuleByName(String name) {
