@@ -22,7 +22,7 @@ public class VisualRange extends Module {
     private final Setting<Boolean> enter = register(new Setting<>("Enter", true));
     private final Setting<Boolean> friends = register(new Setting<>("Friends", true));
     private final Setting<Boolean> soundpl = register(new Setting<>("Sound", true));
-    private final Setting<Mode> mode = new Setting<>("Mode", Mode.Chat);
+    private final Setting<Mode> mode = register(new Setting<>("Mode", Mode.Chat));
 
     public VisualRange() {
         super("VisualRange", "", Category.MISC, true, false, false);
