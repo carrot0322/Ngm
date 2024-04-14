@@ -71,6 +71,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Spammer());
         modules.add(new XCarry());
         modules.add(new VisualRange());
+        modules.add(new GameModeNotifier());
 
         // CLIENT
         modules.add(new ClickGuiModule());
