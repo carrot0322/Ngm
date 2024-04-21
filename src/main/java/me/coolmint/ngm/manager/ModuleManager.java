@@ -8,10 +8,7 @@ import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.client.*;
 import me.coolmint.ngm.features.modules.combat.*;
-import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
-import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
-import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
-import me.coolmint.ngm.features.modules.exploit.GrimDisabler;
+import me.coolmint.ngm.features.modules.exploit.*;
 import me.coolmint.ngm.features.modules.legit.AntiMiss;
 import me.coolmint.ngm.features.modules.legit.Reach;
 import me.coolmint.ngm.features.modules.legit.Trigger;
@@ -91,6 +88,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
         modules.add(new GrimDisabler());
+        modules.add(new Disabler());
     }
 
     public Module getModuleByName(String name) {

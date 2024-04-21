@@ -4,7 +4,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.suggestion.Suggestions;
 import me.coolmint.ngm.Ngm;
-import me.coolmint.ngm.features.memojang.Memojang;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.command.CommandSource;
@@ -77,11 +76,6 @@ public abstract class MixinChatInputSuggestor {
                     )
             )
     )
-    private void afterGetChatSuggestions(CallbackInfo ci) {
-        if (Memojang.wereLastSuggestionsConditional()) {
-            this.show(true); // Shows the autocomplete popup
-        }
-    }
 
     @SuppressWarnings("InvalidInjectorMethodSignature") // This is the correct way, you doofus
     @ModifyVariable(method = "refresh()V", at = @At("STORE"), ordinal = 0, name = "collection")
@@ -96,10 +90,6 @@ public abstract class MixinChatInputSuggestor {
         int startOfCurrentWord = getStartOfCurrentWord(textBeforeCursor);
 
         String currentWord = textBeforeCursor.substring(startOfCurrentWord);
-
-        Collection<String> additionalSuggestions = Memojang.getSuggestions(currentWord);
-
-        newSuggestions.addAll(additionalSuggestions);
 
         return newSuggestions;
     }
