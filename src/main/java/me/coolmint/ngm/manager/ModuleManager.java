@@ -12,6 +12,7 @@ import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
 import me.coolmint.ngm.features.modules.exploit.GrimDisabler;
+import me.coolmint.ngm.features.modules.legit.AntiMiss;
 import me.coolmint.ngm.features.modules.legit.Reach;
 import me.coolmint.ngm.features.modules.legit.Trigger;
 import me.coolmint.ngm.features.modules.misc.*;
@@ -83,6 +84,7 @@ public class ModuleManager implements Jsonable, Util {
         // LEGIT
         modules.add(new Reach());
         modules.add(new Trigger());
+        modules.add(new AntiMiss());
 
         // EXPLOIT
         modules.add(new CompletionCrash());

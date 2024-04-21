@@ -14,7 +14,7 @@ import java.util.Random;
 public class Spammer extends Module {
     public static ArrayList<String> SpamList = new ArrayList<>();
     public Setting<Boolean> bypass = register(new Setting<>("Bypass", true));
-    public Setting<Float> delay = register(new Setting<>("Belay", 1.0f, 0.0f, 30.0f));
+    public Setting<Float> delay = register(new Setting<>("Delay", 1.0f, 0.0f, 30.0f));
     private final Setting<Boolean> autoDisable = register(new Setting<>("Auto Disable", true));
     private final Timer timer_delay = new Timer();
 
