@@ -30,7 +30,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.PlayerManager playerManager;
     public static me.coolmint.ngm.manager.NetworkManager networkManager;
     public static me.coolmint.ngm.manager.TickManager tickManager;
-    public static me.coolmint.ngm.features.memojang.Memojang memojang;
 
     @Override public void onInitialize() {
         eventManager = new me.coolmint.ngm.manager.EventManager();
@@ -46,7 +45,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         playerManager = new me.coolmint.ngm.manager.PlayerManager();
         networkManager = new me.coolmint.ngm.manager.NetworkManager();
         tickManager = new me.coolmint.ngm.manager.TickManager();
-        memojang = new me.coolmint.ngm.features.memojang.Memojang();
     }
 
 
@@ -62,7 +60,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         configManager = new me.coolmint.ngm.manager.ConfigManager();
         configManager.load();
         colorManager.init();
-        memojang.init();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> configManager.save()));
     }

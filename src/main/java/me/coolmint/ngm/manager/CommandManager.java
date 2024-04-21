@@ -23,8 +23,8 @@ public class CommandManager {
         add(new BindCommand());
         add(new FriendCommand());
         add(new ToggleCommand());
-        add(new MethodCommand());
-        add(new TcpCommand());
+        //add(new MethodCommand());
+        //add(new TcpCommand());
     }
 
     private void add(@NotNull Command command) {
