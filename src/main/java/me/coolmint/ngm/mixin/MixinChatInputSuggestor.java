@@ -32,13 +32,6 @@ public abstract class MixinChatInputSuggestor {
 
     @Shadow protected abstract void showCommandSuggestions();
 
-    @Shadow
-    private static int getStartOfCurrentWord(String input) {
-        return 0;
-    }
-
-    @Shadow public abstract void show(boolean narrateFirstSuggestion);
-
     @Inject(method = "refresh", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;canRead()Z", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     public void onRefresh(CallbackInfo ci, String string, StringReader reader) {
         if (reader.canRead(Ngm.commandManager.getPrefix().length()) && reader.getString().startsWith(Ngm.commandManager.getPrefix(), reader.getCursor())) {
@@ -58,39 +51,5 @@ public abstract class MixinChatInputSuggestor {
 
             ci.cancel();
         }
-    }
-
-    @Inject(
-            method = "refresh()V",
-            at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/client/gui/screen/ChatInputSuggestor;pendingSuggestions:Ljava/util/concurrent/CompletableFuture;",
-                    opcode = Opcodes.PUTFIELD,
-                    shift = At.Shift.AFTER,
-                    ordinal = 0
-            ),
-            slice = @Slice(
-                    from = @At(
-                            value = "INVOKE",
-                            target = "Lnet/minecraft/client/gui/screen/ChatInputSuggestor;getStartOfCurrentWord(Ljava/lang/String;)I"
-                    )
-            )
-    )
-
-    @SuppressWarnings("InvalidInjectorMethodSignature") // This is the correct way, you doofus
-    @ModifyVariable(method = "refresh()V", at = @At("STORE"), ordinal = 0, name = "collection")
-    private Collection<String> modifySuggestionsOutsideOfCommands(Collection<String> vanillaSuggestions) {
-        ArrayList<String> newSuggestions = new ArrayList<>(vanillaSuggestions);
-
-        // We need the current word to filter the additional suggestions, hence all of this
-        String currentInput = this.textField.getText();
-        int currentCursorPosition = this.textField.getCursor();
-
-        String textBeforeCursor = currentInput.substring(0, currentCursorPosition);
-        int startOfCurrentWord = getStartOfCurrentWord(textBeforeCursor);
-
-        String currentWord = textBeforeCursor.substring(startOfCurrentWord);
-
-        return newSuggestions;
     }
 }

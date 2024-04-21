@@ -18,6 +18,7 @@
   "client": [
     "ICreativeInventoryScreen",
     "MixinBlock",
+    "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",
     "MixinClientConnection",
     "MixinClientPlayerEntity",
