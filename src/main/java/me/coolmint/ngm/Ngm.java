@@ -1,6 +1,6 @@
 package me.coolmint.ngm;
 
-import me.coolmint.ngm.auth.Init;
+import me.coolmint.ngm.util.client.Auth;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -20,7 +20,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.ColorManager colorManager;
     public static me.coolmint.ngm.manager.RotationManager rotationManager;
     public static me.coolmint.ngm.manager.PositionManager positionManager;
-    public static me.coolmint.ngm.manager.HoleManager holeManager;
     public static me.coolmint.ngm.manager.EventManager eventManager;
     public static me.coolmint.ngm.manager.SpeedManager speedManager;
     public static me.coolmint.ngm.manager.CommandManager commandManager;
@@ -28,8 +27,6 @@ public class Ngm implements ModInitializer, ClientModInitializer {
     public static me.coolmint.ngm.manager.ModuleManager moduleManager;
     public static me.coolmint.ngm.manager.ConfigManager configManager;
     public static me.coolmint.ngm.manager.PlayerManager playerManager;
-    public static me.coolmint.ngm.manager.NetworkManager networkManager;
-    public static me.coolmint.ngm.manager.TickManager tickManager;
 
     @Override public void onInitialize() {
         eventManager = new me.coolmint.ngm.manager.EventManager();
@@ -41,19 +38,15 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         moduleManager = new me.coolmint.ngm.manager.ModuleManager();
         commandManager = new me.coolmint.ngm.manager.CommandManager();
         speedManager = new me.coolmint.ngm.manager.SpeedManager();
-        holeManager = new me.coolmint.ngm.manager.HoleManager();
         playerManager = new me.coolmint.ngm.manager.PlayerManager();
-        networkManager = new me.coolmint.ngm.manager.NetworkManager();
-        tickManager = new me.coolmint.ngm.manager.TickManager();
     }
 
 
     @Override public void onInitializeClient() {
-        if (!Init.auth()) {
-            System.exit(523);
-            LOGGER.warn("[{}] Invalid Hwid : Use HwidChecker", Ngm.NAME);
-        }
-        LOGGER.info("[{}] Initializing Client", NAME);
+        //if (!Auth.auth()) {
+            //System.exit(523);
+            //LOGGER.warn("[{}] Invalid Hwid : Use HwidChecker", Ngm.NAME);
+        //}
         eventManager.init();
         moduleManager.init();
 

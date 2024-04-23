@@ -5,7 +5,7 @@ import me.coolmint.ngm.features.gui.ClickGui;
 import me.coolmint.ngm.features.gui.fonts.FontRenderers;
 import me.coolmint.ngm.features.modules.client.ClickGuiModule;
 import me.coolmint.ngm.features.settings.Setting;
-import me.coolmint.ngm.util.RenderUtil;
+import me.coolmint.ngm.util.client.RenderUtil;
 import me.coolmint.ngm.util.models.Timer;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.DrawContext;

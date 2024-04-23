@@ -9,9 +9,11 @@ import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.util.traits.Jsonable;
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 public class ConfigManager {
     private static final Path NGM_PATH = FabricLoader.getInstance().getGameDir().resolve("ngm");
@@ -19,7 +21,7 @@ public class ConfigManager {
             .setLenient()
             .setPrettyPrinting()
             .create();
-    private final List<Jsonable> jsonables = List.of(Ngm.friendManager, Ngm.moduleManager/*, (Jsonable) Ngm.commandManager*/);
+    private final List<Jsonable> jsonables = List.of(Ngm.friendManager, Ngm.moduleManager);
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {
@@ -60,23 +62,53 @@ public class ConfigManager {
 
     public void load() {
         if (!NGM_PATH.toFile().exists()) NGM_PATH.toFile().mkdirs();
+
+        // 버전 읽기
+        try {
+            String jsonString = Files.readString(NGM_PATH.resolve("modules.json"));
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+
+            if (!jsonObject.has("version")) return;
+
+            String configVersion = jsonObject.get("version").getAsString();
+
+            if (!Objects.equals(configVersion, Ngm.VERSION)){
+                File file = new File(NGM_PATH.resolve("modules.json").toString());
+                file.delete();
+                return;
+            }
+
+        } catch (Throwable e) {
+            Ngm.LOGGER.error(e);
+        }
+
         for (Jsonable jsonable : jsonables) {
             try {
                 String read = Files.readString(NGM_PATH.resolve(jsonable.getFileName()));
                 jsonable.fromJson(JsonParser.parseString(read));
             } catch (Throwable e) {
-                e.printStackTrace();
+                Ngm.LOGGER.error(e);
             }
         }
     }
 
     public void save() {
         if (!NGM_PATH.toFile().exists()) NGM_PATH.toFile().mkdirs();
+        // 버전 쓰기
+        try {
+            JsonObject root = new JsonObject();
+            root.addProperty("version", Ngm.VERSION);
+            Files.writeString(NGM_PATH.resolve("modules.json"), gson.toJson(root));
+        } catch (Throwable e) {
+            Ngm.LOGGER.error(e);
+        }
+
         for (Jsonable jsonable : jsonables) {
             try {
                 JsonElement json = jsonable.toJson();
-                Files.writeString(NGM_PATH.resolve(jsonable.getFileName()), gson.toJson(json));
+                Files.writeString(NGM_PATH.resolve(jsonable.getFileName()), gson.toJson(json)); // 파일 쓰기
             } catch (Throwable e) {
+                Ngm.LOGGER.error(e);
             }
         }
     }

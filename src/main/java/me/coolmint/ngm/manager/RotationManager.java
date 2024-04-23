@@ -1,6 +1,6 @@
 package me.coolmint.ngm.manager;
 
-import me.coolmint.ngm.util.MathUtil;
+import me.coolmint.ngm.util.client.MathUtil;
 import me.coolmint.ngm.util.traits.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;

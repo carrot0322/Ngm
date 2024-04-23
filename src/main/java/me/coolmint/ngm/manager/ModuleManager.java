@@ -7,15 +7,6 @@ import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.client.*;
-import me.coolmint.ngm.features.modules.combat.*;
-import me.coolmint.ngm.features.modules.exploit.*;
-import me.coolmint.ngm.features.modules.legit.AntiMiss;
-import me.coolmint.ngm.features.modules.legit.Reach;
-import me.coolmint.ngm.features.modules.legit.Trigger;
-import me.coolmint.ngm.features.modules.misc.*;
-import me.coolmint.ngm.features.modules.movement.*;
-import me.coolmint.ngm.features.modules.render.Esp;
-import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
 
@@ -33,61 +24,18 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         // Module Init
         // COMBAT
-        modules.add(new AutoArmor());
-        modules.add(new AutoTotem());
-        modules.add(new Criticals());
-        modules.add(new KillAura());
-        modules.add(new TpAura());
-        modules.add(new OneTap());
-        modules.add(new BowSpam());
-        modules.add(new Replenish());
 
         // MOVEMENT
-        modules.add(new Flight());
-        modules.add(new GuiMove());
-        modules.add(new Jetpack());
-        modules.add(new NoFall());
-        modules.add(new NoJumpDelay());
-        modules.add(new Parkour());
-        modules.add(new Sprint());
-        modules.add(new Scaffold());
-        modules.add(new Step());
-        modules.add(new Velocity());
-        modules.add(new AutoWalk());
 
         // RENDER
-        modules.add(new Esp());
-        modules.add(new Fullbright());
 
         // MISC
-        modules.add(new AntiHunger());
-        modules.add(new AntiPacketKick());
-        modules.add(new ChestStealer());
-        modules.add(new FastPlace());
-        modules.add(new MCF());
-        modules.add(new SilentDisconnect());
-        modules.add(new Spammer());
-        modules.add(new XCarry());
-        modules.add(new VisualRange());
-        modules.add(new GameModeNotifier());
 
         // CLIENT
-        modules.add(new ClickGuiModule());
-        modules.add(new ClientSpoof());
-        modules.add(new HudModule());
-        modules.add(new Notification());
-        modules.add(new Rotations());
 
         // LEGIT
-        modules.add(new Reach());
-        modules.add(new Trigger());
-        modules.add(new AntiMiss());
 
         // EXPLOIT
-        modules.add(new CompletionCrash());
-        modules.add(new ConsoleSpammer());
-        modules.add(new ErrorCrash());
-        modules.add(new Disabler());
     }
 
     public Module getModuleByName(String name) {

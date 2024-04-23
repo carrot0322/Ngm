@@ -23,8 +23,6 @@ public class CommandManager {
         add(new BindCommand());
         add(new FriendCommand());
         add(new ToggleCommand());
-        //add(new MethodCommand());
-        //add(new TcpCommand());
     }
 
     private void add(@NotNull Command command) {
@@ -45,10 +43,6 @@ public class CommandManager {
             if (command.getClass().equals(commandClass)) return command;
 
         return null;
-    }
-
-    public static @NotNull String getClientMessage() {
-        return Formatting.WHITE + "[" + Formatting.DARK_RED + "NGM" + Formatting.WHITE + "]" + Formatting.RESET;
     }
 
     public List<Command> getCommands() {

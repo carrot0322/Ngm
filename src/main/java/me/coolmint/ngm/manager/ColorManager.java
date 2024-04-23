@@ -2,7 +2,7 @@ package me.coolmint.ngm.manager;
 
 import me.coolmint.ngm.features.gui.Component;
 import me.coolmint.ngm.features.modules.client.ClickGuiModule;
-import me.coolmint.ngm.util.ColorUtil;
+import me.coolmint.ngm.util.client.ColorUtil;
 
 import java.awt.*;
 

@@ -6,12 +6,16 @@ import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.command.args.ModuleArgumentType;
 import me.coolmint.ngm.features.modules.Module;
+import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static me.coolmint.ngm.util.client.KeyboardUtil.getShortKeyName;
 
 public class BindCommand extends Command {
     public BindCommand() {
@@ -26,7 +30,7 @@ public class BindCommand extends Command {
                     final String stringKey = context.getArgument("key", String.class);
 
                     if (stringKey == null) {
-                        sendMessage(module.getName() + " is bound to " + Formatting.GRAY + module.getBind());
+                        ChatUtil.sendInfo(module.getName() + " is bound to " + Formatting.GRAY + module.getBind());
                         return SINGLE_SUCCESS;
                     }
 
@@ -37,19 +41,19 @@ public class BindCommand extends Command {
                         try {
                             key = InputUtil.fromTranslationKey("key.keyboard." + stringKey.toLowerCase()).getCode();
                         } catch (NumberFormatException e) {
-                            sendMessage("There is no such button");
+                            ChatUtil.sendError("There is no such button");
                             return SINGLE_SUCCESS;
                         }
                     }
 
 
                     if (key == 0) {
-                        sendMessage("Unknown key '" + stringKey + "'!");
+                        ChatUtil.sendError("Unknown key '" + stringKey + "'!");
                         return SINGLE_SUCCESS;
                     }
                     module.setBind(key);
 
-                    sendMessage("Bind for " + Formatting.GREEN + module.getName() + Formatting.WHITE + " set to " + Formatting.GRAY + stringKey.toUpperCase());
+                    ChatUtil.sendInfo("Bind for " + Formatting.GREEN + module.getName() + Formatting.WHITE + " set to " + Formatting.GRAY + stringKey.toUpperCase());
 
                     return SINGLE_SUCCESS;
                 }))
@@ -58,19 +62,17 @@ public class BindCommand extends Command {
         builder.then(literal("list").executes(context -> {
             StringBuilder binds = new StringBuilder("Binds: ");
             for (Module feature : Ngm.moduleManager.modules) {
-                /*
-                if (!Objects.equals(feature.getBind().getBind(), "None")) {
-                    binds.append("\n- ").append(feature.getName()).append(" -> ").append(getShortKeyName(feature)).append(feature.getBind().isHold() ? "[hold]" : "");
+                if (!Objects.equals(feature.getBind().toString(), "None")) {
+                    binds.append("\n- " + feature.getName() + " -> " + getShortKeyName(feature));
                 }
-                 */
             }
-            sendMessage(binds.toString());
+            ChatUtil.sendInfo(binds.toString());
             return SINGLE_SUCCESS;
         }));
 
         builder.then(literal("reset").executes(context -> {
             for (Module mod : Ngm.moduleManager.modules) mod.setBind(-1);
-            sendMessage("Done!");
+            ChatUtil.sendInfo("Done!");
             return SINGLE_SUCCESS;
         }));
     }

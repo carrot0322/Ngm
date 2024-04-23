@@ -6,6 +6,7 @@ import me.coolmint.ngm.event.impl.ClientEvent;
 import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
+import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 
@@ -47,7 +48,7 @@ public class ClickGuiModule
         if (event.getStage() == 2 && event.getSetting().getFeature().equals(this)) {
             if (event.getSetting().equals(this.prefix)) {
                 Ngm.commandManager.setPrefix(this.prefix.getPlannedValue());
-                Command.sendMessage("Prefix set to " + Formatting.DARK_GRAY + Ngm.commandManager.getPrefix());
+                ChatUtil.sendInfo("Prefix set to " + Formatting.DARK_GRAY + Ngm.commandManager.getPrefix());
             }
             Ngm.colorManager.setColor(this.red.getPlannedValue(), this.green.getPlannedValue(), this.blue.getPlannedValue(), this.alpha.getPlannedValue());
         }

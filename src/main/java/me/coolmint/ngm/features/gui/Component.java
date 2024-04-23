@@ -7,7 +7,7 @@ import me.coolmint.ngm.features.gui.items.Item;
 import me.coolmint.ngm.features.gui.items.buttons.Button;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.client.ClickGuiModule;
-import me.coolmint.ngm.util.RenderUtil;
+import me.coolmint.ngm.util.client.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;

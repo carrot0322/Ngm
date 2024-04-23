@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import me.coolmint.ngm.Ngm;
+import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.command.CommandRegistryAccess;
@@ -30,11 +30,6 @@ public abstract class Command {
     }
 
     public abstract void executeBuild(LiteralArgumentBuilder<CommandSource> builder);
-
-    public static void sendMessage(String message) {
-        if (mc.player == null) return;
-        mc.player.sendMessage(Text.of(Ngm.commandManager.getClientMessage() + " "  + message));
-    }
 
     protected static <T> @NotNull RequiredArgumentBuilder<CommandSource, T> arg(final String name, final ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
