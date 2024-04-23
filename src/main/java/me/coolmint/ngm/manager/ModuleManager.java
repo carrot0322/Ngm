@@ -32,6 +32,8 @@ public class ModuleManager implements Jsonable, Util {
         // MISC
 
         // CLIENT
+        modules.add(new ClickGuiModule());
+        modules.add(new HudModule());
 
         // LEGIT
 

@@ -78,16 +78,14 @@ public class ConfigManager {
                 return;
             }
 
-        } catch (Throwable e) {
-            Ngm.LOGGER.error(e);
+        } catch (Throwable ignored) {
         }
 
         for (Jsonable jsonable : jsonables) {
             try {
                 String read = Files.readString(NGM_PATH.resolve(jsonable.getFileName()));
                 jsonable.fromJson(JsonParser.parseString(read));
-            } catch (Throwable e) {
-                Ngm.LOGGER.error(e);
+            } catch (Throwable ignored) {
             }
         }
     }

@@ -2,10 +2,12 @@ package me.coolmint.ngm.features.modules.client;
 
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.Render2DEvent;
+import me.coolmint.ngm.features.gui.fonts.FontRenderers;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 import net.minecraft.client.MinecraftClient;
 
+import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,12 +24,7 @@ public class HudModule extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
 
         if (Watermark.getValue()) {
-            event.getContext().drawTextWithShadow(
-                    mc.textRenderer,
-                    Ngm.NAME + " " + Ngm.VERSION,
-                    2, 2,
-                    -1
-            );
+            FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 2,  new Color(255, 255, 255, 255).getRGB(), true);
         }
 
         if (Arraylist.getValue()) {
