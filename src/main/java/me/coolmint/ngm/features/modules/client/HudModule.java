@@ -37,9 +37,9 @@ public class HudModule extends Module {
 
         if (Watermark.getValue()) {
             if(rainbow.getValue())
-                FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  getRainbow(alpha.getValue()), true);
+                FontRenderers.Hud.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  getRainbow(alpha.getValue()), true);
             else
-                FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
+                FontRenderers.Hud.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
         }
 
         if (Arraylist.getValue()) {
@@ -50,20 +50,20 @@ public class HudModule extends Module {
                     modules.remove(i);
             }
 
-            modules.sort(Comparator.comparingDouble(mod -> -FontRenderers.Main.getStringWidth(mod.getDisplayName())));
+            modules.sort(Comparator.comparingDouble(mod -> -FontRenderers.Hud.getStringWidth(mod.getDisplayName())));
 
             int y = 2;
 
             for (Module mod : modules) {
                 String displayName = mod.getDisplayName();
-                float stringWidth = FontRenderers.Main.getStringWidth(displayName);
+                float stringWidth = FontRenderers.Hud.getStringWidth(displayName);
 
                 float yOffset = mc.textRenderer.fontHeight + 2;
 
                 if(rainbow.getValue())
-                    FontRenderers.Main.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y,  getRainbow(alpha.getValue()), true);
+                    FontRenderers.Hud.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y,  getRainbow(alpha.getValue()), true);
                 else
-                    FontRenderers.Main.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
+                    FontRenderers.Hud.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
 
                 y += yOffset;
             }

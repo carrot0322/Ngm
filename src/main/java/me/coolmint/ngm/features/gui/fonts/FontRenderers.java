@@ -9,8 +9,10 @@ import java.util.Objects;
 
 public class FontRenderers {
     public static FontAdapter Main;
-    public static @NotNull RendererFontAdapter createDefault(float size, String name) throws IOException, FontFormatException {
-        return new RendererFontAdapter(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Ngm.class.getClassLoader().getResourceAsStream("assets/client/fonts/" + name + ".ttf"))).deriveFont(Font.PLAIN, size / 2f), size / 2f);
+    public static FontAdapter Hud;
+
+    public static @NotNull RendererFontAdapter createDefault(float size, String font) throws IOException, FontFormatException {
+        return new RendererFontAdapter(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Ngm.class.getClassLoader().getResourceAsStream("assets/client/fonts/" + font + ".ttf"))).deriveFont(Font.PLAIN, size / 2f), size / 2f);
     }
 
     public static @NotNull RendererFontAdapter createIcons(float size) throws IOException, FontFormatException {

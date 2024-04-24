@@ -17,6 +17,7 @@ public class MixinMinecraft {
     public void init(RunArgs args, CallbackInfo ci) {
         try {
             FontRenderers.Main = FontRenderers.createDefault(16f, "Main");
+            FontRenderers.Hud = FontRenderers.createDefault(18f, "Lexend");
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
