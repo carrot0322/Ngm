@@ -1,7 +1,7 @@
 package me.coolmint.ngm.util.player;
 
 import me.coolmint.ngm.Ngm;
-import me.coolmint.ngm.event.impl.EventMove;
+import me.coolmint.ngm.event.impl.MoveEvent;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.MathHelper;
 
@@ -77,7 +77,7 @@ public final class MovementUtility {
         return jumpSpeed;
     }
 
-    public static void modifyEventSpeed(EventMove event, double d) {
+    public static void modifyEventSpeed(MoveEvent event, double d) {
         double d2 = mc.player.input.movementForward;
         double d3 = mc.player.input.movementSideways;
         float f = mc.player.getYaw();

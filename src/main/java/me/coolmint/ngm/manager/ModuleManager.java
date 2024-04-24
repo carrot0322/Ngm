@@ -7,6 +7,14 @@ import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.client.*;
+import me.coolmint.ngm.features.modules.combat.BowSpam;
+import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
+import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
+import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.movement.Flight;
+import me.coolmint.ngm.features.modules.movement.Jetpack;
+import me.coolmint.ngm.features.modules.movement.Sprint;
+import me.coolmint.ngm.features.modules.render.Fullbright;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
 
@@ -24,10 +32,15 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         // Module Init
         // COMBAT
+        modules.add(new BowSpam());
 
         // MOVEMENT
+        modules.add(new Flight());
+        modules.add(new Jetpack());
+        modules.add(new Sprint());
 
         // RENDER
+        modules.add(new Fullbright());
 
         // MISC
 
@@ -38,6 +51,9 @@ public class ModuleManager implements Jsonable, Util {
         // LEGIT
 
         // EXPLOIT
+        modules.add(new CompletionCrash());
+        modules.add(new ConsoleSpammer());
+        modules.add(new ErrorCrash());
     }
 
     public Module getModuleByName(String name) {

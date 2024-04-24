@@ -36,7 +36,7 @@ public class PlayerManager {
     public boolean inInventory;
 
     @Subscribe
-    public void onSync(EventSync event) {
+    public void onSync(SyncEvent event) {
         if (Module.fullNullCheck()) return;
 
         yaw = mc.player.getYaw();
@@ -50,12 +50,12 @@ public class PlayerManager {
     }
 
     @Subscribe
-    public void onTick(EventTick e) {
+    public void onTick(TickEvent e) {
         currentPlayerSpeed = (float) Math.hypot(mc.player.getX() - mc.player.prevX, mc.player.getZ() - mc.player.prevZ);
     }
 
     @Subscribe
-    public void postSync(EventPostSync event) {
+    public void postSync(PostSyncEvent event) {
         if (mc.player == null) return;
 
         prevBodyYaw = bodyYaw;

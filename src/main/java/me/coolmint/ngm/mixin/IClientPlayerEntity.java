@@ -24,4 +24,7 @@ public interface IClientPlayerEntity {
 
     @Accessor(value = "mountJumpStrength")
     void setMountJumpStrength(float v);
+
+    @Accessor("ticksSinceLastPositionPacketSent")
+    void setTicksSinceLastPositionPacketSent(int ticks);
 }

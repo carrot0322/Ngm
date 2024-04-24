@@ -10,11 +10,14 @@
   ],
   "client": [
     "IClientPlayerEntity",
+    "IClientWorldMixin",
     "MixinChatInputSuggestor",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
+    "MixinEntityRenderer",
     "MixinInGameHud",
     "MixinKeyboard",
+    "MixinLightmapTextureManager",
     "MixinMinecraft",
     "MixinRenderTickCounter"
   ],

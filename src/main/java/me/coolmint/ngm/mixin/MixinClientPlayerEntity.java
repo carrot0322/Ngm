@@ -2,7 +2,7 @@ package me.coolmint.ngm.mixin;
 
 import com.mojang.authlib.GameProfile;
 import me.coolmint.ngm.event.Stage;
-import me.coolmint.ngm.event.impl.EventSync;
+import me.coolmint.ngm.event.impl.SyncEvent;
 import me.coolmint.ngm.event.impl.UpdateEvent;
 import me.coolmint.ngm.event.impl.UpdateWalkingPlayerEvent;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -40,7 +40,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
     @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
     private void sendMovementPacketsHook(CallbackInfo info) {
         if (fullNullCheck()) return;
-        EventSync event = new EventSync(getYaw(), getPitch());
+        SyncEvent event = new SyncEvent(getYaw(), getPitch());
         EVENT_BUS.post(event);
 
         if (event.isCancelled()) info.cancel();

@@ -2,7 +2,7 @@ package me.coolmint.ngm.event.impl;
 
 import me.coolmint.ngm.event.Event;
 
-public class EventPostSync extends Event {
-    public EventPostSync() {
+public class PostSyncEvent extends Event {
+    public PostSyncEvent() {
     }
 }

@@ -2,10 +2,10 @@ package me.coolmint.ngm.event.impl;
 
 import me.coolmint.ngm.event.Event;
 
-public class EventMove extends Event {
+public class MoveEvent extends Event {
     public double x, y, z;
 
-    public EventMove( double x, double y, double z) {
+    public MoveEvent(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;

@@ -1,7 +1,9 @@
 package me.coolmint.ngm.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.Render3DEvent;
+import me.coolmint.ngm.features.modules.render.Fullbright;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -12,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
@@ -25,5 +28,12 @@ public class MixinWorldRenderer {
         Render3DEvent event = new Render3DEvent(tickDelta);
         EVENT_BUS.post(event);
         MinecraftClient.getInstance().getProfiler().pop();
+    }
+
+    @ModifyVariable(method = "getLightmapCoordinates(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)I", at = @At(value = "STORE"), ordinal = 0)
+    private static int getLightmapCoordinatesModifySkyLight(int sky) {
+        if (Ngm.moduleManager.isModuleEnabled("Fullbright"))
+            return (Fullbright.brightness.getValue());
+        return sky;
     }
 }
