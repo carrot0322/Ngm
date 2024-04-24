@@ -12,6 +12,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 
@@ -60,9 +61,11 @@ public class StringButton
     @Override
     public void onKeyTyped(char typedChar, int keyCode) {
         if (this.isListening) {
-            if (isValidChar(typedChar)) {
+            if (isValidChar(typedChar) && typedChar != GLFW.GLFW_KEY_BACKSPACE)
                 this.setString(this.currentString.string() + typedChar);
-            }
+
+            if(typedChar == GLFW.GLFW_KEY_BACKSPACE)
+                this.setString(this.currentString.string().substring(0, this.currentString.string().length() - 1));
         }
     }
 

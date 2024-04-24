@@ -16,6 +16,7 @@ import java.util.List;
 public class HudModule extends Module {
     private final Setting<Boolean> Watermark = register(new Setting<>("Watermark", true));
     private final Setting<Boolean> Arraylist = register(new Setting<>("Arraylist", true));
+    public Setting<Boolean> smoothFont = register(new Setting<>("SmoothFont", true));
     public Setting<Boolean> rainbow = register(new Setting<>("Rainbow", false));
     public Setting<Integer> rainbowHue = register(new Setting<>("Delay", 240, 0, 600, v -> rainbow.getValue()));
     public Setting<Integer> red = register(new Setting<>("Red", 20, 0, 255, v -> !rainbow.getValue()));
@@ -36,10 +37,30 @@ public class HudModule extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
 
         if (Watermark.getValue()) {
-            if(rainbow.getValue())
-                FontRenderers.Hud.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  getRainbow(alpha.getValue()), true);
-            else
-                FontRenderers.Hud.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
+            if(smoothFont.getValue()){
+                if(rainbow.getValue())
+                    FontRenderers.Hud.drawString(
+                            event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION,
+                            2, 3,  getRainbow(alpha.getValue()), true
+                    );
+                else
+                    FontRenderers.Hud.drawString(
+                            event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION,
+                            2, 3,  new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true
+                    );
+            } else {
+                if(rainbow.getValue()){
+                    event.getContext().drawTextWithShadow(
+                            mc.textRenderer, Ngm.NAME + " " + Ngm.VERSION,
+                            2, 3, getRainbow(alpha.getValue())
+                    );
+                } else {
+                    event.getContext().drawTextWithShadow(
+                            mc.textRenderer, Ngm.NAME + " " + Ngm.VERSION,
+                            2, 3, getRainbow(alpha.getValue())
+                    );
+                }
+            }
         }
 
         if (Arraylist.getValue()) {
@@ -50,20 +71,41 @@ public class HudModule extends Module {
                     modules.remove(i);
             }
 
-            modules.sort(Comparator.comparingDouble(mod -> -FontRenderers.Hud.getStringWidth(mod.getDisplayName())));
+            modules.sort(Comparator.comparingDouble(mod -> smoothFont.getValue() ? -FontRenderers.Hud.getStringWidth(mod.getDisplayName()) : -mc.textRenderer.getWidth(mod.getDisplayName())));
 
             int y = 2;
 
             for (Module mod : modules) {
                 String displayName = mod.getDisplayName();
                 float stringWidth = FontRenderers.Hud.getStringWidth(displayName);
+                float stringWidthMC = mc.textRenderer.getWidth(displayName);
 
                 float yOffset = mc.textRenderer.fontHeight + 2;
 
-                if(rainbow.getValue())
-                    FontRenderers.Hud.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y,  getRainbow(alpha.getValue()), true);
-                else
-                    FontRenderers.Hud.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
+                if(smoothFont.getValue()){
+                    if(rainbow.getValue())
+                        FontRenderers.Hud.drawString(
+                                event.getContext().getMatrices(), displayName,
+                                mc.getWindow().getScaledWidth() - stringWidth - 2, y, getRainbow(alpha.getValue()), true
+                        );
+                    else
+                        FontRenderers.Hud.drawString(
+                                event.getContext().getMatrices(), displayName,
+                                mc.getWindow().getScaledWidth() - stringWidth - 2, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true
+                        );
+                } else {
+                    if(rainbow.getValue()){
+                        event.getContext().drawTextWithShadow(
+                                mc.textRenderer, displayName,
+                                (int) (mc.getWindow().getScaledWidth() - stringWidthMC - 2), y, getRainbow(alpha.getValue())
+                        );
+                    } else {
+                        event.getContext().drawTextWithShadow(
+                                mc.textRenderer, displayName,
+                                (int) (mc.getWindow().getScaledWidth() - stringWidthMC - 2), y, getRainbow(alpha.getValue())
+                        );
+                    }
+                }
 
                 y += yOffset;
             }
