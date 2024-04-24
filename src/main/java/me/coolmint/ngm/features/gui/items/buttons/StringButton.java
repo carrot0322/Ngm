@@ -60,10 +60,14 @@ public class StringButton
     @Override
     public void onKeyTyped(char typedChar, int keyCode) {
         if (this.isListening) {
-            if (SharedConstants.isValidChar(typedChar)) {
+            if (isValidChar(typedChar)) {
                 this.setString(this.currentString.string() + typedChar);
             }
         }
+    }
+
+    public static boolean isValidChar(char chr) {
+        return chr != 167 && chr >= ' ' && chr != 127;
     }
 
     @Override public void onKeyPressed(int key) {

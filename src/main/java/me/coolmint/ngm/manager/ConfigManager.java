@@ -65,7 +65,7 @@ public class ConfigManager {
 
         // 버전 읽기
         try {
-            String jsonString = Files.readString(NGM_PATH.resolve("modules.json"));
+            String jsonString = Files.readString(NGM_PATH.resolve("version.json"));
             JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
 
             if (!jsonObject.has("version")) return;
@@ -75,6 +75,8 @@ public class ConfigManager {
             if (!Objects.equals(configVersion, Ngm.VERSION)){
                 File file = new File(NGM_PATH.resolve("modules.json").toString());
                 file.delete();
+                File file1 = new File(NGM_PATH.resolve("version.json").toString());
+                file1.delete();
                 return;
             }
 
@@ -96,7 +98,7 @@ public class ConfigManager {
         try {
             JsonObject root = new JsonObject();
             root.addProperty("version", Ngm.VERSION);
-            Files.writeString(NGM_PATH.resolve("modules.json"), gson.toJson(root));
+            Files.writeString(NGM_PATH.resolve("version.json"), gson.toJson(root));
         } catch (Throwable e) {
             Ngm.LOGGER.error(e);
         }

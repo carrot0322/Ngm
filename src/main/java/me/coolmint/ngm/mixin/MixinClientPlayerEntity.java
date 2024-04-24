@@ -5,12 +5,10 @@ import me.coolmint.ngm.event.Stage;
 import me.coolmint.ngm.event.impl.EventSync;
 import me.coolmint.ngm.event.impl.UpdateEvent;
 import me.coolmint.ngm.event.impl.UpdateWalkingPlayerEvent;
-import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,9 +18,6 @@ import static me.coolmint.ngm.util.traits.Util.EVENT_BUS;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
-    @Shadow
-    public Input input;
-
     public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }

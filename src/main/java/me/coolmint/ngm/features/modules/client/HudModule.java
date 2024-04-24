@@ -2,9 +2,11 @@ package me.coolmint.ngm.features.modules.client;
 
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.Render2DEvent;
+import me.coolmint.ngm.features.gui.Component;
 import me.coolmint.ngm.features.gui.fonts.FontRenderers;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
+import me.coolmint.ngm.util.client.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 
 import java.awt.*;
@@ -14,9 +16,19 @@ import java.util.List;
 public class HudModule extends Module {
     private final Setting<Boolean> Watermark = register(new Setting<>("Watermark", true));
     private final Setting<Boolean> Arraylist = register(new Setting<>("Arraylist", true));
+    public Setting<Boolean> rainbow = register(new Setting<>("Rainbow", false));
+    public Setting<Integer> rainbowHue = register(new Setting<>("Delay", 240, 0, 600, v -> rainbow.getValue()));
+    public Setting<Integer> red = register(new Setting<>("Red", 20, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> green = register(new Setting<>("Green", 255, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> blue = register(new Setting<>("Blue", 80, 0, 255, v -> !rainbow.getValue()));
+    public Setting<Integer> alpha = register(new Setting<>("Alpha", 255, 0, 255));
 
     public HudModule() {
         super("Hud", "hud", Category.CLIENT, true, false, false);
+    }
+
+    private int getRainbow(int alpha){
+        return ColorUtil.rainbow(Component.counter1[0] * this.rainbowHue.getValue()).getRGB();
     }
 
     @Override
@@ -24,34 +36,35 @@ public class HudModule extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
 
         if (Watermark.getValue()) {
-            FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 2,  new Color(255, 255, 255, 255).getRGB(), true);
+            if(rainbow.getValue())
+                FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  getRainbow(alpha.getValue()), true);
+            else
+                FontRenderers.Main.drawString(event.getContext().getMatrices(), Ngm.NAME + " " + Ngm.VERSION, 2, 3,  new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
         }
 
         if (Arraylist.getValue()) {
-            List<me.coolmint.ngm.features.modules.Module> modules = Ngm.moduleManager.sortedModules;
+            List<Module> modules = Ngm.moduleManager.sortedModules;
 
-            for (int i = 0; i == modules.size(); i++){
+            for (int i = 0; i == modules.size(); i++) {
                 if (!modules.get(i).drawn.getValue())
                     modules.remove(i);
             }
 
-            modules.sort(Comparator.comparingInt(mod -> -mc.textRenderer.getWidth(mod.getDisplayName())));
+            modules.sort(Comparator.comparingDouble(mod -> -FontRenderers.Main.getStringWidth(mod.getDisplayName())));
 
             int y = 2;
 
-            for (me.coolmint.ngm.features.modules.Module mod : modules) {
+            for (Module mod : modules) {
                 String displayName = mod.getDisplayName();
-                int stringWidth = mc.textRenderer.getWidth(displayName);
+                float stringWidth = FontRenderers.Main.getStringWidth(displayName);
 
-                int yOffset = mc.textRenderer.fontHeight + 2;
+                float yOffset = mc.textRenderer.fontHeight + 2;
 
-                event.getContext().drawTextWithShadow(
-                        mc.textRenderer,
-                        displayName,
-                        mc.getWindow().getScaledWidth() - stringWidth - 2,
-                        y,
-                        -1
-                );
+                if(rainbow.getValue())
+                    FontRenderers.Main.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y,  getRainbow(alpha.getValue()), true);
+                else
+                    FontRenderers.Main.drawString(event.getContext().getMatrices(), displayName, mc.getWindow().getScaledWidth() - stringWidth - 2, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB(), true);
+
                 y += yOffset;
             }
         }

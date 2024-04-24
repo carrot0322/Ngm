@@ -16,8 +16,7 @@
     "MixinInGameHud",
     "MixinKeyboard",
     "MixinMinecraft",
-    "MixinRenderTickCounter",
-    "MixinWorldRenderer"
+    "MixinRenderTickCounter"
   ],
   "injectors": {
     "defaultRequire": 1

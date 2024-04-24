@@ -21,7 +21,7 @@ public class MixinClientConnection {
     @Shadow private Channel channel;
     @Shadow @Final private NetworkSide side;
 
-    @Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "channelRead0*", at = @At("HEAD"), cancellable = true)
     public void channelRead0(ChannelHandlerContext chc, Packet<?> packet, CallbackInfo ci) {
         if (this.channel.isOpen() && packet != null) {
             try {
