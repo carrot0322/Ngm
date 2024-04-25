@@ -66,14 +66,18 @@ public class TpAura extends Module {
                     return true;
                 }
             }).collect(Collectors.toList());
+
             targets = (List)targets.stream().filter((entity) -> {
                 return mc.player.distanceTo((Entity) entity) < (float)((Integer)this.max_range.getValue() * 2) && entity != mc.player;
             }).collect(Collectors.toList());
+
             targets = (List)targets.stream().filter((entity) -> {
                 return entity != null && ((LivingEntity)entity).getHealth() > 0.0F;
             }).collect(Collectors.toList());
+
             mc.player.getClass();
             targets.sort(Comparator.comparingDouble(mc.player::distanceTo));
+
             if (!targets.isEmpty()) {
                 target = (LivingEntity)targets.get(0);
                 if (mc.player.getAttackCooldownProgress(0.5f) == 1f) {
