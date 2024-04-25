@@ -5,13 +5,16 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "IExplosionS2CPacket",
+    "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity",
-    "MixinClientConnection"
+    "MixinClientConnection",
+    "MixinPlayerEntity"
   ],
   "client": [
     "IClientPlayerEntity",
     "IClientWorldMixin",
     "MixinChatInputSuggestor",
+    "MixinClientCommonNetworkHandler",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinEntityRenderer",

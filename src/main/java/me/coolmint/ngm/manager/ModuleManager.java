@@ -11,12 +11,18 @@ import me.coolmint.ngm.features.modules.combat.BowSpam;
 import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
 import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
 import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
+import me.coolmint.ngm.features.modules.exploit.MaceExploit;
+import me.coolmint.ngm.features.modules.legit.Trigger;
+import me.coolmint.ngm.features.modules.misc.SilentDisconnect;
 import me.coolmint.ngm.features.modules.movement.Flight;
 import me.coolmint.ngm.features.modules.movement.Jetpack;
+import me.coolmint.ngm.features.modules.movement.NoFall;
 import me.coolmint.ngm.features.modules.movement.Sprint;
 import me.coolmint.ngm.features.modules.render.Fullbright;
+import me.coolmint.ngm.features.modules.render.Xray;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
+import net.minecraft.item.MaceItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,23 +43,28 @@ public class ModuleManager implements Jsonable, Util {
         // MOVEMENT
         modules.add(new Flight());
         modules.add(new Jetpack());
+        modules.add(new NoFall());
         modules.add(new Sprint());
 
         // RENDER
         modules.add(new Fullbright());
+        modules.add(new Xray());
 
         // MISC
+        modules.add(new SilentDisconnect());
 
         // CLIENT
         modules.add(new ClickGuiModule());
         modules.add(new HudModule());
 
         // LEGIT
+        modules.add(new Trigger());
 
         // EXPLOIT
         modules.add(new CompletionCrash());
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
+        modules.add(new MaceExploit());
     }
 
     public Module getModuleByName(String name) {

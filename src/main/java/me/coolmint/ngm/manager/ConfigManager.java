@@ -102,7 +102,6 @@ public class ConfigManager {
         } catch (Throwable e) {
             Ngm.LOGGER.error(e);
         }
-
         for (Jsonable jsonable : jsonables) {
             try {
                 JsonElement json = jsonable.toJson();
