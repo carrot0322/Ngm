@@ -7,22 +7,14 @@ import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.modules.client.*;
-import me.coolmint.ngm.features.modules.combat.BowSpam;
-import me.coolmint.ngm.features.modules.exploit.CompletionCrash;
-import me.coolmint.ngm.features.modules.exploit.ConsoleSpammer;
-import me.coolmint.ngm.features.modules.exploit.ErrorCrash;
-import me.coolmint.ngm.features.modules.exploit.MaceExploit;
-import me.coolmint.ngm.features.modules.legit.Trigger;
-import me.coolmint.ngm.features.modules.misc.SilentDisconnect;
-import me.coolmint.ngm.features.modules.movement.Flight;
-import me.coolmint.ngm.features.modules.movement.Jetpack;
-import me.coolmint.ngm.features.modules.movement.NoFall;
-import me.coolmint.ngm.features.modules.movement.Sprint;
-import me.coolmint.ngm.features.modules.render.Fullbright;
-import me.coolmint.ngm.features.modules.render.Xray;
+import me.coolmint.ngm.features.modules.combat.*;
+import me.coolmint.ngm.features.modules.exploit.*;
+import me.coolmint.ngm.features.modules.legit.*;
+import me.coolmint.ngm.features.modules.misc.*;
+import me.coolmint.ngm.features.modules.movement.*;
+import me.coolmint.ngm.features.modules.render.*;
 import me.coolmint.ngm.util.traits.Jsonable;
 import me.coolmint.ngm.util.traits.Util;
-import net.minecraft.item.MaceItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +31,7 @@ public class ModuleManager implements Jsonable, Util {
         // Module Init
         // COMBAT
         modules.add(new BowSpam());
+        modules.add(new TpAura());
 
         // MOVEMENT
         modules.add(new Flight());
@@ -48,7 +41,6 @@ public class ModuleManager implements Jsonable, Util {
 
         // RENDER
         modules.add(new Fullbright());
-        modules.add(new Xray());
 
         // MISC
         modules.add(new SilentDisconnect());
