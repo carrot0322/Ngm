@@ -14,6 +14,7 @@ import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,16 +48,20 @@ public class TpAura extends Module {
 
     public void onTick() {
         if (!(Boolean)this.swordOnly.getValue() || mc.player.getInventory().getStack(mc.player.getInventory().selectedSlot).getItem() instanceof SwordItem) {
-            Stream var10000;
+            Stream players;
             List targets;
             if ((Boolean)this.only.getValue()) {
-                var10000 = mc.world.getPlayers().stream();
+                players = mc.world.getPlayers().stream();
                 PlayerEntity.class.getClass();
-                targets = (List)var10000.filter(PlayerEntity.class::isInstance).collect(Collectors.toList());
+                targets = (List)players.filter(PlayerEntity.class::isInstance).collect(Collectors.toList());
             } else {
-                var10000 = mc.world.getPlayers().stream();
+                List<Entity> entities = new ArrayList<>();
+                mc.world.getEntities().forEach(Entity -> {
+                    entities.add(Entity);
+                });
+                players = entities.stream();
                 LivingEntity.class.getClass();
-                targets = (List)var10000.filter(LivingEntity.class::isInstance).collect(Collectors.toList());
+                targets = (List)players.filter(LivingEntity.class::isInstance).collect(Collectors.toList());
             }
 
             targets = (List)targets.stream().filter((entity) -> {

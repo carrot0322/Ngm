@@ -16,6 +16,8 @@ import net.minecraft.network.packet.s2c.play.LookAtS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.Hand;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +56,11 @@ public class Aura extends Module {
             PlayerEntity.class.getClass();
             targets = (List)players.filter(PlayerEntity.class::isInstance).collect(Collectors.toList());
         } else {
-            players = mc.world.getPlayers().stream();
+            List<Entity> entities = new ArrayList<>();
+            mc.world.getEntities().forEach(Entity -> {
+                entities.add(Entity);
+            });
+            players = entities.stream();
             LivingEntity.class.getClass();
             targets = (List)players.filter(LivingEntity.class::isInstance).collect(Collectors.toList());
         }
