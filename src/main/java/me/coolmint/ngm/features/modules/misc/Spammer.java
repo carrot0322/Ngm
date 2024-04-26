@@ -13,27 +13,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Spammer extends Module {
+    public static ArrayList<String> SpamList = new ArrayList<>();
     public Setting<Boolean> bypass = register(new Setting<>("Bypass", true));
     public Setting<Float> delay = register(new Setting<>("Delay", 1.0f, 0.0f, 30.0f));
     private final Setting<Boolean> autoDisable = register(new Setting<>("Auto Disable", true));
+    private final Timer timer_delay = new Timer();
 
     public Spammer() {
         super("Spammer", "", Category.MISC, true, false, false);
     }
 
-    public static ArrayList<String> SpamList = new ArrayList<>();
-    private final Timer timer_delay = new Timer();
-
     public static void loadSpammer() {
-        File path = new File("ngm/spammer/");
-        File file = new File("ngm/spammer/spammer.txt");
-
         try {
-            if(!path.exists())
-                path.mkdirs();
-            if (!file.exists())
-                file.createNewFile();
+            File file = new File("ngm/Spammer/spammer.txt");
 
+            if (!file.exists()) file.createNewFile();
             new Thread(() -> {
                 try {
                     FileInputStream fis = new FileInputStream(file);
@@ -83,26 +77,24 @@ public class Spammer extends Module {
     @Override
     public void onEnable() {
         loadSpammer();
-        if (SpamList.isEmpty()) {
-            ChatUtil.sendError("SpamList is Empty - add list at ./minecraft/ngm/spammer/spammer.txt");
-            disable();
-        }
     }
 
     @Override
     public void onUpdate() {
         if (timer_delay.passedS(delay.getValue())) {
-            String string = SpamList.get(new Random().nextInt(SpamList.size()));
-            if (string.charAt(0) == '/') {
-                string = string.replace("/", "");
-                mc.player.networkHandler.sendCommand(string);
-            } else
-                mc.player.networkHandler.sendChatMessage(bypass.getValue() ? "/skill " + string : string);
+            if (SpamList.isEmpty()) {
+                toggle();
+                return;
+            }
+            String c = SpamList.get(new Random().nextInt(SpamList.size()));
+            if (c.charAt(0) == '/') {
+                c = c.replace("/", "");
+                mc.player.networkHandler.sendCommand(c);
+            } else mc.player.networkHandler.sendChatMessage(bypass.getValue() ? "/skill " + c : c);
 
             timer_delay.reset();
         }
     }
-
     @Subscribe
     private void onGameLeft(GameLeftEvent event) {
         if (autoDisable.getValue()) toggle();
