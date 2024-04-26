@@ -94,6 +94,8 @@ public class ConfigManager {
 
     public void save() {
         if (!NGM_PATH.toFile().exists()) NGM_PATH.toFile().mkdirs();
+        // 켜두면 버그나는 모듈 끄기
+        Ngm.moduleManager.disableModule("ClickGui");
         // 버전 쓰기
         try {
             JsonObject root = new JsonObject();
