@@ -39,6 +39,10 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Jetpack());
         modules.add(new NoFall());
         modules.add(new Sprint());
+        modules.add(new Velocity());
+        modules.add(new NoJumpDelay());
+        modules.add(new AutoWalk());
+        modules.add(new GuiMove());
 
         // RENDER
         modules.add(new Fullbright());
@@ -46,6 +50,9 @@ public class ModuleManager implements Jsonable, Util {
         // MISC
         modules.add(new SilentDisconnect());
         modules.add(new Spammer());
+        modules.add(new GameModeNotifier());
+        modules.add(new XCarry());
+        modules.add(new AntiHunger());
 
         // CLIENT
         modules.add(new ClickGuiModule());
@@ -53,6 +60,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // LEGIT
         modules.add(new Trigger());
+        modules.add(new Reach());
 
         // EXPLOIT
         modules.add(new CompletionCrash());
