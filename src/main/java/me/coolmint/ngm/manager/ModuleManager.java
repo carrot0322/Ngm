@@ -53,10 +53,12 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new GameModeNotifier());
         modules.add(new XCarry());
         modules.add(new AntiHunger());
+        modules.add(new AntiPacketKick());
 
         // CLIENT
         modules.add(new ClickGuiModule());
         modules.add(new HudModule());
+        modules.add(new Notification());
 
         // LEGIT
         modules.add(new Trigger());

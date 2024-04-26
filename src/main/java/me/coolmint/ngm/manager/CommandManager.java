@@ -45,10 +45,6 @@ public class CommandManager {
         return null;
     }
 
-    public static @NotNull String getClientMessage() {
-        return Formatting.WHITE + "[" + Formatting.DARK_RED + "NGM" + Formatting.WHITE + "]" + Formatting.RESET;
-    }
-
     public List<Command> getCommands() {
         return commands;
     }

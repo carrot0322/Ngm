@@ -7,9 +7,11 @@ import me.coolmint.ngm.event.impl.ClientEvent;
 import me.coolmint.ngm.event.impl.Render2DEvent;
 import me.coolmint.ngm.event.impl.Render3DEvent;
 import me.coolmint.ngm.features.Feature;
+import me.coolmint.ngm.features.modules.client.Notification;
 import me.coolmint.ngm.features.settings.Bind;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.manager.ConfigManager;
+import me.coolmint.ngm.util.ChatUtil;
 import me.coolmint.ngm.util.traits.Jsonable;
 import net.minecraft.util.Formatting;
 import net.minecraft.screen.slot.SlotActionType;
@@ -83,6 +85,9 @@ public class Module extends Feature implements Jsonable {
     }
 
     public void enable() {
+        Notification notification = new Notification();
+        if(Ngm.moduleManager.isModuleEnabled("Notification") && notification.module.getValue())
+            ChatUtil.sendInfo(this.getDisplayName() + " has been Enabled.");
         this.enabled.setValue(true);
         this.onToggle();
         this.onEnable();
@@ -92,6 +97,9 @@ public class Module extends Feature implements Jsonable {
     }
 
     public void disable() {
+        Notification notification = new Notification();
+        if(Ngm.moduleManager.isModuleEnabled("Notification") && notification.module.getValue())
+            ChatUtil.sendInfo(this.getDisplayName() + " has been Disabled.");
         if (this.hasListener && !this.alwaysListening) {
             EVENT_BUS.unregister(this);
         }

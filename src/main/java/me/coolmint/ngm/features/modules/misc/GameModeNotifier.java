@@ -3,11 +3,10 @@ package me.coolmint.ngm.features.modules.misc;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import com.google.common.eventbus.Subscribe;
+import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.world.GameMode;
-
-import static me.coolmint.ngm.features.command.Command.sendMessage;
 
 public class GameModeNotifier extends Module {
     public GameModeNotifier() {
@@ -26,7 +25,7 @@ public class GameModeNotifier extends Module {
                     if (!action.equals(PlayerListS2CPacket.Action.UPDATE_GAME_MODE) || packet2.getPlayerAdditionEntries().contains(entry)) continue;
                     GameMode newGameMode = entry.gameMode();
                     String player = this.mc.getNetworkHandler().getPlayerListEntry(entry.profileId()).getProfile().getName();
-                    sendMessage(player + " has switched to " + newGameMode.getName() + " mode!");
+                    ChatUtil.sendInfo(player + " has switched to " + newGameMode.getName() + " mode!");
                 }
             }
         }

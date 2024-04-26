@@ -27,15 +27,10 @@ public abstract class Command {
 
     public Command(String... names) {
         this.names = Arrays.asList(names);
-        this.description = "descriptions.commands." + this.names.getFirst();
+        this.description = "descriptions.commands." + this.names.get(0);
     }
 
     public abstract void executeBuild(LiteralArgumentBuilder<CommandSource> builder);
-
-    public static void sendMessage(String message) {
-        if (mc.player == null) return;
-        mc.player.sendMessage(Text.of(Ngm.commandManager.getClientMessage() + " "  + message));
-    }
 
     protected static <T> @NotNull RequiredArgumentBuilder<CommandSource, T> arg(final String name, final ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
