@@ -4,17 +4,17 @@
   "package": "me.coolmint.ngm.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "IClientPlayerEntity",
+    "IClientWorldMixin",
     "IExplosionS2CPacket",
     "IPlayerMoveC2SPacket",
     "ISPacketEntityVelocity",
-    "MixinClientConnection",
-    "MixinPlayerEntity"
+    "IMinecraftClientAccessor"
   ],
   "client": [
-    "IClientPlayerEntity",
-    "IClientWorldMixin",
     "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",
+    "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinEntityRenderer",
@@ -22,6 +22,7 @@
     "MixinKeyboard",
     "MixinLightmapTextureManager",
     "MixinMinecraft",
+    "MixinPlayerEntity",
     "MixinRenderTickCounter"
   ],
   "injectors": {

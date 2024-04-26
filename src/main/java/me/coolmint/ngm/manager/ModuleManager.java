@@ -54,6 +54,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new XCarry());
         modules.add(new AntiHunger());
         modules.add(new AntiPacketKick());
+        modules.add(new FastPlace());
 
         // CLIENT
         modules.add(new ClickGuiModule());
@@ -69,6 +70,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
         modules.add(new MaceExploit());
+        modules.add(new WindChargeExploit());
     }
 
     public Module getModuleByName(String name) {
