@@ -45,6 +45,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // MISC
         modules.add(new SilentDisconnect());
+        modules.add(new Spammer());
 
         // CLIENT
         modules.add(new ClickGuiModule());

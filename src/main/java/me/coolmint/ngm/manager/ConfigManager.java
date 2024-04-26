@@ -95,8 +95,9 @@ public class ConfigManager {
     public void save() {
         if (!NGM_PATH.toFile().exists()) NGM_PATH.toFile().mkdirs();
         // 켜두면 버그나는 모듈 끄기
-        if(Ngm.moduleManager.isModuleEnabled("ClickGui"))
-            Ngm.moduleManager.disableModule("ClickGui");
+        if(Ngm.moduleManager.isModuleEnabled("ClickGui")) Ngm.moduleManager.disableModule("ClickGui");
+        if(Ngm.moduleManager.isModuleEnabled("MaceExploit")) Ngm.moduleManager.disableModule("MaceExploit");
+
         // 버전 쓰기
         try {
             JsonObject root = new JsonObject();
