@@ -26,7 +26,7 @@ public abstract class Command {
 
     public Command(String... names) {
         this.names = Arrays.asList(names);
-        this.description = "descriptions.commands." + this.names.get(0);
+        this.description = "descriptions.commands." + this.names.getFirst();
     }
 
     public abstract void executeBuild(LiteralArgumentBuilder<CommandSource> builder);

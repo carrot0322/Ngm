@@ -1,13 +1,12 @@
 package me.coolmint.ngm.manager;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.coolmint.ngm.features.command.Command;
+import me.coolmint.ngm.features.command.impl.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
-import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
-import me.coolmint.ngm.features.command.Command;
-import me.coolmint.ngm.features.command.impl.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,7 @@ public class CommandManager {
     public CommandManager() {
         add(new BindCommand());
         add(new FriendCommand());
+        add(new GamemodeCommand());
         add(new ToggleCommand());
     }
 
