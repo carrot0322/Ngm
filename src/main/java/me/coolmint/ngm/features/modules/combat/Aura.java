@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import net.minecraft.network.packet.s2c.play.LookAtS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.Hand;
 
@@ -22,8 +23,6 @@ import java.util.stream.Stream;
 
 public class Aura extends Module {
     public Setting<Boolean> onlyPlayer = register(new Setting<>("Only Player", false));
-    public Setting<Float> attackRange = register(new Setting<>("Attack Range", 3.00f, 2.00f, 6.00f));
-    public Setting<Float> rotateRange = register(new Setting<>("Rotate Range", 4.2f, 3.0f, 12.0f));
     public Setting<rotations> rotateMode = register(new Setting<>("Rotate Mode", rotations.Grim));
     public Setting<Float> targetRange = register(new Setting<>("Target Range", 8.0f, 6.0f, 12.0f));
     public Setting<Boolean> tpDisable = register(new Setting<>("Disable on tp", false));
@@ -84,24 +83,10 @@ public class Aura extends Module {
 
         target = (LivingEntity) targets.get(0);
 
-        float distance = mc.player.distanceTo(target);
-
-        if(distance <= targetRange.getValue()){
-            /*
-            if(distance <= rotateRange.getValue()){
-                switch (rotateMode.getValue()){
-                    case Grim -> mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.Full(mc.player.getX(), mc.player.getY(), mc.player.getZ(), rotationYaw, rotationPitch, mc.player.isOnGround()));
-                }
-            }
-             */
-
-            if(distance <= attackRange.getValue()){
-                if (mc.player.getAttackCooldownProgress(0) >= 1) {
-                    mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.Full(mc.player.getX(), mc.player.getY(), mc.player.getZ(), rotationYaw, rotationPitch, mc.player.isOnGround()));
-                    mc.interactionManager.attackEntity(mc.player, target);
-                    mc.player.swingHand(Hand.MAIN_HAND);
-                }
-            }
+        if (mc.player.getAttackCooldownProgress(0) >= 1) {
+            //TODO: 로테이션 구현
+            mc.interactionManager.attackEntity(mc.player, target);
+            mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 
