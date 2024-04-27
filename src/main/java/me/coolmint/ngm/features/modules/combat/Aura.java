@@ -10,13 +10,10 @@ import me.coolmint.ngm.util.ChatUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
-import net.minecraft.network.packet.s2c.play.LookAtS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.Hand;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +23,7 @@ import java.util.stream.Stream;
 public class Aura extends Module {
     public Setting<Boolean> onlyPlayer = register(new Setting<>("Only Player", false));
     public Setting<rotations> rotateMode = register(new Setting<>("Rotate Mode", rotations.Grim));
-    public Setting<Float> targetRange = register(new Setting<>("Target Range", 8.0f, 6.0f, 12.0f));
+    public Setting<Float> attackRange = register(new Setting<>("Attack Range", 3.0f, 1.0f, 6.0f));
     public Setting<Boolean> tpDisable = register(new Setting<>("Disable on tp", false));
     public Setting<Boolean> deathDisable = register(new Setting<>("Disable on death", true));
 
@@ -74,7 +71,7 @@ public class Aura extends Module {
         }).collect(Collectors.toList());
 
         targets = (List) targets.stream().filter((entity) -> {
-            return mc.player.distanceTo((Entity) entity) < (float)(this.targetRange.getValue() * 2) && entity != mc.player;
+            return mc.player.distanceTo((Entity) entity) < (float)(this.attackRange.getValue() * 2) && entity != mc.player;
         }).collect(Collectors.toList());
 
         targets = (List) targets.stream().filter((entity) -> {
