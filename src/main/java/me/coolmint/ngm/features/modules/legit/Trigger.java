@@ -19,12 +19,10 @@ public class Trigger extends Module {
 
     @Override
     public void onUpdate() {
-        if (fullNullCheck() && !mc.isWindowFocused()) {
+        if (fullNullCheck() && !mc.isWindowFocused())
             return;
-        }
-        if (SwordOnly.getValue() && !SwordCheck()) {
+        if (SwordOnly.getValue() && !SwordCheck())
             return;
-        }
 
         if (mc.crosshairTarget instanceof EntityHitResult entityHitResult) {
             if (MathUtil.getRandom(0, 100) <= chance.getValue() && mc.player.getAttackCooldownProgress(0.5f) == 1) {
