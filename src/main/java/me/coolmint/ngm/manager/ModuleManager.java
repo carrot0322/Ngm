@@ -50,7 +50,6 @@ public class ModuleManager implements Jsonable, Util {
         // MISC
         modules.add(new SilentDisconnect());
         modules.add(new Spammer());
-        modules.add(new GameModeNotifier());
         modules.add(new XCarry());
         modules.add(new AntiHunger());
         modules.add(new AntiPacketKick());
