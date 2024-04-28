@@ -36,25 +36,25 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new TpAura());
 
         // MOVEMENT
+        modules.add(new AutoWalk());
         modules.add(new Flight());
+        modules.add(new GuiMove());
         modules.add(new Jetpack());
         modules.add(new NoFall());
+        modules.add(new NoJumpDelay());
         modules.add(new Sprint());
         modules.add(new Velocity());
-        modules.add(new NoJumpDelay());
-        modules.add(new AutoWalk());
-        modules.add(new GuiMove());
 
         // RENDER
         modules.add(new Fullbright());
 
         // MISC
-        modules.add(new SilentDisconnect());
-        modules.add(new Spammer());
-        modules.add(new XCarry());
         modules.add(new AntiHunger());
         modules.add(new AntiPacketKick());
         modules.add(new FastPlace());
+        modules.add(new SilentDisconnect());
+        modules.add(new Spammer());
+        modules.add(new XCarry());
 
         // CLIENT
         modules.add(new ClickGuiModule());
