@@ -62,7 +62,6 @@ public class ModuleManager implements Jsonable, Util {
 
         // LEGIT
         modules.add(new Trigger());
-        modules.add(new Reach());
 
         // EXPLOIT
         modules.add(new CompletionCrash());
