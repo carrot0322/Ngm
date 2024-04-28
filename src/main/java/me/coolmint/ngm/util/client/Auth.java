@@ -1,10 +1,13 @@
 package me.coolmint.ngm.util.client;
 
+import me.coolmint.ngm.Ngm;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -14,24 +17,30 @@ public class Auth {
 
     public static boolean auth() {
         String hwid = getHwid();
+        String username = mc.getSession().getUsername(); // Assuming mc is a valid Minecraft session
+
         try {
-            URL url = new URL("http://121.254.171.162:20831/auth/" + hwid + "/" + mc.getSession().getUsername());
+            String encodedHwid = URLEncoder.encode(hwid, "UTF-8");
+            String encodedUsername = URLEncoder.encode(username, "UTF-8");
+
+            URL url = new URL("http://121.254.171.162:20831/auth/" + encodedHwid + "/" + encodedUsername);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setDoOutput(true);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = reader.readLine();
-
-            if (response.equalsIgnoreCase("True")) {
-                return true;
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                    return reader.readLine().equalsIgnoreCase("True");
+                }
             } else {
-                return false;
+                Ngm.LOGGER.error("[Ngm] Auth server is offline");
+                System.exit(523);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            Ngm.LOGGER.error("[Ngm] Auth server is offline");
+            System.exit(523);
         }
+
+        return false;
     }
 
     public static String getHwid() {
