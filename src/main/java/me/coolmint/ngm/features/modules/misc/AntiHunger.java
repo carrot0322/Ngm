@@ -14,7 +14,7 @@ public class AntiHunger extends Module {
     }
 
     @Subscribe
-    public void onPacketSend(PacketEvent.@NotNull Send e) {
+    public void onPacketSend(PacketEvent.@NotNull SendPRE e) {
         if (e.getPacket() instanceof PlayerMoveC2SPacket pac) {
             ((IPlayerMoveC2SPacket) pac).setOnGround(false);
         }

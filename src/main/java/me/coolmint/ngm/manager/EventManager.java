@@ -57,7 +57,7 @@ public class EventManager extends Feature {
     }
 
     @Subscribe
-    public void onPacketReceive(PacketEvent.Receive event) {
+    public void onPacketReceive(PacketEvent.ReceivePRE event) {
         Ngm.serverManager.onPacketReceived();
         if (event.getPacket() instanceof WorldTimeUpdateS2CPacket)
             Ngm.serverManager.update();

@@ -11,7 +11,7 @@ public class XCarry extends Module {
     }
 
     @Subscribe
-    public void onPacketSend(PacketEvent.Send e) {
+    public void onPacketSend(PacketEvent.SendPRE e) {
         if (e.getPacket() instanceof CloseHandledScreenC2SPacket) e.cancel();
     }
 }

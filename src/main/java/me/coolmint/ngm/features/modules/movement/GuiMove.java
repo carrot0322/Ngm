@@ -54,7 +54,7 @@ public class GuiMove extends Module {
     }
 
     @Subscribe
-    public void onPacketSend(PacketEvent.Send e) {
+    public void onPacketSend(PacketEvent.SendPRE e) {
         if (pause) {
             pause = false;
             return;

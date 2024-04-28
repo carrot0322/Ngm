@@ -18,7 +18,7 @@ public class Notification extends Module {
     }
 
     @Subscribe
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(PacketEvent.ReceivePRE event) {
         if (this.mc.getNetworkHandler() == null)
             return;
 

@@ -1,6 +1,8 @@
 package me.coolmint.ngm.features.modules.movement;
 
 import com.google.common.eventbus.Subscribe;
+import me.coolmint.ngm.Ngm;
+import me.coolmint.ngm.event.Stage;
 import me.coolmint.ngm.event.impl.SyncEvent;
 import me.coolmint.ngm.event.impl.TickEvent;
 import me.coolmint.ngm.event.impl.PacketEvent;
@@ -14,13 +16,14 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Flight extends Module {
     private final Setting<Mode> mode = register(new Setting<>("Mode", Mode.Vanilla));
-    public Setting<Float> hSpeed = register(new Setting<>("Horizontal", 1f, 0.0f, 10.0f));
-    public Setting<Float> vSpeed = register(new Setting<>("Vertical", 0.78F, 0.0F, 5F));
+    public Setting<Float> hSpeed = register(new Setting<>("Horizontal", 1f, 0.0f, 10.0f, v -> !mode.getValue().equals(Mode.VulcanGlide)));
+    public Setting<Float> vSpeed = register(new Setting<>("Vertical", 0.78F, 0.0F, 5F, v -> !mode.getValue().equals(Mode.VulcanGlide)));
 
     public Flight() {
         super("Flight", "", Category.MOVEMENT, true, false, false);
     }
 
+    private int ticks = 0;
     private double prevX, prevY, prevZ;
     public boolean onPosLook = false;
     private int delayLeft = 20;
@@ -28,17 +31,16 @@ public class Flight extends Module {
     private double lastPacketY = Double.MAX_VALUE;
 
     public void onUpdate() {
-        if (mode.getValue() != Mode.Vanilla || nullCheck()) return;
-        mc.player.getAbilities().flying = false;
-        mc.player.setVelocity(0.0, 0.0, 0.0);
-
-        if (mc.options.jumpKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, vSpeed.getValue(), 0));
-        if (mc.options.sneakKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, -vSpeed.getValue(), 0));
-
-        final double[] dir = MovementUtility.forward(hSpeed.getValue());
-        mc.player.setVelocity(dir[0], mc.player.getVelocity().getY(), dir[1]);
-
         if (mode.getValue() == Mode.GroundSpoof) {
+            mc.player.getAbilities().flying = false;
+            mc.player.setVelocity(0.0, 0.0, 0.0);
+
+            if (mc.options.jumpKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, vSpeed.getValue(), 0));
+            if (mc.options.sneakKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, -vSpeed.getValue(), 0));
+
+            final double[] dir = MovementUtility.forward(hSpeed.getValue());
+            mc.player.setVelocity(dir[0], mc.player.getVelocity().getY(), dir[1]);
+
             if (MovementUtility.isMoving() && mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().expand(0.5, 0.0, 0.5).offset(0.0, -1.0, 0.0)).iterator().hasNext()) {
                 mc.player.setOnGround(true);
             }
@@ -46,7 +48,7 @@ public class Flight extends Module {
     }
 
     @Subscribe
-    public void onPacketSend(PacketEvent.Send e) {
+    public void onPacketSendPRE(PacketEvent.SendPRE e) {
         if(nullCheck()) return;
 
         if (mode.getValue() == Mode.Vanilla) {
@@ -58,7 +60,25 @@ public class Flight extends Module {
                 }
             }
         }
+
+        if (e.getPacket() instanceof PlayerMoveC2SPacket pac) {
+
+            if(mode.getValue().equals(Mode.VulcanGlide)){
+                if (!mc.player.isOnGround()) {
+                    Ngm.TICK_TIMER = 1f;
+                    mc.player.setVelocity(mc.player.getVelocity().x, ticks % 2 == 0 ? -0.17 : -0.10, mc.player.getVelocity().z);
+
+                    if (ticks == 0)
+                        mc.player.setVelocity(mc.player.getVelocity().x, -0.16, mc.player.getVelocity().z);
+
+                    ticks++;
+                }
+            }
+
+        }
     }
+
+
 
     @Subscribe
     public void onSync(SyncEvent e) {

@@ -46,7 +46,7 @@ public class Velocity extends Module {
     private int grimTicks, ccCooldown;
 
     @Subscribe
-    public void onPacketReceive(PacketEvent.Receive e) {
+    public void onPacketReceive(PacketEvent.ReceivePRE e) {
         if (fullNullCheck()) return;
 
         if(mc.player != null && (mc.player.isTouchingWater() || mc.player.isSubmergedInWater() || mc.player.isInLava()) && pauseInWater.getValue())

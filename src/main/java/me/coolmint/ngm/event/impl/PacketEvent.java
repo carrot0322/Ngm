@@ -14,14 +14,14 @@ public class PacketEvent extends Event {
         return (T) this.packet;
     }
 
-    public static class Send extends PacketEvent {
-        public Send(Packet<?> packet) {
+    public static class SendPRE extends PacketEvent {
+        public SendPRE(Packet<?> packet) {
             super(packet);
         }
     }
 
-    public static class Receive extends PacketEvent {
-        public Receive(Packet<?> packet) {
+    public static class ReceivePRE extends PacketEvent {
+        public ReceivePRE(Packet<?> packet) {
             super(packet);
         }
     }

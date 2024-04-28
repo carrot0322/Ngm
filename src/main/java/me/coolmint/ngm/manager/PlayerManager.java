@@ -91,7 +91,7 @@ public class PlayerManager {
      */
 
     @Subscribe
-    public void onSyncWithServer(PacketEvent.@NotNull Send event) {
+    public void onSyncWithServer(PacketEvent.@NotNull SendPRE event) {
         if (event.getPacket() instanceof ClickSlotC2SPacket) {
             inInventory = true;
         }
@@ -110,7 +110,7 @@ public class PlayerManager {
     }
 
     @Subscribe
-    public void onPacketReceive(PacketEvent.@NotNull Receive event) {
+    public void onPacketReceive(PacketEvent.@NotNull ReceivePRE event) {
         if (event.getPacket() instanceof UpdateSelectedSlotS2CPacket slot) {
             switchTimer.reset();
             serverSideSlot = slot.getSlot();

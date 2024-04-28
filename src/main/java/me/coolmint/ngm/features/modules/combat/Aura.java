@@ -105,7 +105,7 @@ public class Aura extends Module {
     }
 
     @Subscribe
-    public void onPacketReceive(PacketEvent.Receive e) {
+    public void onPacketReceive(PacketEvent.ReceivePRE e) {
         if (e.getPacket() instanceof PlayerPositionLookS2CPacket && tpDisable.getValue()) {
             ChatUtil.sendInfo("Aura has been disabled due tp");
             disable();
