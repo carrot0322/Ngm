@@ -60,15 +60,15 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new HudModule());
         modules.add(new Notification());
 
-        // LEGIT
-        modules.add(new Trigger());
-
         // EXPLOIT
         modules.add(new CompletionCrash());
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
         modules.add(new MaceExploit());
         modules.add(new WindChargeExploit());
+
+        // LEGIT
+        modules.add(new Trigger());
     }
 
     public Module getModuleByName(String name) {
