@@ -47,8 +47,11 @@ public class Flight extends Module {
 
     @Subscribe
     public void onPacketSend(PacketEvent.Send e) {
+        if(nullCheck()) return;
+
         if (mode.getValue() == Mode.Vanilla) {
             if (e.getPacket() instanceof PlayerMoveC2SPacket.Full) {
+                antiKickPacket(e.getPacket(), mc.player.getY());
                 if (onPosLook) {
                     mc.player.setVelocity(prevX, prevY, prevZ);
                     onPosLook = false;
@@ -106,6 +109,7 @@ public class Flight extends Module {
 
     enum Mode {
         Vanilla,
-        GroundSpoof
+        GroundSpoof,
+        VulcanGlide
     }
 }
