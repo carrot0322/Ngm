@@ -2,14 +2,13 @@ package me.coolmint.ngm.features.modules.movement;
 
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.Ngm;
-import me.coolmint.ngm.event.Stage;
 import me.coolmint.ngm.event.impl.SyncEvent;
 import me.coolmint.ngm.event.impl.TickEvent;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.mixin.IClientPlayerEntity;
-import me.coolmint.ngm.util.player.MovementUtility;
+import me.coolmint.ngm.util.player.MovementUtil;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -38,10 +37,10 @@ public class Flight extends Module {
             if (mc.options.jumpKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, vSpeed.getValue(), 0));
             if (mc.options.sneakKey.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, -vSpeed.getValue(), 0));
 
-            final double[] dir = MovementUtility.forward(hSpeed.getValue());
+            final double[] dir = MovementUtil.forward(hSpeed.getValue());
             mc.player.setVelocity(dir[0], mc.player.getVelocity().getY(), dir[1]);
 
-            if (MovementUtility.isMoving() && mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().expand(0.5, 0.0, 0.5).offset(0.0, -1.0, 0.0)).iterator().hasNext()) {
+            if (MovementUtil.isMoving() && mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().expand(0.5, 0.0, 0.5).offset(0.0, -1.0, 0.0)).iterator().hasNext()) {
                 mc.player.setOnGround(true);
             }
         }

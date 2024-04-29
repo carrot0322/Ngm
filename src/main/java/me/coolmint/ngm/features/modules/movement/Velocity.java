@@ -7,7 +7,7 @@ import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.mixin.IExplosionS2CPacket;
 import me.coolmint.ngm.mixin.ISPacketEntityVelocity;
-import me.coolmint.ngm.util.player.MovementUtility;
+import me.coolmint.ngm.util.player.MovementUtil;
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -95,7 +95,7 @@ public class Velocity extends Module {
                         int vZ = pac.getVelocityZ();
                         if (vX < 0) vX *= -1;
                         if (vZ < 0) vZ *= -1;
-                        double[] motion = MovementUtility.forward((vX + vZ));
+                        double[] motion = MovementUtil.forward((vX + vZ));
                         ((ISPacketEntityVelocity) pac).setMotionX((int) (motion[0]));
                         ((ISPacketEntityVelocity) pac).setMotionY(0);
                         ((ISPacketEntityVelocity) pac).setMotionZ((int) (motion[1]));

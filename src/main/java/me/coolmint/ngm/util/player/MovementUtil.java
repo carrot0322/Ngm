@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import static me.coolmint.ngm.features.Feature.fullNullCheck;
 import static me.coolmint.ngm.util.traits.Util.mc;
 
-public final class MovementUtility {
+public final class MovementUtil {
 
     public static boolean isMoving() {
         return mc.player.input.movementForward != 0.0 || mc.player.input.movementSideways != 0.0;

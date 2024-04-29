@@ -10,7 +10,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import me.coolmint.ngm.features.modules.Module;
-import me.coolmint.ngm.util.player.MovementUtility;
+import me.coolmint.ngm.util.player.MovementUtil;
 
 public class GuiMove extends Module {
 
@@ -60,7 +60,7 @@ public class GuiMove extends Module {
             return;
         }
         if (e.getPacket() instanceof ClickSlotC2SPacket) {
-            if (clickBypass.getValue() && mc.player.isOnGround() && MovementUtility.isMoving() && !mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0, 0.0656, 0.0)).iterator().hasNext()) {
+            if (clickBypass.getValue() && mc.player.isOnGround() && MovementUtil.isMoving() && !mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0, 0.0656, 0.0)).iterator().hasNext()) {
                 if (mc.player.isSprinting()) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
 
                 mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.0656, mc.player.getZ(), false));
