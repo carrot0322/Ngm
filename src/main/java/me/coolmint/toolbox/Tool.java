@@ -1,7 +1,5 @@
 package me.coolmint.toolbox;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-
 import javax.swing.*;
 
 public class Tool extends JFrame {
@@ -27,7 +25,6 @@ public class Tool extends JFrame {
     }
 
     public static void main(String[] args){
-        FlatDarculaLaf.setup();
         new Tool();
     }
 }
