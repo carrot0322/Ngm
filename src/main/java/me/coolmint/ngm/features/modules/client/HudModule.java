@@ -21,7 +21,6 @@ public class HudModule extends Module {
     private final Setting<Boolean> Coordinate = register(new Setting<>("Coordinate", true, v -> Info.getValue()));
     private final Setting<Boolean> Fps = register(new Setting<>("Fps", true, v -> Info.getValue()));
     private final Setting<Boolean> Tps = register(new Setting<>("Tps", true, v -> Info.getValue()));
-    private final Setting<Boolean> Brand = register(new Setting<>("Server Brand", false, v -> Info.getValue()));
     private final Setting<Boolean> Speed = register(new Setting<>("Speed", true, v -> Info.getValue()));
     public Setting<Boolean> smoothFont = register(new Setting<>("SmoothFont", true));
     public Setting<Boolean> rainbow = register(new Setting<>("Rainbow", false));
@@ -64,7 +63,7 @@ public class HudModule extends Module {
                 } else {
                     event.getContext().drawTextWithShadow(
                             mc.textRenderer, Ngm.NAME + " " + Ngm.VERSION,
-                            2, 3, getRainbow(alpha.getValue())
+                            2, 3, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB()
                     );
                 }
             }
@@ -110,7 +109,7 @@ public class HudModule extends Module {
                     } else {
                         event.getContext().drawTextWithShadow(
                                 mc.textRenderer, displayName,
-                                (int) x, y, getRainbow(alpha.getValue())
+                                (int) x, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB()
                         );
                     }
                 }
@@ -132,9 +131,6 @@ public class HudModule extends Module {
             if(Tps.getValue())
                 items.add(Ngm.serverManager.getTPS() + " TPS");
 
-            if(Brand.getValue())
-                items.add(Ngm.serverManager.getServerBrand());
-
             if(Speed.getValue())
                 items.add(Ngm.speedManager.getSpeedKpH() + " KPH");
 
@@ -147,7 +143,7 @@ public class HudModule extends Module {
                 float stringWidthMC = mc.textRenderer.getWidth(mod);
                 float x = smoothFont.getValue() ? mc.getWindow().getScaledWidth() - stringWidth - 2 : mc.getWindow().getScaledWidth() - stringWidthMC -2;
 
-                float yOffset = smoothFont.getValue() ? FontRenderers.Hud.getFontHeight() - 2 : mc.textRenderer.fontHeight - 2;
+                float yOffset = smoothFont.getValue() ? FontRenderers.Hud.getFontHeight() - 2 : mc.textRenderer.fontHeight;
 
                 if(smoothFont.getValue()){
                     if(rainbow.getValue())
@@ -169,7 +165,7 @@ public class HudModule extends Module {
                     } else {
                         event.getContext().drawTextWithShadow(
                                 mc.textRenderer, mod,
-                                (int) x, y, getRainbow(alpha.getValue())
+                                (int) x, y, new Color(red.getValue(), green.getValue(), blue.getValue(), alpha.getValue()).getRGB()
                         );
                     }
                 }
