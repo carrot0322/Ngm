@@ -37,7 +37,7 @@ public class Esp extends Module {
 
     // Render
     public Setting<Modes> mode = register(new Setting<>("Mode", Modes.Glow, v -> category.getValue() == EspSetting.Render));
-    
+
     // Entity
     public Setting<Boolean> player = register(new Setting<>("Players", true, v -> category.getValue() == EspSetting.Entity));
     public Setting<Boolean> monster = register(new Setting<>("Monsters", true, v -> category.getValue() == EspSetting.Entity));
