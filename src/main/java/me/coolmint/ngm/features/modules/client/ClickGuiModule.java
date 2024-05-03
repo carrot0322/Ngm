@@ -3,10 +3,9 @@ package me.coolmint.ngm.features.modules.client;
 import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.ClientEvent;
-import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 

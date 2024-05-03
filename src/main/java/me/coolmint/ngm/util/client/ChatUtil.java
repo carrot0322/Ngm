@@ -1,4 +1,4 @@
-package me.coolmint.ngm.util;
+package me.coolmint.ngm.util.client;
 
 import me.coolmint.ngm.Ngm;
 import net.minecraft.text.Text;

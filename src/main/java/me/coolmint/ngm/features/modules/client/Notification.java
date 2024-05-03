@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import me.coolmint.ngm.features.modules.Module;
 import me.coolmint.ngm.features.settings.Setting;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.world.GameMode;

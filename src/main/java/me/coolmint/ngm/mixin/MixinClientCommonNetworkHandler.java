@@ -1,7 +1,7 @@
 package me.coolmint.ngm.mixin;
 
 import me.coolmint.ngm.Ngm;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;

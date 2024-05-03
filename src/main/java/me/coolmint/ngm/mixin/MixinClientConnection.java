@@ -6,7 +6,7 @@ import io.netty.handler.timeout.TimeoutException;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.event.impl.PacketEvent;
 import me.coolmint.ngm.features.modules.misc.AntiPacketKick;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.PacketCallbacks;

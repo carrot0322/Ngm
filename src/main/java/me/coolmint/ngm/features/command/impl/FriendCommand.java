@@ -1,13 +1,12 @@
 package me.coolmint.ngm.features.command.impl;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.coolmint.ngm.Ngm;
 import me.coolmint.ngm.features.command.Command;
 import me.coolmint.ngm.features.command.args.FriendArgumentType;
 import me.coolmint.ngm.features.command.args.PlayerListEntryArgumentType;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;

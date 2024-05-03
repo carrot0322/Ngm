@@ -11,7 +11,7 @@ import me.coolmint.ngm.features.modules.client.Notification;
 import me.coolmint.ngm.features.settings.Bind;
 import me.coolmint.ngm.features.settings.Setting;
 import me.coolmint.ngm.manager.ConfigManager;
-import me.coolmint.ngm.util.ChatUtil;
+import me.coolmint.ngm.util.client.ChatUtil;
 import me.coolmint.ngm.util.traits.Jsonable;
 import net.minecraft.util.Formatting;
 import net.minecraft.screen.slot.SlotActionType;
