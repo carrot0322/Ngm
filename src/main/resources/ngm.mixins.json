@@ -9,7 +9,8 @@
     "IExplosionS2CPacket",
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
-    "ISPacketEntityVelocity"
+    "ISPacketEntityVelocity",
+    "MixinEntity"
   ],
   "client": [
     "MixinChatInputSuggestor",

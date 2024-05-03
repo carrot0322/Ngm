@@ -47,6 +47,7 @@ public class ModuleManager implements Jsonable, Util {
 
         // RENDER
         modules.add(new Fullbright());
+        modules.add(new Esp());
 
         // MISC
         modules.add(new AntiHunger());

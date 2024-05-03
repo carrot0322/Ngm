@@ -1,6 +1,7 @@
 package me.coolmint.ngm.mixin;
 
 import me.coolmint.ngm.event.impl.AttackEvent;
+import me.coolmint.ngm.event.impl.EntityOutlineEvent;
 import me.coolmint.ngm.event.impl.GameLeftEvent;
 import me.coolmint.ngm.event.impl.TickEvent;
 import me.coolmint.ngm.features.gui.fonts.FontRenderers;
@@ -8,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -58,6 +60,16 @@ public class MixinMinecraft {
         EVENT_BUS.post(event);
         if (event.isCancelled()) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "hasOutline", at = @At(value = "HEAD"), cancellable = true)
+    private void hookHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+        EntityOutlineEvent entityOutlineEvent = new EntityOutlineEvent(entity);
+        EVENT_BUS.post(entityOutlineEvent);
+        if (entityOutlineEvent.isCancelled()) {
+            cir.cancel();
+            cir.setReturnValue(true);
         }
     }
 }
