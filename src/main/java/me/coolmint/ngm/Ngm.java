@@ -43,12 +43,10 @@ public class Ngm implements ModInitializer, ClientModInitializer {
 
 
     @Override public void onInitializeClient() {
-        /*
         if (!Auth.auth()) {
+            LOGGER.warn("[{}] Invalid Hwid", Ngm.NAME);
             System.exit(523);
-            LOGGER.warn("[{}] Invalid Hwid : Use HwidChecker", Ngm.NAME);
         }
-         */
 
         eventManager.init();
         moduleManager.init();
