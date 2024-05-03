@@ -8,6 +8,8 @@ public class Tool extends JFrame {
 
         pane.add("Welcome", new Welcome());
         pane.add("Hwid", new hwid());
+        //TODO: auth 서버 json 에 저장하는거 만들기
+        //pane.add("AuthServer", new AuthServer());
 
         return pane;
     }

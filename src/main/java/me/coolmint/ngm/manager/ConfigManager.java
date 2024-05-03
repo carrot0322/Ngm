@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigManager {
-    private static final Path NGM_PATH = FabricLoader.getInstance().getGameDir().resolve("ngm");
-    private static final Gson gson = new GsonBuilder()
+    public static final Path NGM_PATH = FabricLoader.getInstance().getGameDir().resolve("ngm");
+    public static final Gson gson = new GsonBuilder()
             .setLenient()
             .setPrettyPrinting()
             .create();
-    private final List<Jsonable> jsonables = List.of(Ngm.friendManager, Ngm.moduleManager);
+    public final List<Jsonable> jsonables = List.of(Ngm.friendManager, Ngm.moduleManager);
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static void setValueFromJson(Feature feature, Setting setting, JsonElement element) {

@@ -1,19 +1,45 @@
 package me.coolmint.ngm.util.client;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import me.coolmint.ngm.Ngm;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
+import static me.coolmint.ngm.manager.ConfigManager.NGM_PATH;
 import static me.coolmint.ngm.util.traits.Util.mc;
 
 public class Auth {
+    public static boolean subServer(){
+        try {
+            String jsonString = Files.readString(NGM_PATH.resolve("server.json"));
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+
+            if (!jsonObject.has("server")) return false;
+
+            String server = jsonObject.get("server").getAsString();
+
+            if (Objects.equals(server, "main")){
+                return false;
+            }
+            if (Objects.equals(server, "sub")){
+                return true;
+            }
+        } catch (Throwable ignored) {
+        }
+
+        return false;
+    }
 
     public static boolean auth() {
         String hwid = getHwid();
