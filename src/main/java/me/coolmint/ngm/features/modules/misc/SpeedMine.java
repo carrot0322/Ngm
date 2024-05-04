@@ -31,14 +31,12 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class SpeedMine extends Module {
     enum categories {
         Mine,
-        Packet,
-        Render
+        Packet
     }
 
     // Mine
@@ -95,40 +93,7 @@ public class SpeedMine extends Module {
     public Setting<Boolean> abort = register(new Setting<>("abort", true, v -> cCate(categories.Packet)));
     public Setting<Boolean> start = register(new Setting<>("start", true, v -> cCate(categories.Packet)));
     public Setting<Boolean> stop2 = register(new Setting<>("stop2", true, v -> cCate(categories.Packet)));
-
-    // Render
-    public Setting<Boolean> render = register(new Setting<>("Render", true, v -> cCate(categories.Render)));
-    public Setting<Boolean> smooth = register(new Setting<>("Smooth", true, v -> cCate(categories.Render) && render.getValue()));
-    public Setting<RenderMode> renderMode = register(new Setting<>("Render Mode", RenderMode.Shrink, v -> cCate(categories.Render) && render.getValue()));
-
-    // Color
-    public Setting<color> colorCategory = register(new Setting<>("", color.StartLine, v -> cCate(categories.Render) & render.getValue()));
-    public Setting<Integer> lineWidth = register(new Setting<>("Line Width", 2, 1, 10, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartLine || colorCategory.getValue() == color.EndLine));
-
-    // Start Line
-    public Setting<Integer> startLineRed = register(new Setting<>("Start Line Red", 255, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartLine));
-    public Setting<Integer> startLineGreen = register(new Setting<>("Start Line Green", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartLine));
-    public Setting<Integer> startLineBlue = register(new Setting<>("Start Line Blue", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartLine));
-    public Setting<Integer> startLineAlpha = register(new Setting<>("Start Line Alpha", 200, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartLine));
-
-    // End Line
-    public Setting<Integer> endLineRed = register(new Setting<>("End Line Red", 47, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndLine));
-    public Setting<Integer> endLineGreen = register(new Setting<>("End Line Green", 255, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndLine));
-    public Setting<Integer> endLineBlue = register(new Setting<>("End Line Blue", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndLine));
-    public Setting<Integer> endLineAlpha = register(new Setting<>("End Line Alpha", 200, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndLine));
-
-    // Start Fill
-    public Setting<Integer> startFillRed = register(new Setting<>("Start Fill Red", 255, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartFill));
-    public Setting<Integer> startFillGreen = register(new Setting<>("Start Fill Green", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartFill));
-    public Setting<Integer> startFillBlue = register(new Setting<>("Start Fill Blue", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartFill));
-    public Setting<Integer> startFillAlpha = register(new Setting<>("Start Fill Alpha", 120, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.StartFill));
-
-    // End Fill
-    public Setting<Integer> endFillRed = register(new Setting<>("End Fill Red", 47, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndFill));
-    public Setting<Integer> endFillGreen = register(new Setting<>("End Fill Green", 255, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndFill));
-    public Setting<Integer> endFillBlue = register(new Setting<>("End Fill Blue", 0, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndFill));
-    public Setting<Integer> endFillAlpha = register(new Setting<>("End Fill Alpha", 120, 0, 255, v -> cCate(categories.Render) && render.getValue() && colorCategory.getValue() == color.EndFill));
-
+    
     public SpeedMine() {
         super("SpeedMine", "", Category.MISC, true, false, false);
         instance = this;
@@ -443,22 +408,6 @@ public class SpeedMine extends Module {
         final BlockState blockState = mc.world.getBlockState(pos);
         final Block block = blockState.getBlock();
         return block.getHardness() != -1;
-    }
-
-    private @NotNull Color getColor(@NotNull Color startColor, @NotNull Color endColor, float progress) {
-        if (!smooth.getValue())
-            return progress >= 0.95 ? endColor : startColor;
-
-        final int rDiff = endColor.getRed() - startColor.getRed();
-        final int gDiff = endColor.getGreen() - startColor.getGreen();
-        final int bDiff = endColor.getBlue() - startColor.getBlue();
-        final int aDiff = endColor.getAlpha() - startColor.getAlpha();
-
-        return new Color(
-                fixColorValue(startColor.getRed() + (int) (rDiff * progress)),
-                fixColorValue(startColor.getGreen() + (int) (gDiff * progress)),
-                fixColorValue(startColor.getBlue() + (int) (bDiff * progress)),
-                fixColorValue(startColor.getAlpha() + (int) (aDiff * progress)));
     }
 
     private int fixColorValue(int colorVal) {
