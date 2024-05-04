@@ -47,7 +47,7 @@ public class Esp extends Module {
     public Setting<Boolean> crystal = register(new Setting<>("Crystals", false, v -> category.getValue() == EspSetting.Entity));
 
     // Color
-    public Setting<EntityList> colorEntity = register(new Setting<>("Entity", EntityList.Player));
+    public Setting<EntityList> colorEntity = register(new Setting<>("Entity", EntityList.Player, v -> category.getValue() == EspSetting.Color));
 
     //Player
     public Setting<Integer> playerRed = register(new Setting<>("Red", 255, 0, 255, v -> category.getValue() == EspSetting.Color && colorEntity.getValue() == EntityList.Player));
