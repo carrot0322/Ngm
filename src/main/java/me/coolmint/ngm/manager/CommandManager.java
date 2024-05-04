@@ -23,6 +23,7 @@ public class CommandManager {
         add(new FriendCommand());
         add(new GamemodeCommand());
         add(new ToggleCommand());
+        add(new VClipCommand());
     }
 
     private void add(@NotNull Command command) {
