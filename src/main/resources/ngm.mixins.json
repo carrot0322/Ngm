@@ -6,6 +6,7 @@
   "mixins": [
     "IClientPlayerEntity",
     "IClientWorldMixin",
+    "IExplosion",
     "IExplosionS2CPacket",
     "IMinecraftClientAccessor",
     "IPlayerMoveC2SPacket",
@@ -13,10 +14,12 @@
     "MixinEntity"
   ],
   "client": [
+    "IInteractionManager",
     "MixinChatInputSuggestor",
     "MixinClientCommonNetworkHandler",
     "MixinClientConnection",
     "MixinClientPlayerEntity",
+    "MixinClientPlayerInteractionManager",
     "MixinClientPlayNetworkHandler",
     "MixinEntityRenderer",
     "MixinInGameHud",

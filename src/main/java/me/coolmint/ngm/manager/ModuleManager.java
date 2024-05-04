@@ -56,6 +56,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Nuker());
         modules.add(new SilentDisconnect());
         modules.add(new Spammer());
+        modules.add(new SpeedMine());
         modules.add(new XCarry());
 
         // CLIENT
