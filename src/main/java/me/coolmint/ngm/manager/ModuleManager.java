@@ -42,6 +42,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new Jetpack());
         modules.add(new NoFall());
         modules.add(new NoJumpDelay());
+        modules.add(new SlimeFly());
         modules.add(new Sprint());
         modules.add(new Velocity());
 
