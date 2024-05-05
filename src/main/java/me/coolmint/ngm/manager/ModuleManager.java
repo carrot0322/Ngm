@@ -70,6 +70,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
         modules.add(new MaceExploit());
+        modules.add(new Regen());
         modules.add(new WindChargeExploit());
 
         // LEGIT
