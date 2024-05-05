@@ -9,10 +9,9 @@ import me.coolmint.ngm.util.client.ChatUtil;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 
-public class ClickGuiModule
-        extends Module {
+public class ClickGuiModule extends Module {
     private static ClickGuiModule INSTANCE = new ClickGuiModule();
-    public Setting<String> prefix = this.register(new Setting<>("Prefix", "."));
+    public Setting<String> prefix = new Setting<>("Prefix", "."); // string 빌더 고치면 그때..
     public Setting<Boolean> rainbow = this.register(new Setting<>("Rainbow", false));
     public Setting<Integer> rainbowHue = this.register(new Setting<>("Delay", 240, 0, 600, v -> rainbow.getValue()));
     public Setting<Float> rainbowBrightness = this.register(new Setting<>("Brightness ", 150.0f, 1.0f, 255.0f, v -> rainbow.getValue()));

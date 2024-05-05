@@ -22,6 +22,7 @@ public class CommandManager {
         add(new BindCommand());
         add(new FriendCommand());
         add(new GamemodeCommand());
+        add(new PrefixCommand());
         add(new ToggleCommand());
         add(new VClipCommand());
     }
