@@ -53,7 +53,6 @@ public class ModuleManager implements Jsonable, Util {
         // MISC
         modules.add(new AntiHunger());
         modules.add(new AntiPacketKick());
-        modules.add(new FastPlace());
         modules.add(new Nuker());
         modules.add(new SilentDisconnect());
         modules.add(new Spammer());
@@ -74,6 +73,8 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new WindChargeExploit());
 
         // LEGIT
+        modules.add(new FastPlace());
+        modules.add(new Hitbox());
         modules.add(new Trigger());
     }
 
