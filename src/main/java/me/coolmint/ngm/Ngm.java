@@ -57,6 +57,8 @@ public class Ngm implements ModInitializer, ClientModInitializer {
         configManager.load();
         colorManager.init();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> configManager.save()));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            configManager.save();
+        }));
     }
 }
