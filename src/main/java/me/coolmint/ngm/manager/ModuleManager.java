@@ -69,6 +69,7 @@ public class ModuleManager implements Jsonable, Util {
         modules.add(new CompletionCrash());
         modules.add(new ConsoleSpammer());
         modules.add(new ErrorCrash());
+        modules.add(new HitboxDesync());
         modules.add(new MaceExploit());
         modules.add(new Plugins());
         modules.add(new Regen());
