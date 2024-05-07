@@ -63,26 +63,6 @@ public class ConfigManager {
     public void load() {
         if (!NGM_PATH.toFile().exists()) NGM_PATH.toFile().mkdirs();
 
-        // 버전 읽기
-        try {
-            String jsonString = Files.readString(NGM_PATH.resolve("version.json"));
-            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-
-            if (!jsonObject.has("version")) return;
-
-            String configVersion = jsonObject.get("version").getAsString();
-
-            if (!Objects.equals(configVersion, Ngm.VERSION)){
-                File file = new File(NGM_PATH.resolve("modules.json").toString());
-                file.delete();
-                File file1 = new File(NGM_PATH.resolve("version.json").toString());
-                file1.delete();
-                return;
-            }
-
-        } catch (Throwable ignored) {
-        }
-
         for (Jsonable jsonable : jsonables) {
             try {
                 String read = Files.readString(NGM_PATH.resolve(jsonable.getFileName()));
@@ -98,14 +78,6 @@ public class ConfigManager {
         if(Ngm.moduleManager.isModuleEnabled("ClickGui")) Ngm.moduleManager.disableModule("ClickGui");
         if(Ngm.moduleManager.isModuleEnabled("MaceExploit")) Ngm.moduleManager.disableModule("MaceExploit");
 
-        // 버전 쓰기
-        try {
-            JsonObject root = new JsonObject();
-            root.addProperty("version", Ngm.VERSION);
-            Files.writeString(NGM_PATH.resolve("version.json"), gson.toJson(root));
-        } catch (Throwable e) {
-            Ngm.LOGGER.error(e);
-        }
         for (Jsonable jsonable : jsonables) {
             try {
                 JsonElement json = jsonable.toJson();
